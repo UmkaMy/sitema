@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Light Fox Manga - Личный кабинет</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-color: #f5f5f5;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --border-color: #e0e0e0;
+            --primary-color: #ff8a50;
+            --primary-hover: #ff7043;
+            --secondary-color: #666;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --header-height: 60px;
+            --mobile-bottom-nav: 60px;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-color: #ffffff;
+            --border-color: #444;
+            --secondary-color: #aaa;
+            --shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding-bottom: var(--mobile-bottom-nav);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: none;
+            align-items: center;
+            padding: 0 32px;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-right: auto;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .desktop-nav {
+            display: flex;
+            gap: 24px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .desktop-nav a {
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .desktop-nav a.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .desktop-nav a:hover {
+            background: var(--primary-hover);
+            color: white;
+        }
+
+        .theme-toggle {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 16px;
+            width: 40px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 0;
+            padding: 20px 16px;
+            min-height: 100vh;
+        }
+
+        @media (min-width: 768px) {
+            .header {
+                display: flex;
+            }
+            
+            .main-content {
+                margin-top: var(--header-height);
+            }
+            
+            .bottom-nav {
+                display: none;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+        }
+
+        /* Main Sections */
+        .sections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .section-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            border-color: var(--primary-color);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-icon {
+            font-size: 1.5rem;
+        }
+
+        .section-count {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .section-description {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Additional Sections */
+        .additional-sections {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .large-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .large-section-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .large-section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .large-section-content {
+            padding: 1.5rem;
+        }
+
+        /* Donation Projects */
+        .donation-projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .donation-card {
+            background: linear-gradient(135deg, rgba(255, 138, 80, 0.1) 0%, rgba(255, 112, 67, 0.1) 100%);
+            border: 1px solid rgba(255, 138, 80, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .donation-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 138, 80, 0.2);
+        }
+
+        .donation-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .donation-poster {
+            width: 60px;
+            height: 80px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .donation-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .donation-meta {
+            font-size: 0.875rem;
+            color: var(--secondary-color);
+        }
+
+        .donation-progress {
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            color: var(--secondary-color);
+        }
+
+        .donation-input-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .donation-input {
+            flex: 1;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .donate-btn {
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .donate-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 138, 80, 0.3);
+        }
+
+        .donation-quick-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .quick-donate-btn {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--primary-color);
+            background: transparent;
+            color: var(--primary-color);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-donate-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--mobile-bottom-nav);
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            z-index: 1000;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-size: 11px;
+            gap: 4px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        /* Section Detail View */
+        .section-detail {
+            display: none;
+        }
+
+        .section-detail.active {
+            display: block;
+        }
+
+        .detail-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-color);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(255, 138, 80, 0.05);
+        }
+
+        /* Manga Grid */
+        .manga-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .manga-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .manga-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .manga-poster-container {
+            position: relative;
+            aspect-ratio: 3/4;
+            overflow: hidden;
+        }
+
+        .manga-poster {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .manga-card:hover .manga-poster {
+            transform: scale(1.05);
+        }
+
+        .manga-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .manga-info {
+            padding: 1rem;
+        }
+
+        .manga-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .manga-meta {
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+            margin-bottom: 0.75rem;
+        }
+
+        .manga-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(255, 138, 80, 0.05);
+        }
+
+        .action-btn.primary {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .action-btn.primary:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-text {
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .empty-action:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            background: #ef4444;
+        }
+
+        .notification.warning {
+            background: #f59e0b;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            color: var(--secondary-color);
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border-color);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 12px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .sections-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .manga-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 1rem;
+            }
+
+            .donation-projects {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <!-- Header (Desktop) -->
+    <header class="header">
+        <a href="index.html" class="logo">Light Fox Manga</a>
+        
+        <nav class="desktop-nav">
+            <a href="index.html" class="nav-link">Главная</a>
+            <a href="catalog.html" class="nav-link">Каталог</a>
+            <a href="cabinet.html" class="nav-link active">Личный кабинет</a>
+            <a href="#" class="nav-link" onclick="openRandomManga()">Случайное</a>
+        </nav>
+        
+        <div class="header-controls">
+            <button class="theme-toggle" id="themeToggle">
+                <svg class="moon-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79C20.8427 14.4922 20.2039 16.1144 19.1583 17.4668C18.1127 18.8192 16.7035 19.8458 15.0957 20.4265C13.4879 21.0073 11.7431 21.1181 10.0644 20.7461C8.38579 20.374 6.8398 19.5345 5.61677 18.3271C4.39374 17.1198 3.54362 15.5916 3.17133 13.9299C2.79905 12.2682 2.91262 10.5378 3.49644 8.94267C4.08026 7.34753 5.10962 5.94939 6.46482 4.90969C7.82002 3.86999 9.44343 3.23112 11.16 3.08C10.1598 4.98048 9.94059 7.18295 10.5446 9.23931C11.1486 11.2957 12.5154 13.0464 14.3735 14.1467C16.2317 15.247 18.4549 15.6021 20.55 15.13L21 12.79Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <svg class="sun-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                    <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Main Dashboard -->
+            <div id="dashboard-view">
+                <div class="page-header">
+                    <h1 class="page-title">Личный кабинет</h1>
+                    <p class="page-subtitle">Управляйте своими тайтлами и поддерживайте любимые серии</p>
+                </div>
+
+                <!-- Main Sections -->
+                <div class="sections-grid">
+                    <div class="section-card" onclick="openSection('favorites')">
+                        <div class="section-header">
+                            <div class="section-title">
+                                <span class="section-icon">❤️</span>
+                                Избранное
+                            </div>
+                            <div class="section-count" id="favoritesCount">0</div>
+                        </div>
+                        <div class="section-description">
+                            Ваши любимые тайтлы для быстрого доступа
+                        </div>
+                    </div>
+
+                    <div class="section-card" onclick="openSection('watching')">
+                        <div class="section-header">
+                            <div class="section-title">
+                                <span class="section-icon">▶️</span>
+                                Смотрю
+                            </div>
+                            <div class="section-count" id="watchingCount">0</div>
+                        </div>
+                        <div class="section-description">
+                            Тайтлы, которые вы сейчас читаете
+                        </div>
+                    </div>
+
+                    <div class="section-card" onclick="openSection('wantToWatch')">
+                        <div class="section-header">
+                            <div class="section-title">
+                                <span class="section-icon">📚</span>
+                                Хочу посмотреть
+                            </div>
+                            <div class="section-count" id="wantToWatchCount">0</div>
+                        </div>
+                        <div class="section-description">
+                            Запланированные к просмотру тайтлы
+                        </div>
+                    </div>
+
+                    <div class="section-card" onclick="openSection('completed')">
+                        <div class="section-header">
+                            <div class="section-title">
+                                <span class="section-icon">✅</span>
+                                Досмотрел
+                            </div>
+                            <div class="section-count" id="completedCount">0</div>
+                        </div>
+                        <div class="section-description">
+                            Завершенные тайтлы
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Sections -->
+                <div class="additional-sections">
+                    <!-- Donation Projects -->
+                    <div class="large-section">
+                        <div class="large-section-header">
+                            <div class="large-section-title">
+                                <span>🚀</span>
+                                Поддержать проекты
+                            </div>
+                        </div>
+                        <div class="large-section-content">
+                            <div id="donationProjectsContainer">
+                                <div class="loading">
+                                    <div class="spinner"></div>
+                                    Загрузка проектов...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Detail Views -->
+            <div id="section-detail" class="section-detail">
+                <div class="detail-header">
+                    <button class="back-btn" onclick="backToDashboard()">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        Назад
+                    </button>
+                    <h2 id="sectionTitle">Раздел</h2>
+                </div>
+
+                <div id="sectionContent">
+                    <!-- Content will be filled by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 12L5 10M5 10L12 3L19 10M5 10V20C5 20.5523 5.44772 21 6 21H9M19 10L21 12M19 10V20C19 20.5523 18.5523 21 18 21H15M9 21C9.55228 21 10 20.5523 10 20V16C10 15.4477 10.4477 15 11 15H13C13.5523 15 14 15.4477 14 16V20C14 20.5523 14.4477 21 15 21M9 21H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <span>Главная</span>
+        </a>
+        <a href="catalog.html" class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 19.5C4 18.1193 5.11929 17 6.5 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M6.5 2H20V22H6.5C5.11929 22 4 20.8807 4 19.5V4.5C4 3.11929 5.11929 2 6.5 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <span>Каталог</span>
+        </a>
+        <a href="cabinet.html" class="nav-item active">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.04097 1.5487 8.5C1.5487 9.95903 2.1283 11.3583 3.16 12.39L4.22 13.45L12 21.23L19.78 13.45L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.06211 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <span>Кабинет</span>
+        </a>
+        <a href="#" class="nav-item" onclick="openRandomManga()">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <span>Случайное</span>
+        </a>
+    </nav>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <!-- Scripts -->
+    <script>
+        // Load data system
+        const script = document.createElement('script');
+        script.src = 'js/data.js';
+        script.onload = initializeCabinet;
+        document.head.appendChild(script);
+    </script>
+
+    <script>
+        // State
+        let isDark = localStorage.getItem('theme') === 'dark';
+        let currentSection = null;
+        let userLists = {
+            favorites: [],
+            watching: [],
+            wantToWatch: [],
+            completed: []
+        };
+
+        // Theme functionality
+        function updateTheme() {
+            document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            
+            const moonIcon = document.querySelector('.moon-icon');
+            const sunIcon = document.querySelector('.sun-icon');
+            if (isDark) {
+                moonIcon.style.display = 'none';
+                sunIcon.style.display = 'block';
+            } else {
+                moonIcon.style.display = 'block';
+                sunIcon.style.display = 'none';
+            }
+            
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        function toggleTheme() {
+            isDark = !isDark;
+            updateTheme();
+        }
+
+        // Initialize cabinet
+        function initializeCabinet() {
+            if (!window.MangaAPI) {
+                showNotification('Система данных не загружена', 'error');
+                return;
+            }
+
+            loadUserLists();
+            updateCounts();
+            loadDonationProjects();
+            
+            console.log('📱 Личный кабинет загружен!');
+        }
+
+        // Load user lists from localStorage
+        function loadUserLists() {
+            Object.keys(userLists).forEach(listName => {
+                const saved = localStorage.getItem(listName);
+                if (saved) {
+                    try {
+                        userLists[listName] = JSON.parse(saved);
+                    } catch (e) {
+                        console.error(`Error loading ${listName}:`, e);
+                        userLists[listName] = [];
+                    }
+                }
+            });
+        }
+
+        // Update section counts
+        function updateCounts() {
+            Object.keys(userLists).forEach(listName => {
+                const countElement = document.getElementById(listName + 'Count');
+                if (countElement) {
+                    countElement.textContent = userLists[listName].length;
+                }
+            });
+        }
+
+        // Load donation projects
+        function loadDonationProjects() {
+            if (!window.MangaAPI) return;
+
+            const allManga = window.MangaAPI.getAllManga();
+            const container = document.getElementById('donationProjectsContainer');
+
+            if (allManga.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📚</div>
+                        <div class="empty-title">Пока нет проектов</div>
+                        <div class="empty-text">Тайтлы для поддержки появятся здесь</div>
+                        <a href="catalog.html" class="empty-action">
+                            <span>🔍</span>
+                            Открыть каталог
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            // Show projects that need donations (not at 100%)
+            const activeProjects = allManga.filter(manga => {
+                const progress = ((manga.currentDonations || 0) / (manga.donationGoal || 10000)) * 100;
+                return progress < 100;
+            }).slice(0, 6); // Show max 6 projects
+
+            if (activeProjects.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🎉</div>
+                        <div class="empty-title">Все цели достигнуты!</div>
+                        <div class="empty-text">Спасибо за поддержку проектов</div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="donation-projects">
+                    ${activeProjects.map(manga => renderDonationCard(manga)).join('')}
+                </div>
+            `;
+        }
+
+        // Render donation card
+        function renderDonationCard(manga) {
+            const current = manga.currentDonations || 0;
+            const goal = manga.donationGoal || 10000;
+            const progress = (current / goal) * 100;
+
+            return `
+                <div class="donation-card">
+                    <div class="donation-header">
+                        <img src="${manga.image || 'https://via.placeholder.com/60x80/FF6B35/FFFFFF?text=' + encodeURIComponent(manga.title.charAt(0))}" 
+                             alt="${manga.title}" class="donation-poster">
+                        <div class="donation-info">
+                            <h3>${manga.title}</h3>
+                            <div class="donation-meta">${manga.type || 'Манга'} • ${manga.year || 'N/A'}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="donation-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${Math.min(progress, 100)}%"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span>${current.toLocaleString()}₽</span>
+                            <span>${goal.toLocaleString()}₽</span>
+                        </div>
+                    </div>
+
+                    <div class="donation-input-group">
+                        <input type="number" class="donation-input" 
+                               placeholder="Сумма" min="10" max="50000" 
+                               id="donationAmount${manga.id}">
+                        <button class="donate-btn" onclick="makeDonation(${manga.id})">💝 Донат</button>
+                    </div>
+
+                    <div class="donation-quick-buttons">
+                        <button class="quick-donate-btn" onclick="quickDonate(${manga.id}, 100)">100₽</button>
+                        <button class="quick-donate-btn" onclick="quickDonate(${manga.id}, 500)">500₽</button>
+                        <button class="quick-donate-btn" onclick="quickDonate(${manga.id}, 1000)">1K₽</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Section navigation
+        function openSection(sectionName) {
+            currentSection = sectionName;
+            
+            // Hide dashboard, show detail
+            document.getElementById('dashboard-view').style.display = 'none';
+            document.getElementById('section-detail').classList.add('active');
+            
+            // Update title
+            const titles = {
+                favorites: 'Избранное',
+                watching: 'Смотрю',
+                wantToWatch: 'Хочу посмотреть',
+                completed: 'Досмотрел'
+            };
+            document.getElementById('sectionTitle').textContent = titles[sectionName] || sectionName;
+            
+            // Load section content
+            loadSectionContent(sectionName);
+        }
+
+        function backToDashboard() {
+            document.getElementById('dashboard-view').style.display = 'block';
+            document.getElementById('section-detail').classList.remove('active');
+            currentSection = null;
+        }
+
+        // Load section content
+        function loadSectionContent(sectionName) {
+            const container = document.getElementById('sectionContent');
+            const items = userLists[sectionName] || [];
+
+            if (items.length === 0) {
+                const emptyStates = {
+                    favorites: {
+                        icon: '❤️',
+                        title: 'Нет избранных тайтлов',
+                        text: 'Добавляйте тайтлы в избранное из каталога или плеера'
+                    },
+                    watching: {
+                        icon: '▶️',
+                        title: 'Не читаете тайтлы',
+                        text: 'Начните читать тайтлы и они появятся здесь'
+                    },
+                    wantToWatch: {
+                        icon: '📚',
+                        title: 'Список пуст',
+                        text: 'Добавляйте интересные тайтлы в планы'
+                    },
+                    completed: {
+                        icon: '✅',
+                        title: 'Нет завершенных',
+                        text: 'Прочитанные тайтлы будут отображаться здесь'
+                    }
+                };
+
+                const state = emptyStates[sectionName];
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">${state.icon}</div>
+                        <div class="empty-title">${state.title}</div>
+                        <div class="empty-text">${state.text}</div>
+                        <a href="catalog.html" class="empty-action">
+                            <span>🔍</span>
+                            Открыть каталог
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="manga-grid">
+                    ${items.map(item => renderMangaCard(item)).join('')}
+                </div>
+            `;
+        }
+
+        // Render manga card for lists
+        function renderMangaCard(item) {
+            // Try to get updated data from API
+            let manga = item;
+            if (window.MangaAPI && item.mangaId) {
+                const apiData = window.MangaAPI.getMangaById(item.mangaId);
+                if (apiData) {
+                    manga = { ...item, ...apiData };
+                }
+            }
+
+            const donationProgress = ((manga.currentDonations || 0) / (manga.donationGoal || 10000)) * 100;
+
+            return `
+                <div class="manga-card" onclick="openManga(${manga.mangaId || manga.id})">
+                    <div class="manga-poster-container">
+                        <img src="${manga.image || 'https://via.placeholder.com/180x240/FF6B35/FFFFFF?text=' + encodeURIComponent((manga.title || '').charAt(0))}" 
+                             alt="${manga.title}" class="manga-poster">
+                        ${manga.currentEpisode ? `<div class="manga-badge">Серия ${manga.currentEpisode}</div>` : ''}
+                    </div>
+                    
+                    <div class="manga-info">
+                        <div class="manga-title">${manga.title}</div>
+                        <div class="manga-meta">
+                            ${manga.type || 'Манга'} • ⭐ ${manga.rating || 'N/A'}
+                        </div>
+                        
+                        <div class="manga-actions">
+                            <button class="action-btn primary" onclick="event.stopPropagation(); openManga(${manga.mangaId || manga.id})">
+                                Читать
+                            </button>
+                            <button class="action-btn" onclick="event.stopPropagation(); removeFromList('${currentSection}', ${item.id || item.mangaId})">
+                                Удалить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // User actions
+        function openManga(mangaId) {
+            if (mangaId && mangaId !== 'undefined') {
+                window.location.href = `player.html?id=${mangaId}`;
+            } else {
+                showNotification('Тайтл не найден', 'error');
+            }
+        }
+
+        function removeFromList(listName, itemId) {
+            const list = userLists[listName];
+            const index = list.findIndex(item => (item.id || item.mangaId) === itemId);
+            
+            if (index !== -1) {
+                list.splice(index, 1);
+                localStorage.setItem(listName, JSON.stringify(list));
+                updateCounts();
+                
+                if (currentSection === listName) {
+                    loadSectionContent(listName);
+                }
+                
+                showNotification('Удалено из списка', 'success');
+            }
+        }
+
+        function openRandomManga() {
+            if (window.MangaAPI) {
+                const allManga = window.MangaAPI.getAllManga();
+                if (allManga.length > 0) {
+                    const randomManga = allManga[Math.floor(Math.random() * allManga.length)];
+                    openManga(randomManga.id);
+                } else {
+                    showNotification('Каталог пуст', 'warning');
+                }
+            } else {
+                showNotification('Система данных не загружена', 'error');
+            }
+        }
+
+        // Donation functions
+        function quickDonate(mangaId, amount) {
+            document.getElementById(`donationAmount${mangaId}`).value = amount;
+            makeDonation(mangaId);
+        }
+
+        function makeDonation(mangaId) {
+            const amountInput = document.getElementById(`donationAmount${mangaId}`);
+            const amount = parseInt(amountInput.value) || 0;
+
+            if (amount < 10) {
+                showNotification('Минимальная сумма: 10₽', 'error');
+                return;
+            }
+
+            if (amount > 50000) {
+                showNotification('Максимальная сумма: 50,000₽', 'error');
+                return;
+            }
+
+            // Update manga donation
+            const manga = window.MangaAPI.getMangaById(mangaId);
+            if (manga) {
+                const newTotal = Math.min((manga.currentDonations || 0) + amount, manga.donationGoal || 10000);
+                
+                window.MangaAPI.updateManga(mangaId, {
+                    currentDonations: newTotal
+                });
+
+                // Save donation history
+                const donationHistory = JSON.parse(localStorage.getItem('donationHistory') || '[]');
+                donationHistory.push({
+                    mangaId: mangaId,
+                    mangaTitle: manga.title,
+                    amount: amount,
+                    timestamp: new Date().toISOString()
+                });
+                localStorage.setItem('donationHistory', JSON.stringify(donationHistory));
+
+                // Clear input
+                amountInput.value = '';
+
+                // Reload projects
+                loadDonationProjects();
+
+                showNotification(`Спасибо! Добавлено ${amount.toLocaleString()}₽`, 'success');
+            } else {
+                showNotification('Тайтл не найден', 'error');
+            }
+        }
+
+        // Utility functions
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification show ${type}`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme toggle
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+            
+            // Initialize theme
+            updateTheme();
+
+            // Initialize cabinet if data is ready
+            if (window.MangaAPI) {
+                initializeCabinet();
+            }
+
+            // Listen for storage updates from other pages
+            window.addEventListener('storage', function(e) {
+                if (['favorites', 'watching', 'wantToWatch', 'completed'].includes(e.key)) {
+                    loadUserLists();
+                    updateCounts();
+                    if (currentSection) {
+                        loadSectionContent(currentSection);
+                    }
+                }
+            });
+        });
+
+        // Listen for data ready event
+        window.addEventListener('mangaDataReady', initializeCabinet);
+        window.addEventListener('mangaDataUpdate', function() {
+            loadDonationProjects();
+        });
+    </script>
+</body>
+</html>

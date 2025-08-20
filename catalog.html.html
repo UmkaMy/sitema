@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Light Fox Manga - Каталог</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-color: #f5f5f5;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --border-color: #e0e0e0;
+            --primary-color: #ff8a50;
+            --primary-hover: #ff7043;
+            --secondary-color: #666;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --header-height: 60px;
+            --mobile-bottom-nav: 60px;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-color: #ffffff;
+            --border-color: #444;
+            --secondary-color: #aaa;
+            --shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding-bottom: var(--mobile-bottom-nav);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: none;
+            align-items: center;
+            padding: 0 32px;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-right: auto;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .desktop-nav {
+            display: flex;
+            gap: 24px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .desktop-nav a {
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .desktop-nav a.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .desktop-nav a:hover {
+            background: var(--primary-hover);
+            color: white;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .theme-toggle {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 16px;
+            width: 40px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        /* Sticky Header Container */
+        .sticky-header {
+            position: sticky;
+            top: var(--header-height);
+            z-index: 25;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            margin-top: var(--header-height);
+        }
+
+        /* Central Search Section */
+        .search-section {
+            background-color: var(--card-bg);
+            padding: 20px 16px;
+        }
+
+        .search-section-content {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .central-search-container {
+            position: relative;
+            margin-bottom: 1px;
+        }
+
+        .central-search-input {
+            width: 100%;
+            padding: 16px 24px 16px 56px;
+            background-color: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            color: var(--text-color);
+        }
+
+        .central-search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(255, 138, 80, 0.1);
+        }
+
+        .central-search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            color: #9ca3af;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .filter-bar-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .main-filter-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .sort-dropdown {
+            background-color: #f3f4f6;
+            border: none;
+            border-radius: 9999px;
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: var(--text-color);
+        }
+
+        .sort-dropdown:hover {
+            background-color: #e5e7eb;
+        }
+
+        .filters-button {
+            background-color: #f3f4f6;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: var(--text-color);
+        }
+
+        .filters-button:hover {
+            background-color: #e5e7eb;
+        }
+
+        /* Results info */
+        .results-info {
+            font-size: 0.875rem;
+            color: var(--secondary-color);
+            margin-bottom: 16px;
+        }
+
+        /* Manga Grid */
+        .manga-grid-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+
+        .manga-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        @media (min-width: 640px) {
+            .manga-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .manga-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 24px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .manga-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+
+        /* Title Card */
+        .title-card {
+            cursor: pointer;
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .title-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .cover-container {
+            position: relative;
+            aspect-ratio: 2/3;
+            width: 100%;
+            overflow: hidden;
+            background-color: #e5e7eb;
+        }
+
+        .cover-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .title-card:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .rating-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+        }
+
+        .star-icon {
+            width: 12px;
+            height: 12px;
+            fill: #ffd700;
+        }
+
+        .donation-progress {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            right: 8px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 8px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 3px;
+            background-color: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            margin-top: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), #ff7043);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .card-info {
+            padding: 12px;
+        }
+
+        .card-meta {
+            font-size: 0.75rem;
+            color: var(--secondary-color);
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-badge {
+            background: var(--primary-color);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .card-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            line-height: 1.25;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            color: var(--text-color);
+            margin-bottom: 8px;
+        }
+
+        .card-genres {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .genre-tag {
+            background: var(--bg-color);
+            color: var(--secondary-color);
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            border: 1px solid var(--border-color);
+        }
+
+        /* No results */
+        .no-results {
+            text-align: center;
+            padding: 64px 16px;
+        }
+
+        .no-results h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 8px;
+        }
+
+        .no-results p {
+            color: var(--secondary-color);
+            margin-bottom: 16px;
+        }
+
+        .clear-filters-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .clear-filters-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Filters Sidebar */
+        .filters-backdrop {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 30;
+            display: none;
+        }
+
+        .filters-backdrop.show {
+            display: block;
+        }
+
+        .filters-sidebar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 100%;
+            max-width: 400px;
+            background-color: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            z-index: 40;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .filters-sidebar.show {
+            transform: translateX(0);
+        }
+
+        .filters-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .filters-header h3 {
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .close-button {
+            padding: 8px;
+            border: none;
+            background: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: var(--text-color);
+        }
+
+        .close-button:hover {
+            background-color: var(--bg-color);
+        }
+
+        .filters-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-categories {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .filter-category-button {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-color);
+        }
+
+        .filter-category-button:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(255, 138, 80, 0.05);
+        }
+
+        .filter-count {
+            color: var(--primary-color);
+            margin-left: 4px;
+            font-size: 0.75rem;
+            font-weight: normal;
+            background: rgba(255, 138, 80, 0.1);
+            padding: 2px 6px;
+            border-radius: 8px;
+        }
+
+        /* Filter page */
+        .filter-page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-color);
+        }
+
+        .back-button:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(255, 138, 80, 0.05);
+        }
+
+        .search-input-container {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            color: #9ca3af;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 40px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            color: var(--text-color);
+        }
+
+        .filter-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .filter-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: var(--text-color);
+        }
+
+        .filter-item:hover {
+            background-color: var(--bg-color);
+        }
+
+        .checkbox {
+            display: flex;
+            align-items: center;
+            margin-right: 12px;
+        }
+
+        .checkbox-input {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .checkbox-input.checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .checkmark {
+            width: 12px;
+            height: 12px;
+            color: white;
+            fill: currentColor;
+        }
+
+        /* Mobile Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--mobile-bottom-nav);
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            z-index: 1000;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-size: 11px;
+            gap: 4px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        /* Desktop Styles */
+        @media (min-width: 768px) {
+            body {
+                padding-bottom: 0;
+            }
+
+            .header {
+                display: flex;
+            }
+
+            .sticky-header {
+                top: var(--header-height);
+                margin-top: 0;
+            }
+
+            .bottom-nav {
+                display: none;
+            }
+        }
+
+        /* Loading state */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            color: var(--secondary-color);
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border-color);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 12px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <!-- Header (Desktop) -->
+    <header class="header">
+        <a href="index.html" class="logo">Light Fox Manga</a>
+        
+        <nav class="desktop-nav">
+            <a href="index.html" class="nav-link">Главная</a>
+            <a href="catalog.html" class="nav-link active">Каталог</a>
+            <a href="cabinet.html" class="nav-link">Личный кабинет</a>
+            <a href="#" class="nav-link" onclick="openRandomManga()">Случайное</a>
+        </nav>
+        
+        <div class="header-controls">
+            <button class="theme-toggle" id="themeToggle">
+                <svg class="moon-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79C20.8427 14.4922 20.2039 16.1144 19.1583 17.4668C18.1127 18.8192 16.7035 19.8458 15.0957 20.4265C13.4879 21.0073 11.7431 21.1181 10.0644 20.7461C8.38579 20.374 6.8398 19.5345 5.61677 18.3271C4.39374 17.1198 3.54362 15.5916 3.17133 13.9299C2.79905 12.2682 2.91262 10.5378 3.49644 8.94267C4.08026 7.34753 5.10962 5.94939 6.46482 4.90969C7.82002 3.86999 9.44343 3.23112 11.16 3.08C10.1598 4.98048 9.94059 7.18295 10.5446 9.23931C11.1486 11.2957 12.5154 13.0464 14.3735 14.1467C16.2317 15.247 18.4549 15.6021 20.55 15.13L21 12.79Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <svg class="sun-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                    <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Sticky Header Container -->
+    <div class="sticky-header">
+        <!-- Central Search Section -->
+        <div class="search-section">
+            <div class="search-section-content">
+                <div class="central-search-container">
+                    <svg class="central-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <input type="text" placeholder="Поиск по названию манги..." 
+                           class="central-search-input" id="centralSearchInput" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <div class="filter-bar-content">
+                <div class="main-filter-row">
+                    <div>
+                        <select class="sort-dropdown" id="sortSelect">
+                            <option value="popularity">По популярности</option>
+                            <option value="rating">По рейтингу</option>
+                            <option value="updated">По дате обновления</option>
+                            <option value="alphabet">По алфавиту</option>
+                        </select>
+                    </div>
+
+                    <div class="filters-container">
+                        <button class="filters-button" id="filtersButton">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"></path>
+                            </svg>
+                            Фильтры
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manga Grid -->
+    <div class="manga-grid-container">
+        <div class="results-info" id="resultsInfo">Загрузка...</div>
+        
+        <!-- Loading State -->
+        <div class="loading" id="loadingState">
+            <div class="spinner"></div>
+            Загрузка каталога...
+        </div>
+
+        <div class="manga-grid" id="mangaGrid" style="display: none;">
+            <!-- Manga cards will be generated by JavaScript -->
+        </div>
+
+        <!-- No Results -->
+        <div class="no-results" id="noResults" style="display: none;">
+            <h3>Ничего не найдено</h3>
+            <p>Попробуйте изменить параметры поиска или фильтры</p>
+            <button class="clear-filters-btn" onclick="clearAllFilters()">Очистить фильтры</button>
+        </div>
+    </div>
+
+    <!-- Filters Sidebar -->
+    <div class="filters-backdrop" id="filtersBackdrop"></div>
+    <div class="filters-sidebar" id="filtersSidebar">
+        <div class="filters-header">
+            <h3>Фильтры</h3>
+            <button class="close-button" id="closeSidebar">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <div class="filters-content" id="filtersContent">
+            <!-- Filter content will be dynamically generated -->
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 12L5 10M5 10L12 3L19 10M5 10V20C5 20.5523 5.44772 21 6 21H9M19 10L21 12M19 10V20C19 20.5523 18.5523 21 18 21H15M9 21C9.55228 21 10 20.5523 10 20V16C10 15.4477 10.4477 15 11 15H13C13.5523 15 14 15.4477 14 16V20C14 20.5523 14.4477 21 15 21M9 21H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <span>Главная</span>
+        </a>
+        <a href="catalog.html" class="nav-item active">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 19.5C4 18.1193 5.11929 17 6.5 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M6.5 2H20V22H6.5C5.11929 22 4 20.8807 4 19.5V4.5C4 3.11929 5.11929 2 6.5 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <span>Каталог</span>
+        </a>
+        <a href="cabinet.html" class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.04097 1.5487 8.5C1.5487 9.95903 2.1283 11.3583 3.16 12.39L4.22 13.45L12 21.23L19.78 13.45L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.06211 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <span>Кабинет</span>
+        </a>
+        <a href="#" class="nav-item" onclick="openRandomManga()">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <span>Случайное</span>
+        </a>
+    </nav>
+
+    <!-- Scripts -->
+    <script>
+        // Подключаем систему данных
+        const script = document.createElement('script');
+        script.src = 'js/data.js';
+        document.head.appendChild(script);
+    </script>
+    
+    <script>
+        // State management
+        let state = {
+            sortBy: 'popularity',
+            isFiltersOpen: false,
+            searchQuery: '',
+            chaptersFrom: '',
+            chaptersTo: '',
+            activeFilterPage: 'main',
+            selectedGenres: [],
+            genreSearchQuery: '',
+            selectedCategories: [],
+            categorySearchQuery: '',
+            selectedStatuses: [],
+            isDark: localStorage.getItem('theme') === 'dark'
+        };
+
+        // Theme functionality
+        function updateTheme() {
+            document.body.setAttribute('data-theme', state.isDark ? 'dark' : 'light');
+            
+            const moonIcon = document.querySelector('.moon-icon');
+            const sunIcon = document.querySelector('.sun-icon');
+            if (state.isDark) {
+                moonIcon.style.display = 'none';
+                sunIcon.style.display = 'block';
+            } else {
+                moonIcon.style.display = 'block';
+                sunIcon.style.display = 'none';
+            }
+            
+            localStorage.setItem('theme', state.isDark ? 'dark' : 'light');
+        }
+
+        function toggleTheme() {
+            state.isDark = !state.isDark;
+            updateTheme();
+        }
+
+        // Render manga card
+        function renderMangaCard(manga) {
+            const donationProgress = ((manga.currentDonations || 0) / (manga.donationGoal || 10000)) * 100;
+            
+            return `
+                <div class="title-card" data-id="${manga.id}" onclick="openManga(${manga.id})">
+                    <div class="cover-container">
+                        <img src="${manga.image || 'https://via.placeholder.com/300x450/FF6B35/FFFFFF?text=' + encodeURIComponent(manga.title)}" 
+                             alt="${manga.title}" 
+                             class="cover-image"
+                             onerror="this.src='https://via.placeholder.com/300x450/FF6B35/FFFFFF?text=' + encodeURIComponent('${manga.title}')" />
+                        
+                        <div class="rating-badge">
+                            <svg class="star-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            ${manga.rating}
+                        </div>
+
+                        <div class="donation-progress">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+                                <span>🚀 ${donationProgress.toFixed(0)}%</span>
+                                <span>${(manga.currentDonations || 0).toLocaleString()}₽</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${Math.min(donationProgress, 100)}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-info">
+                        <div class="card-meta">
+                            <span>${manga.type} ${manga.year}</span>
+                            <span class="status-badge">${manga.status}</span>
+                        </div>
+                        <h3 class="card-title">${manga.title}</h3>
+                        <div class="card-meta">
+                            <span>Серий: ${manga.availableEpisodes}/${manga.totalEpisodes}</span>
+                        </div>
+                        <div class="card-genres">
+                            ${manga.genres ? manga.genres.slice(0, 3).map(genre => 
+                                `<span class="genre-tag">${genre}</span>`
+                            ).join('') : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Filter and search functions
+        function getFilteredManga() {
+            if (!window.MangaAPI) {
+                return [];
+            }
+
+            const filters = {
+                search: state.searchQuery,
+                genres: state.selectedGenres,
+                categories: state.selectedCategories,
+                statuses: state.selectedStatuses,
+                chaptersFrom: state.chaptersFrom,
+                chaptersTo: state.chaptersTo,
+                sortBy: state.sortBy
+            };
+
+            return window.MangaAPI.filterManga(filters);
+        }
+
+        function renderMangaGrid() {
+            const filteredData = getFilteredManga();
+            const grid = document.getElementById('mangaGrid');
+            const noResults = document.getElementById('noResults');
+            const resultsInfo = document.getElementById('resultsInfo');
+            const loadingState = document.getElementById('loadingState');
+
+            // Hide loading
+            loadingState.style.display = 'none';
+            grid.style.display = 'grid';
+
+            if (filteredData.length === 0) {
+                grid.innerHTML = '';
+                grid.style.display = 'none';
+                noResults.style.display = 'block';
+                resultsInfo.textContent = 'Результатов: 0';
+            } else {
+                grid.innerHTML = filteredData.map(manga => renderMangaCard(manga)).join('');
+                noResults.style.display = 'none';
+                resultsInfo.textContent = `Найдено тайтлов: ${filteredData.length}`;
+            }
+        }
+
+        // Navigation functions
+        function openManga(id) {
+            window.location.href = `player.html?id=${id}`;
+        }
+
+        function openRandomManga() {
+            if (window.MangaAPI) {
+                const allManga = window.MangaAPI.getAllManga();
+                if (allManga.length > 0) {
+                    const randomManga = allManga[Math.floor(Math.random() * allManga.length)];
+                    openManga(randomManga.id);
+                } else {
+                    alert('Каталог пуст. Добавьте тайтлы через админку!');
+                }
+            }
+        }
+
+        // Filter sidebar functions
+        function renderMainFilters() {
+            const genres = window.MangaAPI ? window.MangaAPI.getGenres() : [];
+            const categories = window.MangaAPI ? window.MangaAPI.getCategories() : [];
+            const statuses = window.MangaAPI ? window.MangaAPI.getStatuses() : [];
+
+            return `
+                <div class="filter-categories">
+                    <button class="filter-category-button" onclick="setActiveFilterPage('genres')">
+                        <span>Жанры ${state.selectedGenres.length > 0 ? `<span class="filter-count">${state.selectedGenres.length}</span>` : ''}</span>
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+
+                    <button class="filter-category-button" onclick="setActiveFilterPage('categories')">
+                        <span>Категории ${state.selectedCategories.length > 0 ? `<span class="filter-count">${state.selectedCategories.length}</span>` : ''}</span>
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+
+                    <button class="filter-category-button" onclick="setActiveFilterPage('status')">
+                        <span>Статус ${state.selectedStatuses.length > 0 ? `<span class="filter-count">${state.selectedStatuses.length}</span>` : ''}</span>
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderFilterPage(type, items, selected, searchQuery = '') {
+            const filteredItems = items.filter(item => 
+                item.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+
+            const titles = {
+                genres: 'Жанры',
+                categories: 'Категории', 
+                status: 'Статус'
+            };
+            const title = titles[type];
+
+            return `
+                <div style="display: flex; flex-direction: column; height: 100%;">
+                    <div class="filter-page-header">
+                        <button class="back-button" onclick="setActiveFilterPage('main')">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                            ${title}
+                        </button>
+                        <button class="back-button" onclick="clearFilter('${type}')">Сбросить</button>
+                    </div>
+
+                    ${type !== 'status' ? `
+                    <div class="search-input-container">
+                        <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <input type="text" placeholder="Поиск..." value="${searchQuery}" 
+                               class="search-input" onkeyup="updateFilterSearch('${type}', this.value)" />
+                    </div>
+                    ` : ''}
+
+                    <div class="filter-list">
+                        ${filteredItems.map(item => `
+                            <button class="filter-item" onclick="toggleFilter('${type}', '${item}')">
+                                <span class="checkbox">
+                                    <div class="checkbox-input ${selected.includes(item) ? 'checked' : ''}">
+                                        ${selected.includes(item) ? `
+                                            <svg class="checkmark" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                            </svg>
+                                        ` : ''}
+                                    </div>
+                                </span>
+                                ${item}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderFiltersContent() {
+            const content = document.getElementById('filtersContent');
+            
+            if (!window.MangaAPI) {
+                content.innerHTML = '<div class="loading"><div class="spinner"></div>Загрузка фильтров...</div>';
+                return;
+            }
+
+            if (state.activeFilterPage === 'main') {
+                content.innerHTML = renderMainFilters();
+            } else if (state.activeFilterPage === 'genres') {
+                content.innerHTML = renderFilterPage('genres', window.MangaAPI.getGenres(), state.selectedGenres, state.genreSearchQuery);
+            } else if (state.activeFilterPage === 'categories') {
+                content.innerHTML = renderFilterPage('categories', window.MangaAPI.getCategories(), state.selectedCategories, state.categorySearchQuery);
+            } else if (state.activeFilterPage === 'status') {
+                content.innerHTML = renderFilterPage('status', window.MangaAPI.getStatuses(), state.selectedStatuses);
+            }
+        }
+
+        // Filter management functions
+        function setActiveFilterPage(page) {
+            state.activeFilterPage = page;
+            if (page === 'main') {
+                state.genreSearchQuery = '';
+                state.categorySearchQuery = '';
+            }
+            renderFiltersContent();
+        }
+
+        function updateFilterSearch(type, value) {
+            if (type === 'genres') {
+                state.genreSearchQuery = value;
+            } else if (type === 'categories') {
+                state.categorySearchQuery = value;
+            }
+            renderFiltersContent();
+        }
+
+        function toggleFilter(type, item) {
+            if (type === 'genres') {
+                if (state.selectedGenres.includes(item)) {
+                    state.selectedGenres = state.selectedGenres.filter(g => g !== item);
+                } else {
+                    state.selectedGenres.push(item);
+                }
+            } else if (type === 'categories') {
+                if (state.selectedCategories.includes(item)) {
+                    state.selectedCategories = state.selectedCategories.filter(c => c !== item);
+                } else {
+                    state.selectedCategories.push(item);
+                }
+            } else if (type === 'status') {
+                if (state.selectedStatuses.includes(item)) {
+                    state.selectedStatuses = state.selectedStatuses.filter(s => s !== item);
+                } else {
+                    state.selectedStatuses.push(item);
+                }
+            }
+            renderFiltersContent();
+            renderMangaGrid();
+        }
+
+        function clearFilter(type) {
+            if (type === 'genres') {
+                state.selectedGenres = [];
+            } else if (type === 'categories') {
+                state.selectedCategories = [];
+            } else if (type === 'status') {
+                state.selectedStatuses = [];
+            }
+            renderFiltersContent();
+            renderMangaGrid();
+        }
+
+        function clearAllFilters() {
+            state.selectedGenres = [];
+            state.selectedCategories = [];
+            state.selectedStatuses = [];
+            state.searchQuery = '';
+            state.chaptersFrom = '';
+            state.chaptersTo = '';
+            
+            document.getElementById('centralSearchInput').value = '';
+            renderFiltersContent();
+            renderMangaGrid();
+            closeFilters();
+        }
+
+        // UI functions
+        function openFilters() {
+            state.isFiltersOpen = true;
+            state.activeFilterPage = 'main';
+            document.body.style.overflow = 'hidden';
+            document.getElementById('filtersBackdrop').classList.add('show');
+            document.getElementById('filtersSidebar').classList.add('show');
+            renderFiltersContent();
+        }
+
+        function closeFilters() {
+            state.isFiltersOpen = false;
+            state.activeFilterPage = 'main';
+            state.genreSearchQuery = '';
+            state.categorySearchQuery = '';
+            document.body.style.overflow = '';
+            document.getElementById('filtersBackdrop').classList.remove('show');
+            document.getElementById('filtersSidebar').classList.remove('show');
+        }
+
+        // Initialize when data is ready
+        function initializeCatalog() {
+            renderMangaGrid();
+            renderFiltersContent();
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme toggle
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+            // Search input
+            document.getElementById('centralSearchInput').addEventListener('input', function(e) {
+                state.searchQuery = e.target.value;
+                renderMangaGrid();
+            });
+
+            // Sort dropdown
+            document.getElementById('sortSelect').addEventListener('change', function(e) {
+                state.sortBy = e.target.value;
+                renderMangaGrid();
+            });
+
+            // Filters button
+            document.getElementById('filtersButton').addEventListener('click', openFilters);
+
+            // Close filters
+            document.getElementById('closeSidebar').addEventListener('click', closeFilters);
+            document.getElementById('filtersBackdrop').addEventListener('click', closeFilters);
+
+            // Initialize theme
+            updateTheme();
+
+            // Wait for data to be ready
+            if (window.MangaAPI) {
+                initializeCatalog();
+            } else {
+                window.addEventListener('mangaDataReady', initializeCatalog);
+            }
+
+            // Listen for data updates
+            window.addEventListener('mangaDataUpdate', renderMangaGrid);
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeFilters();
+            }
+        });
+    </script>
+</body>
+</html>

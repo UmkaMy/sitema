@@ -1,440 +1,479 @@
-// ================================================
-// ЦЕНТРАЛЬНАЯ СИСТЕМА УПРАВЛЕНИЯ ДАННЫМИ МАНГИ
-// ================================================
+// Система управления данными для Light Fox Manga
+(function() {
+    'use strict';
 
-// Версия данных (увеличивайте при изменениях)
-const DATA_VERSION = 1;
+    // Ключ для localStorage
+    const STORAGE_KEY = 'lightfox_manga_data';
+    const SETTINGS_KEY = 'lightfox_settings';
 
-// ================================================
-// ОСНОВНАЯ БАЗА ДАННЫХ ТАЙТЛОВ
-// ================================================
-
-window.MangaData = {
-    version: DATA_VERSION,
-    lastUpdated: new Date().toISOString(),
-    
-    // Основной каталог тайтлов
-    manga: [
+    // Образцы данных манги
+    const sampleData = [
         {
-            id: 1,
-            title: 'Поднятие уровня в одиночку',
-            description: 'В мире, где появились врата, соединяющие наш мир с опасными подземельями, обычные люди получили способности охотников. Сунг Джин У - самый слабый охотник ранга E, но после таинственного инцидента в подземелье он получает уникальную способность повышать уровень.',
-            image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=450&fit=crop',
-            type: 'Манхва',
-            year: 2018,
-            status: 'Закончен',
-            rating: 9.7,
-            totalEpisodes: 200,
-            availableEpisodes: 200,
-            
-            // Жанры и категории для фильтрации
-            genres: ['Экшен', 'Фэнтези', 'Сверхъестественное'],
-            categories: ['ГГ имба', 'Система', 'Навыки', 'Монстры', 'Подземелья'],
-            
-            // Ссылки на серии (можете заменить на свои)
-            episodes: {
-                1: 'https://www.youtube.com/embed/UHwz6F5ymYU',
-                2: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-                3: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-                // ... добавьте остальные серии
-            },
-            
-            // Система донатов
+            id: '1',
+            title: 'Атака титанов',
+            type: 'Аниме',
+            status: 'Завершён',
+            year: 2013,
+            rating: 9.0,
+            genres: ['Экшен', 'Драма', 'Фэнтези', 'Военное'],
+            categories: ['Сёнен'],
+            availableEpisodes: 87,
+            totalEpisodes: 87,
+            currentDonations: 7500,
             donationGoal: 10000,
-            currentDonations: 8500,
-            
-            // Метаданные
-            addedAt: '2024-01-15T10:00:00Z',
-            updatedAt: '2024-01-20T15:30:00Z',
-            addedBy: 'admin'
-        },
-        
-        {
-            id: 2,
-            title: 'Начало после конца',
-            description: 'Король Грей обладает непревзойденной силой, богатством и престижем в мире, управляемом способностями к боевым искусствам. Однако одиночество неизбежно следует за теми, кто обладает большой силой. Под внешней оболочкой могущественного короля находится душа человека, лишенного цели и воли.',
-            image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=450&fit=crop',
-            type: 'Западный комикс',
-            year: 2018,
-            status: 'Продолжается',
-            rating: 9.4,
-            totalEpisodes: 180,
-            availableEpisodes: 165,
-            
-            genres: ['Фэнтези', 'Драма', 'Экшен'],
-            categories: ['Реинкарнация', 'Магия', 'Академия', 'ГГ имба'],
-            
+            image: 'https://via.placeholder.com/300x450/FF6B35/FFFFFF?text=Атака+титанов',
+            description: 'Человечество живёт в городах, окружённых огромными стенами, защищающими от титанов — гигантских гуманоидов, пожирающих людей.',
             episodes: {
-                1: 'https://www.youtube.com/embed/UHwz6F5ymYU',
-                2: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-                // ... добавьте остальные серии
-            },
-            
+                1: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+                2: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+            }
+        },
+        {
+            id: '2',
+            title: 'Наруто',
+            type: 'Аниме',
+            status: 'Завершён',
+            year: 2002,
+            rating: 8.7,
+            genres: ['Экшен', 'Приключения', 'Боевые искусства'],
+            categories: ['Сёнен'],
+            availableEpisodes: 720,
+            totalEpisodes: 720,
+            currentDonations: 12000,
             donationGoal: 15000,
-            currentDonations: 3200,
-            
-            addedAt: '2024-01-10T08:00:00Z',
-            updatedAt: '2024-01-21T12:00:00Z',
-            addedBy: 'admin'
-        },
-        
-        {
-            id: 3,
-            title: 'Всеведущий читатель',
-            description: 'Ким Докджа - обычный офисный работник, который единственный дочитал веб-новел "Три способа выжить в разрушенном мире" до конца. Когда события из новеллы начинают происходить в реальности, только он знает, что будет дальше.',
-            image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=450&fit=crop',
-            type: 'Манхва',
-            year: 2020,
-            status: 'Продолжается',
-            rating: 9.5,
-            totalEpisodes: 150,
-            availableEpisodes: 120,
-            
-            genres: ['Фэнтези', 'Экшен', 'Психология', 'Драма'],
-            categories: ['Исекай', 'Система', 'Умный ГГ', 'Апокалипсис'],
-            
-            episodes: {
-                1: 'https://www.youtube.com/embed/UHwz6F5ymYU',
-                2: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-                // ... добавьте остальные серии
-            },
-            
-            donationGoal: 12000,
-            currentDonations: 5600,
-            
-            addedAt: '2024-01-12T14:00:00Z',
-            updatedAt: '2024-01-22T09:15:00Z',
-            addedBy: 'admin'
-        }
-    ],
-    
-    // ================================================
-    // СПРАВОЧНИКИ ДЛЯ ФИЛЬТРОВ
-    // ================================================
-    
-    genres: [
-        'Боевые искусства', 'Гарем', 'Гендерная интрига', 'Героическое фэнтези', 'Детектив',
-        'Дзёсэй', 'Додзинси', 'Драма', 'История', 'Киберпанк', 'Кодомо', 'Комедия',
-        'Махо-сёдзё', 'Меха', 'Мистика', 'Мурим', 'Научная фантастика', 'Повседневность',
-        'Постапокалиптика', 'Приключения', 'Психология', 'Романтика', 'Сверхъестественное',
-        'Сёдзё', 'Сёдзё-ай', 'Сёнэн', 'Сёнэн-ай', 'Спорт', 'Сэйнэн', 'Трагедия',
-        'Триллер', 'Ужасы', 'Фантастика', 'Фэнтези', 'Школьная жизнь', 'Экшен',
-        'Элементы юмора', 'Этти', 'Юри', 'Яой', 'Военное'
-    ],
-    
-    categories: [
-        'Алхимия', 'Амнезия', 'Ангелы', 'Аниме', 'Антигерой', 'Антиутопия', 'Апокалипсис',
-        'Аристократия', 'Армия', 'Артефакты', 'Боги', 'Бои на мечах', 'Борьба за власть',
-        'Будущее', 'В цвете', 'Веб', 'Вестерн', 'Видеоигры', 'Владыка демонов',
-        'Волшебные существа', 'Воспоминания из другого мира', 'Выживание', 'ГГ женщина',
-        'ГГ имба', 'ГГ мужчина', 'ГГ не человек', 'Геймеры', 'Гильдии', 'Горничные',
-        'Грузовик-сан', 'Гяру', 'Демоны', 'Дружба', 'Ёнкома', 'Жестокий мир',
-        'Животные компаньоны', 'Зверолюди', 'Зомби', 'Игровые элементы', 'Исекай',
-        'Космос', 'Криминал', 'Кулинария', 'Культивация', 'Лоли', 'Магическая академия',
-        'Магия', 'Медицина', 'Месть', 'Монстры', 'Музыка', 'Навыки', 'Наёмники',
-        'Насилие / жестокость', 'Научпоп', 'Нежить', 'Ниндзя', 'Обратный Гарем',
-        'Офисные работники', 'Пародия', 'Подземелья', 'Политика', 'Полиция',
-        'Путешествия во времени', 'Разумные расы', 'Ранги силы', 'Реинкарнация',
-        'Роботы', 'Рыцари', 'Самураи', 'Сборник', 'Сингл', 'Система', 'Скрытие личности',
-        'Спасение мира', 'Средневековье', 'Стимпанк', 'Супер герои', 'Традиционные игры',
-        'Тупой ГГ', 'Умный ГГ', 'Упоротость', 'Управление территорией', 'Учебное заведение',
-        'Учитель / ученик', 'Хикикомори', 'Шантаж', 'Школа', 'Любовь', 'Академия'
-    ],
-    
-    statuses: [
-        'Анонс', 'Закончен', 'Заморожен', 'Лицензировано', 'Продолжается'
-    ],
-    
-    types: [
-        'Манга', 'Манхва', 'Маньхуа', 'Западный комикс', 'Веб-комикс', 'Додзинси'
-    ]
-};
-
-// ================================================
-// API ФУНКЦИИ ДЛЯ РАБОТЫ С ДАННЫМИ
-// ================================================
-
-window.MangaAPI = {
-    
-    // Получить все тайтлы
-    getAllManga() {
-        return window.MangaData.manga;
-    },
-    
-    // Получить тайтл по ID
-    getMangaById(id) {
-        return window.MangaData.manga.find(manga => manga.id === parseInt(id));
-    },
-    
-    // Поиск тайтлов
-    searchManga(query) {
-        const searchTerm = query.toLowerCase();
-        return window.MangaData.manga.filter(manga => 
-            manga.title.toLowerCase().includes(searchTerm) ||
-            manga.description.toLowerCase().includes(searchTerm)
-        );
-    },
-    
-    // Фильтрация тайтлов
-    filterManga(filters) {
-        let filtered = [...window.MangaData.manga];
-        
-        // Поиск по названию
-        if (filters.search) {
-            const searchTerm = filters.search.toLowerCase();
-            filtered = filtered.filter(manga => 
-                manga.title.toLowerCase().includes(searchTerm)
-            );
-        }
-        
-        // Фильтр по жанрам
-        if (filters.genres && filters.genres.length > 0) {
-            filtered = filtered.filter(manga => 
-                filters.genres.some(genre => manga.genres.includes(genre))
-            );
-        }
-        
-        // Фильтр по категориям
-        if (filters.categories && filters.categories.length > 0) {
-            filtered = filtered.filter(manga => 
-                filters.categories.some(category => manga.categories.includes(category))
-            );
-        }
-        
-        // Фильтр по статусу
-        if (filters.statuses && filters.statuses.length > 0) {
-            filtered = filtered.filter(manga => 
-                filters.statuses.includes(manga.status)
-            );
-        }
-        
-        // Фильтр по количеству глав
-        if (filters.chaptersFrom || filters.chaptersTo) {
-            const from = filters.chaptersFrom ? parseInt(filters.chaptersFrom) : 0;
-            const to = filters.chaptersTo ? parseInt(filters.chaptersTo) : Infinity;
-            filtered = filtered.filter(manga => 
-                manga.totalEpisodes >= from && manga.totalEpisodes <= to
-            );
-        }
-        
-        // Сортировка
-        if (filters.sortBy) {
-            filtered.sort((a, b) => {
-                switch (filters.sortBy) {
-                    case 'rating':
-                        return b.rating - a.rating;
-                    case 'alphabet':
-                        return a.title.localeCompare(b.title);
-                    case 'updated':
-                        return new Date(b.updatedAt) - new Date(a.updatedAt);
-                    case 'popularity':
-                    default:
-                        return b.rating - a.rating; // Используем рейтинг как показатель популярности
-                }
-            });
-        }
-        
-        return filtered;
-    },
-    
-    // Добавить новый тайтл (для админки)
-    addManga(mangaData) {
-        // Генерируем новый ID
-        const newId = Math.max(...window.MangaData.manga.map(m => m.id), 0) + 1;
-        
-        const newManga = {
-            id: newId,
-            ...mangaData,
-            addedAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            addedBy: 'admin',
-            currentDonations: 0
-        };
-        
-        window.MangaData.manga.push(newManga);
-        this.saveData();
-        
-        return newManga;
-    },
-    
-    // Обновить тайтл
-    updateManga(id, updates) {
-        const index = window.MangaData.manga.findIndex(manga => manga.id === parseInt(id));
-        if (index !== -1) {
-            window.MangaData.manga[index] = {
-                ...window.MangaData.manga[index],
-                ...updates,
-                updatedAt: new Date().toISOString()
-            };
-            this.saveData();
-            return window.MangaData.manga[index];
-        }
-        return null;
-    },
-    
-    // Удалить тайтл
-    deleteManga(id) {
-        const index = window.MangaData.manga.findIndex(manga => manga.id === parseInt(id));
-        if (index !== -1) {
-            const deleted = window.MangaData.manga.splice(index, 1)[0];
-            this.saveData();
-            return deleted;
-        }
-        return null;
-    },
-    
-    // Получить справочники
-    getGenres() {
-        return window.MangaData.genres;
-    },
-    
-    getCategories() {
-        return window.MangaData.categories;
-    },
-    
-    getStatuses() {
-        return window.MangaData.statuses;
-    },
-    
-    getTypes() {
-        return window.MangaData.types;
-    },
-    
-    // Сохранить данные в localStorage
-    saveData() {
-        try {
-            localStorage.setItem('mangaDatabase', JSON.stringify(window.MangaData));
-            window.dispatchEvent(new CustomEvent('mangaDataUpdate', { 
-                detail: { 
-                    action: 'save',
-                    timestamp: new Date().toISOString()
-                } 
-            }));
-        } catch (error) {
-            console.error('Ошибка сохранения данных:', error);
-        }
-    },
-    
-    // Загрузить данные из localStorage
-    loadData() {
-        try {
-            const saved = localStorage.getItem('mangaDatabase');
-            if (saved) {
-                const data = JSON.parse(saved);
-                // Проверяем версию данных
-                if (data.version === DATA_VERSION) {
-                    window.MangaData = data;
-                    return true;
-                }
-            }
-        } catch (error) {
-            console.error('Ошибка загрузки данных:', error);
-        }
-        return false;
-    },
-    
-    // Очистить все данные
-    clearData() {
-        localStorage.removeItem('mangaDatabase');
-        window.MangaData.manga = [];
-        window.dispatchEvent(new CustomEvent('mangaDataUpdate', { 
-            detail: { 
-                action: 'clear',
-                timestamp: new Date().toISOString()
-            } 
-        }));
-    },
-    
-    // Экспорт данных
-    exportData() {
-        return JSON.stringify(window.MangaData, null, 2);
-    },
-    
-    // Импорт данных
-    importData(jsonData) {
-        try {
-            const data = JSON.parse(jsonData);
-            if (data.manga && Array.isArray(data.manga)) {
-                window.MangaData = {
-                    ...window.MangaData,
-                    ...data,
-                    lastUpdated: new Date().toISOString()
-                };
-                this.saveData();
-                return true;
-            }
-        } catch (error) {
-            console.error('Ошибка импорта данных:', error);
-        }
-        return false;
-    }
-};
-
-// ================================================
-// ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
-// ================================================
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Пытаемся загрузить сохраненные данные
-    const loaded = window.MangaAPI.loadData();
-    
-    if (!loaded) {
-        // Если данных нет, используем дефолтные и сохраняем их
-        console.log('Используются дефолтные данные манги');
-        window.MangaAPI.saveData();
-    } else {
-        console.log('Загружены сохраненные данные манги');
-    }
-    
-    // Уведомляем другие компоненты о готовности данных
-    window.dispatchEvent(new CustomEvent('mangaDataReady', {
-        detail: {
-            totalManga: window.MangaData.manga.length,
-            version: window.MangaData.version
-        }
-    }));
-});
-
-// ================================================
-// УТИЛИТЫ ДЛЯ РАЗРАБОТКИ (только для отладки)
-// ================================================
-
-window.MangaDebug = {
-    // Показать все данные
-    showAll() {
-        console.table(window.MangaData.manga);
-    },
-    
-    // Добавить тестовый тайтл
-    addTestManga() {
-        return window.MangaAPI.addManga({
-            title: 'Тестовый тайтл ' + Date.now(),
-            description: 'Описание тестового тайтла',
-            image: 'https://via.placeholder.com/300x400/FF6B35/FFFFFF?text=Тест',
-            type: 'Манга',
-            year: 2024,
-            status: 'Продолжается',
-            rating: 8.5,
-            totalEpisodes: 50,
-            availableEpisodes: 10,
-            genres: ['Экшен', 'Комедия'],
-            categories: ['ГГ имба', 'Школа'],
+            image: 'https://via.placeholder.com/300x450/FF6B35/FFFFFF?text=Наруто',
+            description: 'История молодого ниндзя Наруто Узумаки, мечтающего стать Хокаге.',
             episodes: {
                 1: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
-            },
-            donationGoal: 5000
-        });
-    },
-    
-    // Очистить все данные
-    clearAll() {
-        if (confirm('Удалить ВСЕ данные? Это действие нельзя отменить!')) {
-            window.MangaAPI.clearData();
-            location.reload();
+            }
+        },
+        {
+            id: '3',
+            title: 'Ван Пис',
+            type: 'Аниме',
+            status: 'Выходит',
+            year: 1999,
+            rating: 9.1,
+            genres: ['Экшен', 'Приключения', 'Комедия'],
+            categories: ['Сёнен'],
+            availableEpisodes: 1000,
+            totalEpisodes: 1200,
+            currentDonations: 8000,
+            donationGoal: 20000,
+            image: 'https://via.placeholder.com/300x450/FF6B35/FFFFFF?text=Ван+Пис',
+            description: 'Приключения Монки Д. Луффи и его команды пиратов в поисках легендарного сокровища.',
+            episodes: {
+                1: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+            }
+        },
+        {
+            id: '4',
+            title: 'Моя геройская академия',
+            type: 'Аниме',
+            status: 'Выходит',
+            year: 2016,
+            rating: 8.5,
+            genres: ['Экшен', 'Школа', 'Супергерои'],
+            categories: ['Сёнен'],
+            availableEpisodes: 138,
+            totalEpisodes: 150,
+            currentDonations: 5500,
+            donationGoal: 12000,
+            image: 'https://via.placeholder.com/300x450/FF6B35/FFFFFF?text=Моя+геройская+академия',
+            description: 'В мире, где 80% населения обладает суперспособностями, обычный мальчик мечтает стать героем.',
+            episodes: {
+                1: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+            }
+        },
+        {
+            id: '5',
+            title: 'Магическая битва',
+            type: 'Аниме',
+            status: 'Выходит',
+            year: 2020,
+            rating: 8.8,
+            genres: ['Экшен', 'Сверхъестественное', 'Школа'],
+            categories: ['Сёнен'],
+            availableEpisodes: 24,
+            totalEpisodes: 50,
+            currentDonations: 3000,
+            donationGoal: 8000,
+            image: 'https://via.placeholder.com/300x450/FF6B35/FFFFFF?text=Магическая+битва',
+            description: 'Юки Итадори попадает в мир магов и проклятий после того, как съедает палец древнего демона.',
+            episodes: {
+                1: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+            }
+        },
+        {
+            id: '6',
+            title: 'Демон разрушения',
+            type: 'Аниме',
+            status: 'Выходит',
+            year: 2019,
+            rating: 8.9,
+            genres: ['Экшен', 'Исторический', 'Сверхъестественное'],
+            categories: ['Сёнен'],
+            availableEpisodes: 32,
+            totalEpisodes: 44,
+            currentDonations: 9200,
+            donationGoal: 11000,
+            image: 'https://via.placeholder.com/300x450/FF6B35/FFFFFF?text=Демон+разрушения',
+            description: 'Танджиро Камадо становится охотником на демонов, чтобы спасти свою сестру.',
+            episodes: {
+                1: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+            }
+        },
+        {
+            id: '7',
+            title: 'Берсерк',
+            type: 'Манга',
+            status: 'Выходит',
+            year: 1989,
+            rating: 9.2,
+            genres: ['Экшен', 'Драма', 'Ужасы', 'Фэнтези'],
+            categories: ['Сэйнэн'],
+            availableEpisodes: 364,
+            totalEpisodes: 400,
+            currentDonations: 15000,
+            donationGoal: 25000,
+            image: 'https://via.placeholder.com/300x450/FF6B35/FFFFFF?text=Берсерк',
+            description: 'Тёмное фэнтези о наёмнике Гатсе и его борьбе с демонами.',
+            episodes: {}
+        },
+        {
+            id: '8',
+            title: 'Токийский гуль',
+            type: 'Аниме',
+            status: 'Завершён',
+            year: 2014,
+            rating: 8.3,
+            genres: ['Экшен', 'Ужасы', 'Сверхъестественное'],
+            categories: ['Сэйнэн'],
+            availableEpisodes: 48,
+            totalEpisodes: 48,
+            currentDonations: 6800,
+            donationGoal: 9000,
+            image: 'https://via.placeholder.com/300x450/FF6B35/FFFFFF?text=Токийский+гуль',
+            description: 'Кен Канеки становится получеловеком-полугулем после встречи с загадочной девушкой.',
+            episodes: {
+                1: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+            }
+        }
+    ];
+
+    // Система управления данными
+    class MangaDataSystem {
+        constructor() {
+            this.data = this.loadData();
+            this.settings = this.loadSettings();
+        }
+
+        // Загрузка данных из localStorage
+        loadData() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (stored) {
+                    const parsedData = JSON.parse(stored);
+                    // Проверяем, что данные валидны
+                    if (Array.isArray(parsedData) && parsedData.length > 0) {
+                        return parsedData;
+                    }
+                }
+            } catch (error) {
+                console.warn('Ошибка загрузки данных из localStorage:', error);
+            }
+            
+            // Если нет сохранённых данных, используем образцы
+            this.saveData(sampleData);
+            return [...sampleData];
+        }
+
+        // Сохранение данных в localStorage
+        saveData(data = null) {
+            try {
+                const dataToSave = data || this.data;
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+                
+                // Уведомляем об обновлении данных
+                if (typeof window !== 'undefined') {
+                    window.dispatchEvent(new CustomEvent('mangaDataUpdate', {
+                        detail: { data: dataToSave }
+                    }));
+                }
+            } catch (error) {
+                console.error('Ошибка сохранения данных:', error);
+            }
+        }
+
+        // Загрузка настроек
+        loadSettings() {
+            try {
+                const stored = localStorage.getItem(SETTINGS_KEY);
+                return stored ? JSON.parse(stored) : {};
+            } catch (error) {
+                console.warn('Ошибка загрузки настроек:', error);
+                return {};
+            }
+        }
+
+        // Сохранение настроек
+        saveSettings() {
+            try {
+                localStorage.setItem(SETTINGS_KEY, JSON.stringify(this.settings));
+            } catch (error) {
+                console.error('Ошибка сохранения настроек:', error);
+            }
+        }
+
+        // Получение всех манги
+        getAllManga() {
+            return [...this.data];
+        }
+
+        // Получение манги по ID
+        getMangaById(id) {
+            return this.data.find(manga => manga.id === String(id));
+        }
+
+        // Добавление новой манги
+        addManga(manga) {
+            const newManga = {
+                id: String(Date.now()),
+                currentDonations: 0,
+                donationGoal: 10000,
+                episodes: {},
+                ...manga
+            };
+            
+            this.data.push(newManga);
+            this.saveData();
+            return newManga;
+        }
+
+        // Обновление манги
+        updateManga(id, updates) {
+            const index = this.data.findIndex(manga => manga.id === String(id));
+            if (index !== -1) {
+                this.data[index] = { ...this.data[index], ...updates };
+                this.saveData();
+                return this.data[index];
+            }
+            return null;
+        }
+
+        // Удаление манги
+        deleteManga(id) {
+            const index = this.data.findIndex(manga => manga.id === String(id));
+            if (index !== -1) {
+                const deleted = this.data.splice(index, 1)[0];
+                this.saveData();
+                return deleted;
+            }
+            return null;
+        }
+
+        // Получение уникальных жанров
+        getGenres() {
+            const genres = new Set();
+            this.data.forEach(manga => {
+                if (manga.genres) {
+                    manga.genres.forEach(genre => genres.add(genre));
+                }
+            });
+            return Array.from(genres).sort();
+        }
+
+        // Получение уникальных категорий
+        getCategories() {
+            const categories = new Set();
+            this.data.forEach(manga => {
+                if (manga.categories) {
+                    manga.categories.forEach(category => categories.add(category));
+                }
+            });
+            return Array.from(categories).sort();
+        }
+
+        // Получение уникальных статусов
+        getStatuses() {
+            const statuses = new Set();
+            this.data.forEach(manga => {
+                if (manga.status) {
+                    statuses.add(manga.status);
+                }
+            });
+            return Array.from(statuses).sort();
+        }
+
+        // Фильтрация и поиск
+        filterManga(filters = {}) {
+            let result = [...this.data];
+
+            // Поиск по названию
+            if (filters.search) {
+                const searchTerm = filters.search.toLowerCase();
+                result = result.filter(manga => 
+                    manga.title.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            // Фильтр по жанрам
+            if (filters.genres && filters.genres.length > 0) {
+                result = result.filter(manga => 
+                    manga.genres && filters.genres.some(genre => 
+                        manga.genres.includes(genre)
+                    )
+                );
+            }
+
+            // Фильтр по категориям
+            if (filters.categories && filters.categories.length > 0) {
+                result = result.filter(manga => 
+                    manga.categories && filters.categories.some(category => 
+                        manga.categories.includes(category)
+                    )
+                );
+            }
+
+            // Фильтр по статусам
+            if (filters.statuses && filters.statuses.length > 0) {
+                result = result.filter(manga => 
+                    manga.status && filters.statuses.includes(manga.status)
+                );
+            }
+
+            // Фильтр по количеству серий
+            if (filters.chaptersFrom) {
+                const from = parseInt(filters.chaptersFrom);
+                if (!isNaN(from)) {
+                    result = result.filter(manga => 
+                        manga.availableEpisodes >= from
+                    );
+                }
+            }
+
+            if (filters.chaptersTo) {
+                const to = parseInt(filters.chaptersTo);
+                if (!isNaN(to)) {
+                    result = result.filter(manga => 
+                        manga.availableEpisodes <= to
+                    );
+                }
+            }
+
+            // Сортировка
+            if (filters.sortBy) {
+                switch (filters.sortBy) {
+                    case 'alphabet':
+                        result.sort((a, b) => a.title.localeCompare(b.title));
+                        break;
+                    case 'rating':
+                        result.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+                        break;
+                    case 'updated':
+                        result.sort((a, b) => (b.year || 0) - (a.year || 0));
+                        break;
+                    case 'popularity':
+                    default:
+                        result.sort((a, b) => {
+                            const aPopularity = (a.currentDonations || 0) + (a.rating || 0) * 1000;
+                            const bPopularity = (b.currentDonations || 0) + (b.rating || 0) * 1000;
+                            return bPopularity - aPopularity;
+                        });
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        // Статистика
+        getStats() {
+            return {
+                totalManga: this.data.length,
+                totalEpisodes: this.data.reduce((sum, manga) => sum + (manga.availableEpisodes || 0), 0),
+                averageRating: this.data.reduce((sum, manga) => sum + (manga.rating || 0), 0) / this.data.length,
+                totalDonations: this.data.reduce((sum, manga) => sum + (manga.currentDonations || 0), 0)
+            };
+        }
+
+        // Сброс данных к образцам
+        resetToSampleData() {
+            this.data = [...sampleData];
+            this.saveData();
+            return this.data;
+        }
+
+        // Экспорт данных
+        exportData() {
+            return {
+                manga: this.data,
+                settings: this.settings,
+                exportDate: new Date().toISOString(),
+                version: '1.0'
+            };
+        }
+
+        // Импорт данных
+        importData(importedData) {
+            try {
+                if (importedData.manga && Array.isArray(importedData.manga)) {
+                    this.data = importedData.manga;
+                    this.saveData();
+                }
+                
+                if (importedData.settings) {
+                    this.settings = { ...this.settings, ...importedData.settings };
+                    this.saveSettings();
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Ошибка импорта данных:', error);
+                return false;
+            }
         }
     }
-};
 
-console.log('🚀 Система управления данными манги загружена!');
-console.log('📊 Доступно тайтлов:', window.MangaData.manga.length);
-console.log('🔧 Для отладки используйте: window.MangaDebug');
+    // Создание глобального экземпляра
+    const mangaSystem = new MangaDataSystem();
+
+    // Экспорт в глобальную область видимости
+    window.MangaAPI = {
+        // Основные методы работы с данными
+        getAllManga: () => mangaSystem.getAllManga(),
+        getMangaById: (id) => mangaSystem.getMangaById(id),
+        addManga: (manga) => mangaSystem.addManga(manga),
+        updateManga: (id, updates) => mangaSystem.updateManga(id, updates),
+        deleteManga: (id) => mangaSystem.deleteManga(id),
+        
+        // Методы для фильтров
+        getGenres: () => mangaSystem.getGenres(),
+        getCategories: () => mangaSystem.getCategories(),
+        getStatuses: () => mangaSystem.getStatuses(),
+        filterManga: (filters) => mangaSystem.filterManga(filters),
+        
+        // Утилиты
+        getStats: () => mangaSystem.getStats(),
+        resetToSampleData: () => mangaSystem.resetToSampleData(),
+        exportData: () => mangaSystem.exportData(),
+        importData: (data) => mangaSystem.importData(data),
+        
+        // Прямой доступ к системе для расширенного использования
+        _system: mangaSystem
+    };
+
+    // Уведомление о готовности данных
+    setTimeout(() => {
+        if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('mangaDataReady', {
+                detail: { api: window.MangaAPI }
+            }));
+        }
+    }, 100);
+
+    console.log('🦊 Light Fox Manga Data System загружена');
+    console.log(`📚 Загружено ${mangaSystem.data.length} тайтлов`);
+    console.log('🔧 API доступен через window.MangaAPI');
+
+})();

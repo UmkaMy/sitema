@@ -786,6 +786,26 @@
                                 </div>
                             </div>
 
+                            <!-- Количество глав -->
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Доступно глав</label>
+                                    <input type="number" class="form-input" id="availableChapters" min="0" placeholder="Сколько глав доступно (например: 5)">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Всего глав</label>
+                                    <input type="number" class="form-input" id="totalChapters" min="1" placeholder="Общее количество глав (например: 99)">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Предпросмотр</label>
+                                    <div style="padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); font-weight: 600;" id="chaptersPreview">
+                                        Главы: 0/0
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="form-group">
                                 <label class="form-label">URL обложки</label>
                                 <input type="url" class="form-input" id="mangaImage" placeholder="https://example.com/image.jpg" onchange="previewImage(this.value)">
@@ -921,6 +941,10 @@
                     this.value = '';
                 }
             });
+
+            // Chapters preview update
+            document.getElementById('availableChapters').addEventListener('input', updateChaptersPreview);
+            document.getElementById('totalChapters').addEventListener('input', updateChaptersPreview);
         }
 
         // Section navigation
@@ -994,7 +1018,7 @@
                     <div class="manga-item-header">
                         <div class="manga-item-title">${manga.title}</div>
                         <div class="manga-item-meta">
-                            ${manga.type} • ${manga.status} • ${manga.availableEpisodes}/${manga.totalEpisodes} серий
+                            ${manga.type} • ${manga.status} • Главы: ${manga.availableEpisodes || 0}/${manga.totalEpisodes || 0}
                         </div>
                     </div>
                     <div class="manga-item-actions">
@@ -1022,6 +1046,11 @@
             document.getElementById('donationGoal').value = manga.donationGoal || 10000;
             document.getElementById('mangaImage').value = manga.image || '';
             document.getElementById('mangaDescription').value = manga.description || '';
+
+            // Load chapters count
+            document.getElementById('availableChapters').value = manga.availableEpisodes || 0;
+            document.getElementById('totalChapters').value = manga.totalEpisodes || 0;
+            updateChaptersPreview();
 
             // Load genres
             document.getElementById('genreTags').innerHTML = '';
@@ -1322,13 +1351,16 @@
                     throw new Error('Статус тайтла обязателен');
                 }
 
-                // Process episodes
-                const readyEpisodes = episodes.filter(ep => ep.url && ep.url.trim());
-                mangaData.totalEpisodes = episodes.length;
-                mangaData.availableEpisodes = readyEpisodes.length;
+                // Process episodes - now using manual chapter counts
+                const availableChapters = parseInt(document.getElementById('availableChapters').value) || 0;
+                const totalChapters = parseInt(document.getElementById('totalChapters').value) || 0;
+                
+                mangaData.totalEpisodes = totalChapters;
+                mangaData.availableEpisodes = availableChapters;
 
                 // Convert episodes to old format for compatibility
                 mangaData.episodes = {};
+                const readyEpisodes = episodes.filter(ep => ep.url && ep.url.trim());
                 readyEpisodes.forEach(episode => {
                     // Create episode key based on chapter range
                     let episodeKey;
@@ -1395,10 +1427,36 @@
             renderEpisodesList();
             updateEpisodesSummary();
             
+            // Reset chapters preview
+            updateChaptersPreview();
+            
             editingManga = null;
             document.getElementById('formTitle').textContent = 'Добавить новый тайтл';
             
             showNotification('Форма очищена', 'success');
+        }
+
+        // Update chapters preview
+        function updateChaptersPreview() {
+            const available = parseInt(document.getElementById('availableChapters').value) || 0;
+            const total = parseInt(document.getElementById('totalChapters').value) || 0;
+            
+            document.getElementById('chaptersPreview').textContent = `Главы: ${available}/${total}`;
+            
+            // Add color coding
+            const preview = document.getElementById('chaptersPreview');
+            preview.style.color = '';
+            
+            if (available > total && total > 0) {
+                preview.style.color = 'var(--danger-color)';
+                preview.textContent += ' ⚠️ Доступных больше чем всего!';
+            } else if (available === total && total > 0) {
+                preview.style.color = 'var(--success-color)';
+                preview.textContent += ' ✅ Завершено';
+            } else if (available > 0 && total > 0) {
+                preview.style.color = 'var(--warning-color)';
+                preview.textContent += ' 📖 В процессе';
+            }
         }
 
         function previewManga() {

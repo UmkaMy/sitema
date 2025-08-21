@@ -1407,7 +1407,8 @@
                         </div>
                         <h3 class="card-title">${manga.title}</h3>
                         <div class="card-meta">
-                            <span>Глав: ${manga.availableEpisodes}/${manga.totalEpisodes}</span>
+                            // ✅ ПРАВИЛЬНО - использует новые поля
+                                <span>Глав: ${manga.availableChapters || 0}/${manga.totalChapters || 0}</span>
                         </div>
                         <div class="card-genres">
                             ${manga.genres ? manga.genres.slice(0, 3).map(genre => 
@@ -1741,6 +1742,7 @@
     </script>
 </body>
 </html>
+
 
 
 

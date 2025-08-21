@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Light Fox Manga - Каталог</title>
     <style>
+        /* Цвета навигации для светлой темы */
+        .desktop-nav a,
+        .bottom-nav .nav-item {
+            color: #000;
+        }
+
+        /* Цвета навигации для темной темы */
+        [data-theme="dark"] .desktop-nav a,
+        [data-theme="dark"] .bottom-nav .nav-item {
+            color: #ffffff;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -67,6 +79,10 @@
             text-decoration: none;
         }
 
+        .logo:hover {
+            color: var(--primary-hover);
+        }
+
         .desktop-nav {
             display: flex;
             gap: 24px;
@@ -82,7 +98,6 @@
             padding: 8px 16px;
             border-radius: 6px;
             cursor: pointer;
-            color: var(--text-color);
         }
 
         .desktop-nav a.active {
@@ -101,13 +116,18 @@
             gap: 12px;
         }
 
-        .theme-toggle {
+        .lang-switch, .theme-toggle {
             padding: 8px 12px;
             border: 1px solid var(--border-color);
             border-radius: 6px;
             background: var(--card-bg);
             color: var(--text-color);
             cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle {
             font-size: 16px;
             width: 40px;
             height: 32px;
@@ -116,10 +136,259 @@
             justify-content: center;
         }
 
-        .theme-toggle svg {
+        .theme-toggle svg,
+        .mobile-theme-btn svg {
             width: 16px;
             height: 16px;
             fill: currentColor;
+        }
+
+        .profile-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .profile-btn:hover {
+            background: var(--primary-hover);
+            transform: scale(1.05);
+        }
+
+        .profile-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+        }
+
+        /* Bottom Navigation - Mobile */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--mobile-bottom-nav);
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            z-index: 1000;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-size: 11px;
+            gap: 4px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        /* Side Menu */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100vh;
+            background: var(--card-bg);
+            box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+            z-index: 2000;
+            transition: right 0.3s ease;
+            padding: var(--header-height) 0 0 0;
+            overflow-y: auto;
+        }
+
+        .side-menu.open {
+            right: 0;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1500;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .menu-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .menu-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .mobile-theme-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .mobile-theme-toggle span {
+            font-weight: 500;
+        }
+
+        .mobile-theme-btn {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-theme-btn:hover {
+            border-color: var(--primary-color);
+        }
+
+        .menu-item {
+            display: block;
+            padding: 16px 20px;
+            color: var(--text-color);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            background: var(--bg-color);
+        }
+
+        .auth-buttons {
+            padding: 20px;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 1px solid var(--primary-color);
+            border-radius: 6px;
+            background: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .auth-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .auth-btn.secondary {
+            background: transparent;
+            color: var(--primary-color);
+        }
+
+        .auth-btn.secondary:hover {
+            background: rgba(255, 138, 80, 0.1);
+        }
+
+        .user-info {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 12px;
+        }
+
+        .user-avatar svg {
+            width: 30px;
+            height: 30px;
+            stroke: currentColor;
+        }
+
+        .user-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .user-email {
+            font-size: 12px;
+            color: var(--secondary-color);
+        }
+
+        .logout-btn {
+            color: #dc3545;
+            border-top: 1px solid var(--border-color);
+            margin-top: 20px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(220, 53, 69, 0.1);
+        }
+
+        /* Language Dropdown in Mobile Menu */
+        .mobile-lang-select {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .mobile-lang-select select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-size: 14px;
         }
 
         /* Sticky Header Container */
@@ -650,52 +919,6 @@
             fill: currentColor;
         }
 
-        /* Mobile Navigation */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: var(--mobile-bottom-nav);
-            background: var(--card-bg);
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            z-index: 1000;
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
-        }
-
-        .nav-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            color: var(--secondary-color);
-            font-size: 11px;
-            gap: 4px;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .nav-item.active {
-            color: var(--primary-color);
-        }
-
-        .nav-icon {
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .nav-icon svg {
-            width: 18px;
-            height: 18px;
-            fill: currentColor;
-        }
-
         /* Desktop Styles */
         @media (min-width: 768px) {
             body {
@@ -713,6 +936,26 @@
 
             .bottom-nav {
                 display: none;
+            }
+
+            .mobile-theme-toggle,
+            .mobile-lang-select {
+                display: none;
+            }
+
+            .side-menu {
+                padding-top: var(--header-height);
+            }
+        }
+
+        @media (max-width: 767px) {
+            .mobile-theme-toggle,
+            .mobile-lang-select {
+                display: flex;
+            }
+
+            .side-menu {
+                padding-top: 0;
             }
         }
 
@@ -754,6 +997,11 @@
         </nav>
         
         <div class="header-controls">
+            <select class="lang-switch" id="langSwitch">
+                <option value="ru">Рус</option>
+                <option value="ua">Укр</option>
+                <option value="en">Eng</option>
+            </select>
             <button class="theme-toggle" id="themeToggle">
                 <svg class="moon-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M21 12.79C20.8427 14.4922 20.2039 16.1144 19.1583 17.4668C18.1127 18.8192 16.7035 19.8458 15.0957 20.4265C13.4879 21.0073 11.7431 21.1181 10.0644 20.7461C8.38579 20.374 6.8398 19.5345 5.61677 18.3271C4.39374 17.1198 3.54362 15.5916 3.17133 13.9299C2.79905 12.2682 2.91262 10.5378 3.49644 8.94267C4.08026 7.34753 5.10962 5.94939 6.46482 4.90969C7.82002 3.86999 9.44343 3.23112 11.16 3.08C10.1598 4.98048 9.94059 7.18295 10.5446 9.23931C11.1486 11.2957 12.5154 13.0464 14.3735 14.1467C16.2317 15.247 18.4549 15.6021 20.55 15.13L21 12.79Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -761,6 +1009,12 @@
                 <svg class="sun-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: none;">
                     <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <button class="profile-btn" id="profileBtn">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </button>
         </div>
@@ -882,7 +1136,74 @@
             </div>
             <span>Случайное</span>
         </a>
+        <div class="nav-item" id="mobileProfileBtn">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <span>Профиль</span>
+        </div>
     </nav>
+
+    <!-- Side Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Side Menu -->
+    <div class="side-menu" id="sideMenu">
+        <!-- Auth Section (when not logged in) -->
+        <div class="auth-buttons" id="authSection">
+            <button class="auth-btn" onclick="login()">Вход/Регистрация</button>
+        </div>
+
+        <!-- User Section (when logged in) -->
+        <div class="user-info" id="userSection" style="display: none;">
+            <div class="user-avatar" id="userAvatar">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="user-name" id="userName">Пользователь</div>
+            <div class="user-email" id="userEmail">user@example.com</div>
+        </div>
+
+        <!-- Mobile Theme Toggle -->
+        <div class="mobile-theme-toggle">
+            <span>Темная тема</span>
+            <button class="mobile-theme-btn" id="mobileThemeToggle">
+                <svg class="mobile-moon-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79C20.8427 14.4922 20.2039 16.1144 19.1583 17.4668C18.1127 18.8192 16.7035 19.8458 15.0957 20.4265C13.4879 21.0073 11.7431 21.1181 10.0644 20.7461C8.38579 20.374 6.8398 19.5345 5.61677 18.3271C4.39374 17.1198 3.54362 15.5916 3.17133 13.9299C2.79905 12.2682 2.91262 10.5378 3.49644 8.94267C4.08026 7.34753 5.10962 5.94939 6.46482 4.90969C7.82002 3.86999 9.44343 3.23112 11.16 3.08C10.1598 4.98048 9.94059 7.18295 10.5446 9.23931C11.1486 11.2957 12.5154 13.0464 14.3735 14.1467C16.2317 15.247 18.4549 15.6021 20.55 15.13L21 12.79Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <svg class="mobile-sun-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                    <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Language Select -->
+        <div class="mobile-lang-select">
+            <select id="mobileLangSwitch">
+                <option value="ru">Русский</option>
+                <option value="ua">Українська</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+
+        <!-- Menu Items -->
+        <a href="index.html" class="menu-item">Главная</a>
+        <a href="cabinet.html" class="menu-item">Личный Кабинет</a>
+        <a href="catalog.html" class="menu-item">Каталог</a>
+        <a href="#" class="menu-item" onclick="openRandomManga(); closeMenu();">Случайная Манга</a>
+        <a href="cabinet.html#favorites" class="menu-item">Избранное</a>
+        <a href="cabinet.html#history" class="menu-item">История</a>
+        <a href="cabinet.html#settings" class="menu-item">Настройки</a>
+        
+        <!-- Logout Button (only when logged in) -->
+        <a href="#" class="menu-item logout-btn" id="logoutBtn" onclick="logout()" style="display: none;">Выйти</a>
+    </div>
 
     <!-- Scripts -->
 <script>
@@ -915,22 +1236,31 @@
             selectedCategories: [],
             categorySearchQuery: '',
             selectedStatuses: [],
-            isDark: localStorage.getItem('theme') === 'dark'
+            isDark: localStorage.getItem('theme') === 'dark',
+            isLoggedIn: localStorage.getItem('isLoggedIn') === 'true',
+            currentUser: JSON.parse(localStorage.getItem('currentUser')) || null
         };
 
         // Theme functionality
         function updateTheme() {
             document.body.setAttribute('data-theme', state.isDark ? 'dark' : 'light');
             
-            const moonIcon = document.querySelector('.moon-icon');
-            const sunIcon = document.querySelector('.sun-icon');
-            if (state.isDark) {
-                moonIcon.style.display = 'none';
-                sunIcon.style.display = 'block';
-            } else {
-                moonIcon.style.display = 'block';
-                sunIcon.style.display = 'none';
-            }
+            // Update all theme toggle icons
+            const updateIcons = (moonClass, sunClass) => {
+                const moonIcons = document.querySelectorAll(moonClass);
+                const sunIcons = document.querySelectorAll(sunClass);
+                
+                moonIcons.forEach(icon => {
+                    icon.style.display = state.isDark ? 'none' : 'block';
+                });
+                
+                sunIcons.forEach(icon => {
+                    icon.style.display = state.isDark ? 'block' : 'none';
+                });
+            };
+            
+            updateIcons('.moon-icon', '.sun-icon');
+            updateIcons('.mobile-moon-icon', '.mobile-sun-icon');
             
             localStorage.setItem('theme', state.isDark ? 'dark' : 'light');
         }
@@ -938,6 +1268,101 @@
         function toggleTheme() {
             state.isDark = !state.isDark;
             updateTheme();
+        }
+
+        // Language functionality
+        function updateLanguage(lang) {
+            localStorage.setItem('language', lang);
+            
+            // Sync both language selectors
+            const langSwitch = document.getElementById('langSwitch');
+            const mobileLangSwitch = document.getElementById('mobileLangSwitch');
+            
+            if (langSwitch) langSwitch.value = lang;
+            if (mobileLangSwitch) mobileLangSwitch.value = lang;
+        }
+
+        // Authentication functionality
+        function updateAuthState() {
+            const authSection = document.getElementById('authSection');
+            const userSection = document.getElementById('userSection');
+            const logoutBtn = document.getElementById('logoutBtn');
+            
+            if (state.isLoggedIn && state.currentUser) {
+                authSection.style.display = 'none';
+                userSection.style.display = 'block';
+                logoutBtn.style.display = 'block';
+                
+                document.getElementById('userName').textContent = state.currentUser.name;
+                document.getElementById('userEmail').textContent = state.currentUser.email;
+            } else {
+                authSection.style.display = 'block';
+                userSection.style.display = 'none';
+                logoutBtn.style.display = 'none';
+            }
+        }
+
+        function login() {
+            const name = prompt('Введите ваше имя:') || 'Пользователь';
+            const email = prompt('Введите ваш email:') || 'user@example.com';
+            
+            if (name && email) {
+                state.currentUser = { name, email };
+                state.isLoggedIn = true;
+                
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('currentUser', JSON.stringify(state.currentUser));
+                
+                updateAuthState();
+                closeMenu();
+                
+                alert(`Добро пожаловать, ${name}!`);
+            }
+        }
+
+        function logout() {
+            if (confirm('Вы уверены, что хотите выйти?')) {
+                state.isLoggedIn = false;
+                state.currentUser = null;
+                
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('currentUser');
+                
+                updateAuthState();
+                closeMenu();
+                
+                alert('Вы успешно вышли из системы');
+            }
+        }
+
+        // Menu functionality
+        function toggleMenu() {
+            const sideMenu = document.getElementById('sideMenu');
+            const menuOverlay = document.getElementById('menuOverlay');
+            
+            sideMenu.classList.toggle('open');
+            menuOverlay.classList.toggle('show');
+        }
+
+        function closeMenu() {
+            const sideMenu = document.getElementById('sideMenu');
+            const menuOverlay = document.getElementById('menuOverlay');
+            
+            sideMenu.classList.remove('open');
+            menuOverlay.classList.remove('show');
+        }
+
+        // Random manga functionality
+        function openRandomManga() {
+            if (window.MangaAPI) {
+                const allManga = window.MangaAPI.getAllManga();
+                if (allManga.length > 0) {
+                    const randomManga = allManga[Math.floor(Math.random() * allManga.length)];
+                    window.location.href = `player.html?id=${randomManga.id}`;
+                } else {
+                    alert('Каталог пуст. Добавьте тайтлы через админку!');
+                }
+            }
         }
 
         // Render manga card
@@ -1034,18 +1459,6 @@
         // Navigation functions
         function openManga(id) {
             window.location.href = `player.html?id=${id}`;
-        }
-
-        function openRandomManga() {
-            if (window.MangaAPI) {
-                const allManga = window.MangaAPI.getAllManga();
-                if (allManga.length > 0) {
-                    const randomManga = allManga[Math.floor(Math.random() * allManga.length)];
-                    openManga(randomManga.id);
-                } else {
-                    alert('Каталог пуст. Добавьте тайтлы через админку!');
-                }
-            }
         }
 
         // Filter sidebar functions
@@ -1250,8 +1663,30 @@
 
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
-            // Theme toggle
+            // Theme toggles
             document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+            document.getElementById('mobileThemeToggle').addEventListener('click', toggleTheme);
+
+            // Language switches
+            const langSwitch = document.getElementById('langSwitch');
+            const mobileLangSwitch = document.getElementById('mobileLangSwitch');
+            
+            if (langSwitch) {
+                langSwitch.addEventListener('change', (e) => updateLanguage(e.target.value));
+            }
+            if (mobileLangSwitch) {
+                mobileLangSwitch.addEventListener('change', (e) => updateLanguage(e.target.value));
+            }
+
+            // Profile buttons
+            document.getElementById('profileBtn').addEventListener('click', toggleMenu);
+            document.getElementById('mobileProfileBtn').addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleMenu();
+            });
+
+            // Menu overlay
+            document.getElementById('menuOverlay').addEventListener('click', closeMenu);
 
             // Search input
             document.getElementById('centralSearchInput').addEventListener('input', function(e) {
@@ -1272,8 +1707,13 @@
             document.getElementById('closeSidebar').addEventListener('click', closeFilters);
             document.getElementById('filtersBackdrop').addEventListener('click', closeFilters);
 
-            // Initialize theme
+            // Initialize theme and auth
             updateTheme();
+            updateAuthState();
+            
+            // Load saved language
+            const savedLang = localStorage.getItem('language') || 'ru';
+            updateLanguage(savedLang);
 
             // Wait for data to be ready
             if (window.MangaAPI) {
@@ -1290,10 +1730,9 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeFilters();
+                closeMenu();
             }
         });
     </script>
 </body>
 </html>
-
-

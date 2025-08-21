@@ -22,6 +22,8 @@
             --warning-color: #d97706;
             --danger-color: #dc2626;
             --secondary-color: #64748b;
+            --donation-color: #8b5cf6;
+            --donation-hover: #7c3aed;
             --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             --header-height: 70px;
@@ -85,6 +87,22 @@
             background: var(--primary-color);
             color: white;
             border-color: var(--primary-color);
+        }
+
+        .nav-btn.donations {
+            background: var(--donation-color);
+            color: white;
+            border-color: var(--donation-color);
+        }
+
+        .nav-btn.donations:hover {
+            background: var(--donation-hover);
+            border-color: var(--donation-hover);
+        }
+
+        .nav-btn.donations.active {
+            background: var(--donation-hover);
+            border-color: var(--donation-hover);
         }
 
         .admin-controls {
@@ -202,6 +220,16 @@
             color: white;
         }
 
+        .btn-donation {
+            background: var(--donation-color);
+            color: white;
+        }
+
+        .btn-donation:hover {
+            background: var(--donation-hover);
+            transform: translateY(-1px);
+        }
+
         /* Form Styles */
         .form-grid {
             display: grid;
@@ -245,6 +273,18 @@
         .form-textarea {
             resize: vertical;
             min-height: 100px;
+        }
+
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .form-checkbox input[type="checkbox"] {
+            width: auto;
+            margin: 0;
         }
 
         /* Tags Input */
@@ -295,25 +335,32 @@
             font-weight: 500;
         }
 
-        /* Цвета для разных статусов */
         .status-badge.completed {
-            background: #10b981; /* Зеленый для завершенных */
+            background: #10b981;
         }
 
         .status-badge.ongoing {
-            background: #f59e0b; /* Оранжевый для выходящих/продолжающихся */
+            background: #f59e0b;
         }
 
         .status-badge.paused {
-            background: #3b82f6; /* Синий для замороженных */
+            background: #3b82f6;
         }
 
         .status-badge.announced {
-            background: #8b5cf6; /* Фиолетовый для анонсов */
+            background: #8b5cf6;
         }
 
         .status-badge.licensed {
-            background: #ef4444; /* Красный для лицензии */
+            background: #ef4444;
+        }
+
+        .status-badge.active {
+            background: #10b981;
+        }
+
+        .status-badge.inactive {
+            background: #64748b;
         }
 
         /* Episodes Manager */
@@ -585,6 +632,127 @@
             gap: 8px;
         }
 
+        /* Donation Projects */
+        .donation-projects-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .donation-project-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s;
+            border: 1px solid var(--border-color);
+        }
+
+        .donation-project-item:hover {
+            transform: translateY(-2px);
+            border-color: var(--donation-color);
+        }
+
+        .donation-project-header {
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .donation-project-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .donation-project-poster {
+            width: 50px;
+            height: 70px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 2px solid var(--border-color);
+        }
+
+        .donation-project-details {
+            flex: 1;
+        }
+
+        .donation-project-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-color);
+        }
+
+        .donation-project-manga {
+            font-size: 0.875rem;
+            color: var(--secondary-color);
+        }
+
+        .donation-progress {
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--donation-color), var(--donation-hover));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--secondary-color);
+        }
+
+        .donation-project-actions {
+            padding: 16px;
+            display: flex;
+            gap: 8px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .quick-update {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .quick-amount-input {
+            width: 80px;
+            padding: 4px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        .quick-update-btn {
+            padding: 4px 8px;
+            background: var(--donation-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-update-btn:hover {
+            background: var(--donation-hover);
+        }
+
         /* Notification */
         .notification {
             position: fixed;
@@ -684,6 +852,10 @@
             .form-grid {
                 grid-template-columns: 1fr;
             }
+
+            .donation-projects-list {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Image Preview */
@@ -720,6 +892,7 @@
                 <button class="nav-btn active" onclick="showSection('dashboard')">Обзор</button>
                 <button class="nav-btn" onclick="showSection('manga-list')">Тайтлы</button>
                 <button class="nav-btn" onclick="showSection('add-manga')">Добавить</button>
+                <button class="nav-btn donations" onclick="showSection('donations')">💰 Донаты</button>
             </nav>
             
             <div class="admin-controls">
@@ -908,6 +1081,97 @@
                         </form>
                     </div>
                 </div>
+
+                <!-- Donations Section -->
+                <div id="donations-section" class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">💰 Управление донатами</h2>
+                        <button class="btn btn-donation" onclick="showAddDonationForm()">
+                            ➕ Создать проект
+                        </button>
+                    </div>
+                    <div class="section-content">
+                        <!-- Add Donation Form -->
+                        <div id="donationFormContainer" style="display: none;">
+                            <form id="donationForm" style="margin-bottom: 30px; padding: 20px; background: var(--bg-color); border-radius: 12px; border: 2px solid var(--donation-color);">
+                                <h3 style="margin-bottom: 20px; color: var(--donation-color); display: flex; align-items: center; gap: 8px;" id="donationFormTitle">
+                                    <span>🎯</span>
+                                    Создать донат-проект
+                                </h3>
+
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label class="form-label">Выберите тайтл *</label>
+                                        <select class="form-select" id="donationMangaSelect" required>
+                                            <option value="">Выберите тайтл</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">Название проекта</label>
+                                        <input type="text" class="form-input" id="donationProjectTitle" placeholder="Оставьте пустым для использования названия тайтла">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">Цель доната (₽) *</label>
+                                        <input type="number" class="form-input" id="donationProjectGoal" min="1000" value="10000" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">Текущая сумма (₽)</label>
+                                        <input type="number" class="form-input" id="donationCurrentAmount" min="0" value="0">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">Статус проекта</label>
+                                        <select class="form-select" id="donationProjectStatus">
+                                            <option value="active">Активен</option>
+                                            <option value="completed">Завершен</option>
+                                            <option value="paused">Приостановлен</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">Приоритет (1-10)</label>
+                                        <input type="number" class="form-input" id="donationPriority" min="1" max="10" value="5">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">URL изображения проекта</label>
+                                    <input type="url" class="form-input" id="donationProjectImage" placeholder="https://example.com/project-image.jpg" onchange="previewDonationImage(this.value)">
+                                    <div class="form-checkbox">
+                                        <input type="checkbox" id="useDefaultImage" checked>
+                                        <label for="useDefaultImage">Использовать обложку тайтла</label>
+                                    </div>
+                                    <div class="image-preview" id="donationImagePreview"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Описание цели доната</label>
+                                    <textarea class="form-textarea" id="donationDescription" rows="3" placeholder="Например: Поддержите перевод следующих глав или озвучку серий"></textarea>
+                                </div>
+
+                                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                                    <button type="submit" class="btn btn-donation">
+                                        💾 Сохранить проект
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="hideDonationForm()">
+                                        ❌ Отмена
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="resetDonationForm()">
+                                        🔄 Очистить
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Donation Projects List -->
+                        <div id="donationProjectsList">
+                            <!-- Будет заполнено JS -->
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -920,7 +1184,33 @@
         let episodes = [];
         let episodeIdCounter = 1;
         let editingManga = null;
+        let editingDonation = null;
         let isAuthenticated = false;
+        let donationProjects = [];
+        let donationIdCounter = 1;
+
+        // Load donation projects from localStorage
+        function loadDonationProjects() {
+            const saved = localStorage.getItem('lightfox_donation_projects');
+            if (saved) {
+                try {
+                    donationProjects = JSON.parse(saved);
+                    donationIdCounter = Math.max(...donationProjects.map(p => p.id || 0), 0) + 1;
+                } catch (e) {
+                    console.error('Error loading donation projects:', e);
+                    donationProjects = [];
+                }
+            }
+        }
+
+        // Save donation projects to localStorage
+        function saveDonationProjects() {
+            try {
+                localStorage.setItem('lightfox_donation_projects', JSON.stringify(donationProjects));
+            } catch (e) {
+                console.error('Error saving donation projects:', e);
+            }
+        }
 
         // Status color mapping function
         function getStatusClass(status) {
@@ -932,7 +1222,10 @@
                 'Заморожен': 'paused',
                 'Анонс': 'announced',
                 'Лицензировано': 'licensed',
-                'Лицензия': 'licensed'
+                'Лицензия': 'licensed',
+                'active': 'active',
+                'completed': 'completed',
+                'paused': 'paused'
             };
             return statusMap[status] || '';
         }
@@ -955,10 +1248,12 @@
         // Initialize admin panel
         function initializeAdmin() {
             loadDataSystem().then(() => {
+                loadDonationProjects();
                 loadDashboard();
                 loadMangaList();
+                loadDonationProjectsList();
                 setupEventListeners();
-                console.log('🔥 Админка с управлением сериями загружена!');
+                console.log('🔥 Админка с управлением донатами загружена!');
             });
         }
 
@@ -968,6 +1263,12 @@
             document.getElementById('mangaForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 saveManga();
+            });
+
+            // Donation form submission
+            document.getElementById('donationForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveDonationProject();
             });
 
             // Genre input
@@ -991,6 +1292,14 @@
             // Chapters preview update
             document.getElementById('availableChapters').addEventListener('input', updateChaptersPreview);
             document.getElementById('totalChapters').addEventListener('input', updateChaptersPreview);
+
+            // Use default image checkbox
+            document.getElementById('useDefaultImage').addEventListener('change', function() {
+                if (this.checked) {
+                    document.getElementById('donationProjectImage').value = '';
+                    document.getElementById('donationImagePreview').innerHTML = '';
+                }
+            });
         }
 
         // Section navigation
@@ -1012,6 +1321,9 @@
                 loadDashboard();
             } else if (sectionName === 'manga-list') {
                 loadMangaList();
+            } else if (sectionName === 'donations') {
+                loadDonationProjectsList();
+                loadMangaSelectOptions();
             }
         }
 
@@ -1021,6 +1333,10 @@
 
             const stats = window.MangaAPI.getStats();
             const allManga = window.MangaAPI.getAllManga();
+            
+            // Add donation stats
+            const totalDonationGoal = donationProjects.reduce((sum, project) => sum + (project.goal || 0), 0);
+            const totalDonationCurrent = donationProjects.reduce((sum, project) => sum + (project.currentAmount || 0), 0);
             
             document.getElementById('dashboardStats').innerHTML = `
                 <div class="stat-card">
@@ -1036,8 +1352,16 @@
                     <div class="stat-label">Средний рейтинг</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">${(stats.totalDonations || 0).toLocaleString()}₽</div>
+                    <div class="stat-number">${donationProjects.length}</div>
+                    <div class="stat-label">Донат-проектов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${totalDonationCurrent.toLocaleString()}₽</div>
                     <div class="stat-label">Собрано донатов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${totalDonationGoal.toLocaleString()}₽</div>
+                    <div class="stat-label">Цель донатов</div>
                 </div>
             `;
         }
@@ -1073,6 +1397,304 @@
                     </div>
                 </div>
             `).join('');
+        }
+
+        // Donation Projects Functions
+        function loadMangaSelectOptions() {
+            if (!window.MangaAPI) return;
+
+            const allManga = window.MangaAPI.getAllManga();
+            const select = document.getElementById('donationMangaSelect');
+            
+            select.innerHTML = '<option value="">Выберите тайтл</option>';
+            allManga.forEach(manga => {
+                select.innerHTML += `<option value="${manga.id}">${manga.title}</option>`;
+            });
+        }
+
+        function showAddDonationForm() {
+            document.getElementById('donationFormContainer').style.display = 'block';
+            document.getElementById('donationFormTitle').innerHTML = '<span>🎯</span> Создать донат-проект';
+            editingDonation = null;
+            resetDonationForm();
+            loadMangaSelectOptions();
+        }
+
+        function hideDonationForm() {
+            document.getElementById('donationFormContainer').style.display = 'none';
+            editingDonation = null;
+            resetDonationForm();
+        }
+
+        function resetDonationForm() {
+            document.getElementById('donationForm').reset();
+            document.getElementById('donationProjectGoal').value = 10000;
+            document.getElementById('donationCurrentAmount').value = 0;
+            document.getElementById('donationPriority').value = 5;
+            document.getElementById('useDefaultImage').checked = true;
+            document.getElementById('donationImagePreview').innerHTML = '';
+        }
+
+        function saveDonationProject() {
+            try {
+                const mangaId = document.getElementById('donationMangaSelect').value;
+                const projectTitle = document.getElementById('donationProjectTitle').value.trim();
+                const goal = parseInt(document.getElementById('donationProjectGoal').value);
+                const currentAmount = parseInt(document.getElementById('donationCurrentAmount').value) || 0;
+                const status = document.getElementById('donationProjectStatus').value;
+                const priority = parseInt(document.getElementById('donationPriority').value) || 5;
+                const projectImage = document.getElementById('donationProjectImage').value.trim();
+                const useDefaultImage = document.getElementById('useDefaultImage').checked;
+                const description = document.getElementById('donationDescription').value.trim();
+
+                if (!mangaId) {
+                    throw new Error('Выберите тайтл для проекта');
+                }
+
+                if (!goal || goal < 1000) {
+                    throw new Error('Цель доната должна быть не менее 1000₽');
+                }
+
+                // Get manga data
+                const manga = window.MangaAPI.getMangaById(mangaId);
+                if (!manga) {
+                    throw new Error('Выбранный тайтл не найден');
+                }
+
+                const donationData = {
+                    id: editingDonation ? editingDonation.id : donationIdCounter++,
+                    mangaId: mangaId,
+                    title: projectTitle || manga.title,
+                    goal: goal,
+                    currentAmount: Math.min(currentAmount, goal),
+                    status: status,
+                    priority: priority,
+                    image: useDefaultImage ? null : projectImage,
+                    description: description,
+                    createdAt: editingDonation ? editingDonation.createdAt : new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+
+                if (editingDonation) {
+                    // Update existing project
+                    const index = donationProjects.findIndex(p => p.id === editingDonation.id);
+                    if (index !== -1) {
+                        donationProjects[index] = donationData;
+                        showNotification('Донат-проект обновлен!', 'success');
+                    }
+                } else {
+                    // Add new project
+                    donationProjects.push(donationData);
+                    showNotification('Донат-проект создан!', 'success');
+                }
+
+                saveDonationProjects();
+                loadDonationProjectsList();
+                loadDashboard();
+                hideDonationForm();
+
+            } catch (error) {
+                console.error('Ошибка сохранения донат-проекта:', error);
+                showNotification(error.message, 'error');
+            }
+        }
+
+        function loadDonationProjectsList() {
+            const container = document.getElementById('donationProjectsList');
+
+            if (donationProjects.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--secondary-color);">
+                        <h3>💰 Нет донат-проектов</h3>
+                        <p>Создайте первый проект для сбора донатов</p>
+                        <button class="btn btn-donation" onclick="showAddDonationForm()" style="margin-top: 16px;">
+                            ➕ Создать проект
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort by priority and status
+            const sortedProjects = [...donationProjects].sort((a, b) => {
+                if (a.status === 'active' && b.status !== 'active') return -1;
+                if (a.status !== 'active' && b.status === 'active') return 1;
+                return (b.priority || 5) - (a.priority || 5);
+            });
+
+            container.innerHTML = `
+                <div class="donation-projects-list">
+                    ${sortedProjects.map(project => renderDonationProjectCard(project)).join('')}
+                </div>
+            `;
+        }
+
+        function renderDonationProjectCard(project) {
+            if (!window.MangaAPI) return '';
+
+            const manga = window.MangaAPI.getMangaById(project.mangaId);
+            if (!manga) return '';
+
+            const progress = Math.min((project.currentAmount / project.goal) * 100, 100);
+            const image = project.image || manga.image || `https://via.placeholder.com/50x70/8b5cf6/FFFFFF?text=${encodeURIComponent(project.title.charAt(0))}`;
+            
+            const statusText = {
+                'active': 'Активен',
+                'completed': 'Завершен',
+                'paused': 'Приостановлен'
+            };
+
+            return `
+                <div class="donation-project-item">
+                    <div class="donation-project-header">
+                        <div class="donation-project-info">
+                            <img src="${image}" alt="${project.title}" class="donation-project-poster"
+                                 onerror="this.src='https://via.placeholder.com/50x70/8b5cf6/FFFFFF?text=${encodeURIComponent(project.title.charAt(0))}'">
+                            <div class="donation-project-details">
+                                <div class="donation-project-title">${project.title}</div>
+                                <div class="donation-project-manga">📚 ${manga.title}</div>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: right;">
+                            <span class="status-badge ${getStatusClass(project.status)}">${statusText[project.status]}</span>
+                            <div style="font-size: 0.75rem; color: var(--secondary-color); margin-top: 4px;">
+                                Приоритет: ${project.priority || 5}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="padding: 16px;">
+                        <div class="donation-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${progress}%"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span>${project.currentAmount.toLocaleString()}₽</span>
+                                <span>${project.goal.toLocaleString()}₽</span>
+                            </div>
+                            <div style="text-align: center; font-size: 0.875rem; color: var(--secondary-color); margin-top: 4px;">
+                                ${progress.toFixed(1)}% от цели
+                            </div>
+                        </div>
+
+                        ${project.description ? `
+                            <div style="margin-top: 12px; padding: 8px; background: var(--bg-color); border-radius: 6px; font-size: 0.875rem; color: var(--secondary-color);">
+                                ${project.description}
+                            </div>
+                        ` : ''}
+
+                        <div class="quick-update">
+                            <input type="number" class="quick-amount-input" id="quickAmount${project.id}" min="0" placeholder="Сумма" value="">
+                            <button class="quick-update-btn" onclick="quickUpdateDonation(${project.id})">+ Добавить</button>
+                        </div>
+                    </div>
+
+                    <div class="donation-project-actions">
+                        <button class="btn btn-primary" onclick="editDonationProject(${project.id})">✏️ Редактировать</button>
+                        <button class="btn btn-warning" onclick="setDonationAmount(${project.id})">💰 Установить сумму</button>
+                        <button class="btn btn-danger" onclick="deleteDonationProject(${project.id})">🗑️ Удалить</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function editDonationProject(id) {
+            const project = donationProjects.find(p => p.id === id);
+            if (!project) return;
+
+            editingDonation = project;
+            showAddDonationForm();
+            
+            // Fill form with existing data
+            document.getElementById('donationMangaSelect').value = project.mangaId;
+            document.getElementById('donationProjectTitle').value = project.title;
+            document.getElementById('donationProjectGoal').value = project.goal;
+            document.getElementById('donationCurrentAmount').value = project.currentAmount;
+            document.getElementById('donationProjectStatus').value = project.status;
+            document.getElementById('donationPriority').value = project.priority || 5;
+            document.getElementById('donationProjectImage').value = project.image || '';
+            document.getElementById('useDefaultImage').checked = !project.image;
+            document.getElementById('donationDescription').value = project.description || '';
+            
+            document.getElementById('donationFormTitle').innerHTML = '<span>✏️</span> Редактировать донат-проект';
+            
+            if (project.image) {
+                previewDonationImage(project.image);
+            }
+        }
+
+        function quickUpdateDonation(id) {
+            const project = donationProjects.find(p => p.id === id);
+            const amountInput = document.getElementById(`quickAmount${id}`);
+            const amount = parseInt(amountInput.value) || 0;
+
+            if (!project) return;
+
+            if (amount < 0) {
+                showNotification('Сумма не может быть отрицательной', 'error');
+                return;
+            }
+
+            project.currentAmount = Math.min(project.currentAmount + amount, project.goal);
+            project.updatedAt = new Date().toISOString();
+
+            saveDonationProjects();
+            loadDonationProjectsList();
+            loadDashboard();
+
+            amountInput.value = '';
+            showNotification(`Добавлено ${amount.toLocaleString()}₽`, 'success');
+        }
+
+        function setDonationAmount(id) {
+            const project = donationProjects.find(p => p.id === id);
+            if (!project) return;
+
+            const newAmount = prompt(`Установить текущую сумму для "${project.title}":`, project.currentAmount);
+            if (newAmount === null) return;
+
+            const amount = parseInt(newAmount) || 0;
+            if (amount < 0) {
+                showNotification('Сумма не может быть отрицательной', 'error');
+                return;
+            }
+
+            project.currentAmount = Math.min(amount, project.goal);
+            project.updatedAt = new Date().toISOString();
+
+            saveDonationProjects();
+            loadDonationProjectsList();
+            loadDashboard();
+
+            showNotification('Сумма обновлена', 'success');
+        }
+
+        function deleteDonationProject(id) {
+            const project = donationProjects.find(p => p.id === id);
+            if (!project) return;
+
+            if (confirm(`Удалить донат-проект "${project.title}"? Это действие нельзя отменить.`)) {
+                donationProjects = donationProjects.filter(p => p.id !== id);
+                saveDonationProjects();
+                loadDonationProjectsList();
+                loadDashboard();
+                showNotification('Донат-проект удален', 'success');
+            }
+        }
+
+        function previewDonationImage(url) {
+            const preview = document.getElementById('donationImagePreview');
+            
+            if (!url) {
+                preview.innerHTML = '';
+                return;
+            }
+
+            preview.innerHTML = `
+                <img src="${url}" alt="Preview" class="preview-image" 
+                     onerror="this.parentElement.innerHTML='<p style=color:var(--danger-color)>Ошибка загрузки изображения</p>'">
+            `;
         }
 
         // Edit manga
@@ -1145,9 +1767,15 @@
 
             if (confirm(`Удалить тайтл "${manga.title}"? Это действие нельзя отменить.`)) {
                 window.MangaAPI.deleteManga(id);
+                
+                // Also remove related donation projects
+                donationProjects = donationProjects.filter(p => p.mangaId !== id);
+                saveDonationProjects();
+                
                 loadMangaList();
                 loadDashboard();
-                showNotification('Тайтл удален', 'success');
+                loadDonationProjectsList();
+                showNotification('Тайтл и связанные проекты удалены', 'success');
             }
         }
 
@@ -1449,6 +2077,7 @@
                     // Update dashboard and list
                     loadDashboard();
                     loadMangaList();
+                    loadDonationProjectsList();
                     
                     // Reset form after successful save
                     setTimeout(() => {
@@ -1585,7 +2214,7 @@
 
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🔥 Админка с диапазонами глав загружена!');
+            console.log('🔥 Админка с управлением донатами загружена!');
         });
     </script>
 </body>

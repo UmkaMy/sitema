@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Админ-панель - Light Fox Manga (ИСПРАВЛЕННАЯ)</title>
+    <title>Админ-панель - Light Fox Manga</title>
     <style>
         * {
             margin: 0;
@@ -121,60 +121,6 @@
             margin: 0 auto;
         }
 
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 32px;
-        }
-
-        .stat-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: var(--shadow);
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .stat-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-
-        .stat-title {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--secondary-color);
-            text-transform: uppercase;
-            letter-spacing: 0.025em;
-        }
-
-        .stat-icon {
-            font-size: 1.5rem;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-color);
-        }
-
-        .stat-change {
-            font-size: 0.875rem;
-            margin-top: 8px;
-        }
-
-        .stat-change.positive {
-            color: var(--success-color);
-        }
-
-        .stat-change.negative {
-            color: var(--danger-color);
-        }
-
         /* Content Sections */
         .content-section {
             background: var(--card-bg);
@@ -241,26 +187,14 @@
             color: white;
         }
 
-        .btn-warning:hover {
-            background: #b45309;
-        }
-
-        .btn-danger {
-            background: var(--danger-color);
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: var(--primary-hover);
-        }
-
         .btn-secondary {
             background: var(--border-color);
             color: var(--secondary-color);
         }
 
-        .btn-secondary:hover {
-            background: #cbd5e1;
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
         }
 
         /* Form Styles */
@@ -308,102 +242,6 @@
             min-height: 100px;
         }
 
-        /* Manga List */
-        .manga-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .manga-table th,
-        .manga-table td {
-            padding: 12px 16px;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .manga-table th {
-            background: var(--bg-color);
-            font-weight: 600;
-            color: var(--secondary-color);
-            font-size: 0.875rem;
-            text-transform: uppercase;
-            letter-spacing: 0.025em;
-        }
-
-        .manga-table tr:hover {
-            background: var(--bg-color);
-        }
-
-        .manga-poster {
-            width: 40px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 4px;
-        }
-
-        .manga-title {
-            font-weight: 600;
-            color: var(--text-color);
-        }
-
-        .manga-meta {
-            font-size: 0.75rem;
-            color: var(--secondary-color);
-        }
-
-        .status-badge {
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        .status-active {
-            background: rgba(5, 150, 105, 0.1);
-            color: var(--success-color);
-        }
-
-        .status-completed {
-            background: rgba(59, 130, 246, 0.1);
-            color: #3b82f6;
-        }
-
-        .status-paused {
-            background: rgba(217, 119, 6, 0.1);
-            color: var(--warning-color);
-        }
-
-        /* Action Buttons in Table */
-        .table-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .action-btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .action-btn.edit {
-            background: var(--warning-color);
-            color: white;
-        }
-
-        .action-btn.delete {
-            background: var(--danger-color);
-            color: white;
-        }
-
-        .action-btn.view {
-            background: var(--success-color);
-            color: white;
-        }
-
         /* Tags Input */
         .tags-container {
             display: flex;
@@ -442,37 +280,182 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
-        /* Episode Manager */
-        .episode-manager {
-            margin-top: 20px;
-        }
-
-        .episode-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 12px;
-            margin-top: 12px;
-        }
-
-        .episode-item {
+        /* Chapters Manager */
+        .chapters-manager {
+            margin-top: 30px;
+            padding: 20px;
             background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
         }
 
-        .episode-item h4 {
+        .chapters-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .chapters-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .add-chapter-btn {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
             font-size: 0.875rem;
             font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .add-chapter-btn:hover {
+            background: #047857;
+            transform: translateY(-1px);
+        }
+
+        .chapters-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chapter-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .chapter-item:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow);
+        }
+
+        .chapter-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .chapter-number-input {
+            width: 80px;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .chapter-title-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
+
+        .chapter-url-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.875rem;
             margin-bottom: 8px;
         }
 
-        .episode-url {
-            width: 100%;
-            padding: 6px 8px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
+        .chapter-url-input:focus {
+            border-color: var(--success-color);
+            box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1);
+        }
+
+        .chapter-url-input.filled {
+            border-color: var(--success-color);
+            background: rgba(5, 150, 105, 0.05);
+        }
+
+        .chapter-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remove-chapter-btn {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 10px;
             font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .remove-chapter-btn:hover {
+            background: #dc2626;
+        }
+
+        .chapter-status {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .chapter-status.ready {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--success-color);
+        }
+
+        .chapter-status.empty {
+            background: rgba(100, 116, 139, 0.1);
+            color: var(--secondary-color);
+        }
+
+        .chapters-summary {
+            margin-top: 16px;
+            padding: 12px 16px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 0.875rem;
+            color: var(--secondary-color);
+        }
+
+        /* Drag and Drop */
+        .chapter-item.dragging {
+            opacity: 0.5;
+            transform: rotate(2deg);
+        }
+
+        .drag-handle {
+            cursor: grab;
+            color: var(--secondary-color);
+            padding: 4px;
+            margin-right: 8px;
+        }
+
+        .drag-handle:hover {
+            color: var(--text-color);
+        }
+
+        .drag-handle:active {
+            cursor: grabbing;
         }
 
         /* Notification */
@@ -508,90 +491,65 @@
             color: white;
         }
 
-        /* Loading */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.8);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
+        /* Empty State */
+        .chapters-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--secondary-color);
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
         }
 
-        .loading-overlay.show {
+        .chapters-empty h4 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        /* Auto-numbering */
+        .auto-number-controls {
             display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
         }
 
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--border-color);
-            border-top: 3px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        .auto-number-btn {
+            background: var(--warning-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .auto-number-btn:hover {
+            background: #b45309;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .admin-header {
-                padding: 0 16px;
+            .chapters-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
             }
 
-            .admin-nav {
-                display: none;
+            .chapter-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
             }
 
-            .main-content {
-                padding: 16px;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
+            .chapter-number-input {
+                width: 100%;
             }
 
             .form-grid {
                 grid-template-columns: 1fr;
             }
-
-            .table-actions {
-                flex-direction: column;
-                gap: 4px;
-            }
-
-            .manga-table {
-                font-size: 0.75rem;
-            }
-
-            .manga-table th,
-            .manga-table td {
-                padding: 8px 4px;
-            }
-        }
-
-        /* Debug styles */
-        .debug-info {
-            background: #f0f9ff;
-            border: 1px solid #0284c7;
-            border-radius: 8px;
-            padding: 16px;
-            margin: 16px 0;
-            font-family: monospace;
-            font-size: 14px;
-        }
-
-        .debug-title {
-            font-weight: bold;
-            color: #0284c7;
-            margin-bottom: 8px;
         }
     </style>
 </head>
@@ -601,10 +559,9 @@
         <div class="admin-logo">🔥 ADMIN</div>
         
         <nav class="admin-nav">
-            <button class="nav-btn active" onclick="showSection('dashboard')">Обзор</button>
+            <button class="nav-btn" onclick="showSection('dashboard')">Обзор</button>
             <button class="nav-btn" onclick="showSection('manga')">Тайтлы</button>
-            <button class="nav-btn" onclick="showSection('add-manga')">Добавить</button>
-            <button class="nav-btn" onclick="showSection('debug')">Debug</button>
+            <button class="nav-btn active" onclick="showSection('add-manga')">Добавить</button>
         </nav>
         
         <div class="admin-controls">
@@ -616,127 +573,18 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <!-- Debug Section -->
-            <div id="debug-section" class="content-section-wrapper" style="display: none;">
-                <div class="content-section">
-                    <div class="section-header">
-                        <h2 class="section-title">Диагностика системы</h2>
-                        <button class="btn btn-warning" onclick="runDiagnostics()">
-                            🔍 Запустить диагностику
-                        </button>
-                    </div>
-                    <div class="section-content">
-                        <div id="debugOutput">
-                            <p>Нажмите кнопку "Запустить диагностику" для проверки системы</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Dashboard Section -->
-            <div id="dashboard-section" class="content-section-wrapper">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-title">Всего тайтлов</span>
-                            <span class="stat-icon">📚</span>
-                        </div>
-                        <div class="stat-value" id="totalManga">0</div>
-                        <div class="stat-change positive" id="mangaChange">+0 за неделю</div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-title">Активные проекты</span>
-                            <span class="stat-icon">🚀</span>
-                        </div>
-                        <div class="stat-value" id="activeManga">0</div>
-                        <div class="stat-change positive" id="activeChange">Продолжается</div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-title">Общие донаты</span>
-                            <span class="stat-icon">💰</span>
-                        </div>
-                        <div class="stat-value" id="totalDonations">0₽</div>
-                        <div class="stat-change positive" id="donationChange">+0₽ за неделю</div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-title">Система данных</span>
-                            <span class="stat-icon">⚙️</span>
-                        </div>
-                        <div class="stat-value" id="systemStatus">Проверка...</div>
-                        <div class="stat-change" id="systemMessage">Инициализация</div>
-                    </div>
-                </div>
-
-                <div class="content-section">
-                    <div class="section-header">
-                        <h2 class="section-title">Последние действия</h2>
-                        <button class="btn btn-primary" onclick="refreshData()">
-                            🔄 Обновить
-                        </button>
-                    </div>
-                    <div class="section-content">
-                        <div id="recentActions">
-                            <p>Загрузка последних действий...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Manga List Section -->
-            <div id="manga-section" class="content-section-wrapper" style="display: none;">
-                <div class="content-section">
-                    <div class="section-header">
-                        <h2 class="section-title">Управление тайтлами</h2>
-                        <div>
-                            <button class="btn btn-success" onclick="showSection('add-manga')">
-                                ➕ Добавить тайтл
-                            </button>
-                            <button class="btn btn-warning" onclick="exportData()">
-                                📤 Экспорт
-                            </button>
-                        </div>
-                    </div>
-                    <div class="section-content">
-                        <div style="overflow-x: auto;">
-                            <table class="manga-table">
-                                <thead>
-                                    <tr>
-                                        <th>Обложка</th>
-                                        <th>Название</th>
-                                        <th>Тип</th>
-                                        <th>Статус</th>
-                                        <th>Серии</th>
-                                        <th>Рейтинг</th>
-                                        <th>Донаты</th>
-                                        <th>Действия</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="mangaTableBody">
-                                    <!-- Content will be filled by JavaScript -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Add Manga Section -->
-            <div id="add-manga-section" class="content-section-wrapper" style="display: none;">
+            <div id="add-manga-section" class="content-section-wrapper">
                 <div class="content-section">
                     <div class="section-header">
                         <h2 class="section-title" id="formTitle">Добавить новый тайтл</h2>
-                        <button class="btn btn-secondary" onclick="showSection('manga')">
-                            ← Назад к списку
+                        <button class="btn btn-secondary" onclick="resetForm()">
+                            🔄 Очистить форму
                         </button>
                     </div>
                     <div class="section-content">
                         <form id="mangaForm">
+                            <!-- Основная информация -->
                             <div class="form-grid">
                                 <div class="form-group">
                                     <label class="form-label">Название тайтла *</label>
@@ -780,16 +628,6 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="form-label">Всего серий *</label>
-                                    <input type="number" class="form-input" id="totalEpisodes" required min="1">
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="form-label">Доступно серий *</label>
-                                    <input type="number" class="form-input" id="availableEpisodes" required min="0">
-                                </div>
-
-                                <div class="form-group">
                                     <label class="form-label">Цель доната (₽)</label>
                                     <input type="number" class="form-input" id="donationGoal" min="1000" value="10000">
                                 </div>
@@ -817,19 +655,52 @@
                                 <div class="tags-container" id="categoryTags"></div>
                             </div>
 
-                            <div class="episode-manager">
-                                <label class="form-label">Ссылки на серии</label>
-                                <div class="episode-grid" id="episodeGrid">
-                                    <!-- Will be generated by JavaScript -->
+                            <!-- Chapters Manager -->
+                            <div class="chapters-manager">
+                                <div class="chapters-header">
+                                    <h3 class="chapters-title">
+                                        <span>📚</span>
+                                        Управление главами
+                                    </h3>
+                                    <button type="button" class="add-chapter-btn" onclick="addNewChapter()">
+                                        <span>➕</span>
+                                        Добавить главу
+                                    </button>
+                                </div>
+
+                                <div class="auto-number-controls">
+                                    <button type="button" class="auto-number-btn" onclick="autoNumberChapters()">
+                                        🔢 Авто-нумерация
+                                    </button>
+                                    <button type="button" class="auto-number-btn" onclick="sortChapters()">
+                                        📊 Сортировать
+                                    </button>
+                                    <span style="font-size: 0.875rem; color: var(--secondary-color);">
+                                        Перетаскивайте для изменения порядка
+                                    </span>
+                                </div>
+
+                                <div class="chapters-list" id="chaptersList">
+                                    <div class="chapters-empty">
+                                        <h4>Нет добавленных глав</h4>
+                                        <p>Нажмите кнопку "Добавить главу" для создания первой главы</p>
+                                    </div>
+                                </div>
+
+                                <div class="chapters-summary" id="chaptersSummary">
+                                    <strong>Итого:</strong> 0 глав, 0 с ссылками, 0 готовых к публикации
                                 </div>
                             </div>
 
-                            <div style="margin-top: 24px; display: flex; gap: 12px;">
+                            <div style="margin-top: 32px; display: flex; gap: 12px; flex-wrap: wrap;">
                                 <button type="submit" class="btn btn-success">
                                     💾 Сохранить тайтл
                                 </button>
                                 <button type="button" class="btn btn-secondary" onclick="resetForm()">
                                     🔄 Очистить форму
+                                </button>
+                                <button type="button" class="btn btn-warning" onclick="previewManga()">
+                                    👁️ Предпросмотр
                                 </button>
                             </div>
                         </form>
@@ -842,305 +713,50 @@
     <!-- Notification -->
     <div class="notification" id="notification"></div>
 
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="spinner"></div>
-    </div>
-
-    <!-- Scripts -->
     <script>
-        // ИСПРАВЛЕННАЯ СИСТЕМА УПРАВЛЕНИЯ ДАННЫМИ
-        // Загружаем систему данных и дожидаемся её инициализации
-        let mangaAPI = null;
-        let isDataReady = false;
-
-        // Подключение к системе данных
-        function loadDataSystem() {
-            return new Promise((resolve, reject) => {
-                const script = document.createElement('script');
-                script.src = 'js/data.js';
-                script.onload = () => {
-                    console.log('📦 data.js загружен');
-                    // Ждем инициализации API
-                    const checkAPI = () => {
-                        if (window.MangaAPI) {
-                            mangaAPI = window.MangaAPI;
-                            isDataReady = true;
-                            console.log('✅ MangaAPI готов');
-                            resolve();
-                        } else {
-                            setTimeout(checkAPI, 100);
-                        }
-                    };
-                    checkAPI();
-                };
-                script.onerror = reject;
-                document.head.appendChild(script);
-            });
-        }
-
         // State
-        let currentSection = 'dashboard';
+        let chapters = [];
+        let chapterIdCounter = 1;
         let editingManga = null;
 
-        // Initialize admin panel
-        async function initializeAdmin() {
-            try {
-                await loadDataSystem();
-                
-                // Проверяем состояние системы
-                updateSystemStatus();
-                
-                // Загружаем данные для дашборда
-                loadDashboardStats();
-                
-                // Настраиваем обработчики событий
-                setupEventListeners();
-                
-                console.log('🔥 Админ-панель успешно загружена!');
-                showNotification('Админ-панель загружена успешно!', 'success');
-                
-            } catch (error) {
-                console.error('❌ Ошибка инициализации админки:', error);
-                showNotification('Ошибка загрузки системы данных', 'error');
-                updateSystemStatus('error');
-            }
-        }
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            console.log('🔥 Админка с управлением главами загружена!');
+        });
 
-        // Обновление статуса системы
-        function updateSystemStatus(status = 'ok') {
-            const statusElement = document.getElementById('systemStatus');
-            const messageElement = document.getElementById('systemMessage');
-            
-            if (status === 'ok') {
-                statusElement.textContent = 'OK';
-                statusElement.style.color = 'var(--success-color)';
-                messageElement.textContent = 'Система работает нормально';
-                messageElement.style.color = 'var(--success-color)';
-            } else if (status === 'error') {
-                statusElement.textContent = 'ERROR';
-                statusElement.style.color = 'var(--danger-color)';
-                messageElement.textContent = 'Ошибка системы данных';
-                messageElement.style.color = 'var(--danger-color)';
-            } else {
-                statusElement.textContent = 'INIT';
-                statusElement.style.color = 'var(--warning-color)';
-                messageElement.textContent = 'Инициализация...';
-                messageElement.style.color = 'var(--warning-color)';
-            }
-        }
-
-        // Navigation
-        function showSection(section) {
-            // Hide all sections
-            document.querySelectorAll('.content-section-wrapper').forEach(el => {
-                el.style.display = 'none';
-            });
-
-            // Update nav buttons
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-
-            // Show selected section
-            const sectionElement = document.getElementById(section + '-section');
-            if (sectionElement) {
-                sectionElement.style.display = 'block';
-            }
-            
-            const navButton = document.querySelector(`[onclick="showSection('${section}')"]`);
-            if (navButton) {
-                navButton.classList.add('active');
-            }
-
-            currentSection = section;
-
-            // Load section specific data
-            if (section === 'dashboard') {
-                loadDashboardStats();
-            } else if (section === 'manga') {
-                loadMangaList();
-            } else if (section === 'add-manga') {
-                resetForm();
-                generateEpisodeInputs();
-            } else if (section === 'debug') {
-                // Debug section doesn't need initial loading
-            }
-        }
-
-        // Dashboard functions
-        function loadDashboardStats() {
-            if (!mangaAPI) {
-                console.warn('⚠️ MangaAPI не готов для загрузки статистики');
-                return;
-            }
-
-            try {
-                const allManga = mangaAPI.getAllManga();
-                const activeManga = allManga.filter(m => m.status === 'Продолжается' || m.status === 'Выходит');
-                const totalDonations = allManga.reduce((sum, m) => sum + (m.currentDonations || 0), 0);
-
-                document.getElementById('totalManga').textContent = allManga.length;
-                document.getElementById('activeManga').textContent = activeManga.length;
-                document.getElementById('totalDonations').textContent = totalDonations.toLocaleString() + '₽';
-
-                // Load recent actions
-                loadRecentActions();
-                
-                console.log('📊 Статистика загружена:', {
-                    total: allManga.length,
-                    active: activeManga.length,
-                    donations: totalDonations
-                });
-            } catch (error) {
-                console.error('❌ Ошибка загрузки статистики:', error);
-                showNotification('Ошибка загрузки статистики', 'error');
-            }
-        }
-
-        function loadRecentActions() {
-            const actions = [
-                { action: 'Система запущена', title: 'Админ-панель', time: 'только что', type: 'success' },
-                { action: 'Загружены данные', title: `${mangaAPI ? mangaAPI.getAllManga().length : 0} тайтлов`, time: 'только что', type: 'info' }
-            ];
-
-            const container = document.getElementById('recentActions');
-            container.innerHTML = actions.map(action => `
-                <div style="padding: 12px; border-left: 3px solid var(--${action.type === 'success' ? 'success' : 'primary'}-color); margin-bottom: 8px; background: var(--bg-color);">
-                    <div style="font-weight: 600;">${action.action}: ${action.title}</div>
-                    <div style="font-size: 0.875rem; color: var(--secondary-color);">${action.time}</div>
-                </div>
-            `).join('');
-        }
-
-        // Manga list functions
-        function loadMangaList() {
-            if (!mangaAPI) {
-                console.warn('⚠️ MangaAPI не готов для загрузки списка');
-                showNotification('Система данных не готова', 'warning');
-                return;
-            }
-
-            try {
-                const allManga = mangaAPI.getAllManga();
-                const tbody = document.getElementById('mangaTableBody');
-
-                if (allManga.length === 0) {
-                    tbody.innerHTML = `
-                        <tr>
-                            <td colspan="8" style="text-align: center; padding: 40px; color: var(--secondary-color);">
-                                Нет тайтлов в базе данных.<br>
-                                <button class="btn btn-primary" onclick="showSection('add-manga')" style="margin-top: 12px;">
-                                    Добавить первый тайтл
-                                </button>
-                            </td>
-                        </tr>
-                    `;
-                    return;
-                }
-
-                tbody.innerHTML = allManga.map(manga => {
-                    const donationProgress = ((manga.currentDonations || 0) / (manga.donationGoal || 10000)) * 100;
-                    const statusClass = getStatusClass(manga.status);
-
-                    return `
-                        <tr>
-                            <td>
-                                <img src="${manga.image || 'https://via.placeholder.com/40x60/FF6B35/FFFFFF?text=M'}" 
-                                     alt="${manga.title}" class="manga-poster">
-                            </td>
-                            <td>
-                                <div class="manga-title">${manga.title}</div>
-                                <div class="manga-meta">${manga.year || 'N/A'}</div>
-                            </td>
-                            <td>${manga.type || 'Манга'}</td>
-                            <td><span class="status-badge ${statusClass}">${manga.status || 'Неизвестно'}</span></td>
-                            <td>${manga.availableEpisodes || 0}/${manga.totalEpisodes || 0}</td>
-                            <td>⭐ ${manga.rating || 'N/A'}</td>
-                            <td>
-                                <div>${(manga.currentDonations || 0).toLocaleString()}₽</div>
-                                <div style="font-size: 0.75rem; color: var(--secondary-color);">${donationProgress.toFixed(1)}%</div>
-                            </td>
-                            <td>
-                                <div class="table-actions">
-                                    <button class="action-btn view" onclick="viewManga('${manga.id}')">👁️</button>
-                                    <button class="action-btn edit" onclick="editManga('${manga.id}')">✏️</button>
-                                    <button class="action-btn delete" onclick="deleteManga('${manga.id}')">🗑️</button>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
-
-                console.log('📋 Список тайтлов загружен:', allManga.length);
-            } catch (error) {
-                console.error('❌ Ошибка загрузки списка тайтлов:', error);
-                showNotification('Ошибка загрузки списка тайтлов', 'error');
-            }
-        }
-
-        function getStatusClass(status) {
-            switch(status) {
-                case 'Продолжается':
-                case 'Выходит':
-                    return 'status-active';
-                case 'Завершён':
-                    return 'status-completed';
-                default:
-                    return 'status-paused';
-            }
-        }
-
-        // Form functions
+        // Настройка обработчиков событий
         function setupEventListeners() {
             // Form submission
-            const form = document.getElementById('mangaForm');
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    saveManga();
-                });
-            }
+            document.getElementById('mangaForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveManga();
+            });
 
             // Genre input
-            const genreInput = document.getElementById('genreInput');
-            if (genreInput) {
-                genreInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        addTag('genre', this.value.trim());
-                        this.value = '';
-                    }
-                });
-            }
+            document.getElementById('genreInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addTag('genre', this.value.trim());
+                    this.value = '';
+                }
+            });
 
             // Category input
-            const categoryInput = document.getElementById('categoryInput');
-            if (categoryInput) {
-                categoryInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        addTag('category', this.value.trim());
-                        this.value = '';
-                    }
-                });
-            }
-
-            // Total episodes change
-            const totalEpisodesInput = document.getElementById('totalEpisodes');
-            if (totalEpisodesInput) {
-                totalEpisodesInput.addEventListener('change', generateEpisodeInputs);
-            }
-
-            console.log('🎛️ Event listeners настроены');
+            document.getElementById('categoryInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addTag('category', this.value.trim());
+                    this.value = '';
+                }
+            });
         }
 
+        // Управление тегами
         function addTag(type, value) {
             if (!value) return;
 
             const container = document.getElementById(type + 'Tags');
-            if (!container) return;
-
             const existingTags = Array.from(container.querySelectorAll('.tag')).map(tag => 
                 tag.textContent.replace('×', '').trim()
             );
@@ -1156,56 +772,250 @@
             container.appendChild(tag);
         }
 
-        function generateEpisodeInputs() {
-            const total = parseInt(document.getElementById('totalEpisodes').value) || 0;
-            const container = document.getElementById('episodeGrid');
-            
-            if (!container) return;
-            
-            if (total === 0) {
-                container.innerHTML = '';
+        // === УПРАВЛЕНИЕ ГЛАВАМИ ===
+
+        // Добавление новой главы
+        function addNewChapter() {
+            const newChapter = {
+                id: chapterIdCounter++,
+                number: chapters.length + 1,
+                title: `Глава ${chapters.length + 1}`,
+                url: '',
+                order: chapters.length
+            };
+
+            chapters.push(newChapter);
+            renderChaptersList();
+            updateChaptersSummary();
+            showNotification('Новая глава добавлена', 'success');
+        }
+
+        // Отображение списка глав
+        function renderChaptersList() {
+            const container = document.getElementById('chaptersList');
+
+            if (chapters.length === 0) {
+                container.innerHTML = `
+                    <div class="chapters-empty">
+                        <h4>Нет добавленных глав</h4>
+                        <p>Нажмите кнопку "Добавить главу" для создания первой главы</p>
+                    </div>
+                `;
                 return;
             }
 
-            const episodes = [];
-            for (let i = 1; i <= Math.min(total, 20); i++) { // Limit to 20 for performance
-                episodes.push(`
-                    <div class="episode-item">
-                        <h4>Серия ${i}</h4>
-                        <input type="url" class="episode-url" placeholder="Ссылка на видео" data-episode="${i}">
-                    </div>
-                `);
-            }
+            // Сортируем главы по порядку
+            const sortedChapters = [...chapters].sort((a, b) => a.order - b.order);
 
-            container.innerHTML = episodes.join('');
-            
-            if (total > 20) {
-                container.innerHTML += `
-                    <div class="episode-item" style="grid-column: 1 / -1; text-align: center; padding: 20px;">
-                        <p>Показаны первые 20 серий. Остальные можно добавить после создания тайтла.</p>
+            container.innerHTML = sortedChapters.map(chapter => `
+                <div class="chapter-item" draggable="true" data-chapter-id="${chapter.id}">
+                    <div class="chapter-header">
+                        <div class="drag-handle" title="Перетащите для изменения порядка">⋮⋮</div>
+                        
+                        <input type="number" 
+                               class="chapter-number-input" 
+                               value="${chapter.number}" 
+                               min="1" 
+                               title="Номер главы"
+                               onchange="updateChapterNumber(${chapter.id}, this.value)">
+                        
+                        <input type="text" 
+                               class="chapter-title-input" 
+                               value="${chapter.title}" 
+                               placeholder="Название главы"
+                               onchange="updateChapterTitle(${chapter.id}, this.value)">
+                        
+                        <div class="chapter-actions">
+                            <span class="chapter-status ${chapter.url ? 'ready' : 'empty'}">
+                                ${chapter.url ? '✅ Готова' : '⏳ Пустая'}
+                            </span>
+                            <button type="button" class="remove-chapter-btn" onclick="removeChapter(${chapter.id})">
+                                🗑️
+                            </button>
+                        </div>
                     </div>
-                `;
+                    
+                    <input type="url" 
+                           class="chapter-url-input ${chapter.url ? 'filled' : ''}" 
+                           value="${chapter.url}" 
+                           placeholder="Ссылка на видео (YouTube, Google Drive, и т.д.)"
+                           onchange="updateChapterUrl(${chapter.id}, this.value)">
+                </div>
+            `).join('');
+
+            // Настраиваем drag & drop
+            setupDragAndDrop();
+        }
+
+        // Обновление номера главы
+        function updateChapterNumber(chapterId, newNumber) {
+            const chapter = chapters.find(c => c.id === chapterId);
+            if (chapter) {
+                chapter.number = parseInt(newNumber) || 1;
+                updateChaptersSummary();
             }
         }
 
-        function saveManga() {
-            if (!mangaAPI) {
-                showNotification('Система данных не готова', 'error');
+        // Обновление названия главы
+        function updateChapterTitle(chapterId, newTitle) {
+            const chapter = chapters.find(c => c.id === chapterId);
+            if (chapter) {
+                chapter.title = newTitle.trim() || `Глава ${chapter.number}`;
+                updateChaptersSummary();
+            }
+        }
+
+        // Обновление URL главы
+        function updateChapterUrl(chapterId, newUrl) {
+            const chapter = chapters.find(c => c.id === chapterId);
+            if (chapter) {
+                chapter.url = newUrl.trim();
+                
+                // Обновляем визуальное состояние
+                const input = document.querySelector(`[data-chapter-id="${chapterId}"] .chapter-url-input`);
+                if (input) {
+                    input.classList.toggle('filled', !!chapter.url);
+                }
+                
+                renderChaptersList();
+                updateChaptersSummary();
+            }
+        }
+
+        // Удаление главы
+        function removeChapter(chapterId) {
+            const chapterIndex = chapters.findIndex(c => c.id === chapterId);
+            const chapter = chapters[chapterIndex];
+            
+            if (confirm(`Удалить "${chapter.title}"?`)) {
+                chapters.splice(chapterIndex, 1);
+                
+                // Обновляем порядок для оставшихся глав
+                chapters.forEach((ch, index) => {
+                    ch.order = index;
+                });
+                
+                renderChaptersList();
+                updateChaptersSummary();
+                showNotification('Глава удалена', 'warning');
+            }
+        }
+
+        // Автоматическая нумерация
+        function autoNumberChapters() {
+            if (chapters.length === 0) {
+                showNotification('Нет глав для нумерации', 'warning');
                 return;
             }
 
-            showLoading(true);
+            chapters.forEach((chapter, index) => {
+                chapter.number = index + 1;
+                chapter.title = chapter.title.includes('Глава') ? 
+                    `Глава ${index + 1}` : 
+                    chapter.title;
+            });
 
+            renderChaptersList();
+            updateChaptersSummary();
+            showNotification('Главы перенумерованы', 'success');
+        }
+
+        // Сортировка глав по номерам
+        function sortChapters() {
+            if (chapters.length === 0) {
+                showNotification('Нет глав для сортировки', 'warning');
+                return;
+            }
+
+            chapters.sort((a, b) => a.number - b.number);
+            chapters.forEach((chapter, index) => {
+                chapter.order = index;
+            });
+
+            renderChaptersList();
+            updateChaptersSummary();
+            showNotification('Главы отсортированы', 'success');
+        }
+
+        // Обновление сводки по главам
+        function updateChaptersSummary() {
+            const total = chapters.length;
+            const withUrls = chapters.filter(ch => ch.url && ch.url.trim()).length;
+            const ready = withUrls; // Готовые = те, у которых есть ссылки
+
+            document.getElementById('chaptersSummary').innerHTML = `
+                <strong>Итого:</strong> ${total} глав, ${withUrls} с ссылками, ${ready} готовых к публикации
+            `;
+        }
+
+        // Drag & Drop функциональность
+        function setupDragAndDrop() {
+            const chapterItems = document.querySelectorAll('.chapter-item');
+            
+            chapterItems.forEach(item => {
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragover', handleDragOver);
+                item.addEventListener('drop', handleDrop);
+                item.addEventListener('dragend', handleDragEnd);
+            });
+        }
+
+        let draggedElement = null;
+
+        function handleDragStart(e) {
+            draggedElement = this;
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            
+            if (draggedElement !== this) {
+                const draggedId = parseInt(draggedElement.dataset.chapterId);
+                const targetId = parseInt(this.dataset.chapterId);
+                
+                // Находим индексы
+                const draggedIndex = chapters.findIndex(ch => ch.id === draggedId);
+                const targetIndex = chapters.findIndex(ch => ch.id === targetId);
+                
+                // Меняем местами
+                const draggedChapter = chapters[draggedIndex];
+                chapters.splice(draggedIndex, 1);
+                chapters.splice(targetIndex, 0, draggedChapter);
+                
+                // Обновляем порядок
+                chapters.forEach((ch, index) => {
+                    ch.order = index;
+                });
+                
+                renderChaptersList();
+                updateChaptersSummary();
+                showNotification('Порядок глав изменен', 'success');
+            }
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('dragging');
+            draggedElement = null;
+        }
+
+        // === СОХРАНЕНИЕ МАНГИ ===
+
+        function saveManga() {
             try {
-                // Collect form data
+                // Собираем основные данные
                 const mangaData = {
                     title: document.getElementById('mangaTitle').value.trim(),
                     type: document.getElementById('mangaType').value,
                     status: document.getElementById('mangaStatus').value,
                     year: parseInt(document.getElementById('mangaYear').value) || new Date().getFullYear(),
                     rating: parseFloat(document.getElementById('mangaRating').value) || 8.0,
-                    totalEpisodes: parseInt(document.getElementById('totalEpisodes').value) || 1,
-                    availableEpisodes: parseInt(document.getElementById('availableEpisodes').value) || 0,
                     donationGoal: parseInt(document.getElementById('donationGoal').value) || 10000,
                     image: document.getElementById('mangaImage').value.trim() || null,
                     description: document.getElementById('mangaDescription').value.trim() || '',
@@ -1214,18 +1024,8 @@
                     ),
                     categories: Array.from(document.getElementById('categoryTags').querySelectorAll('.tag')).map(tag => 
                         tag.textContent.replace('×', '').trim()
-                    ),
-                    episodes: {}
+                    )
                 };
-
-                // Collect episode URLs
-                document.querySelectorAll('.episode-url').forEach(input => {
-                    const episode = input.dataset.episode;
-                    const url = input.value.trim();
-                    if (url) {
-                        mangaData.episodes[episode] = url;
-                    }
-                });
 
                 // Validation
                 if (!mangaData.title) {
@@ -1240,264 +1040,144 @@
                     throw new Error('Статус тайтла обязателен');
                 }
 
-                if (mangaData.availableEpisodes > mangaData.totalEpisodes) {
-                    throw new Error('Доступных серий не может быть больше общего количества');
+                // Подсчитываем главы
+                const readyChapters = chapters.filter(ch => ch.url && ch.url.trim());
+                mangaData.totalEpisodes = chapters.length;
+                mangaData.availableEpisodes = readyChapters.length;
+
+                // Конвертируем главы в старый формат episodes для совместимости
+                mangaData.episodes = {};
+                readyChapters.forEach(chapter => {
+                    mangaData.episodes[chapter.number] = chapter.url;
+                });
+
+                // Проверяем систему данных
+                if (!window.MangaAPI) {
+                    // Загружаем систему данных
+                    loadDataSystem().then(() => {
+                        saveToAPI(mangaData);
+                    });
+                } else {
+                    saveToAPI(mangaData);
                 }
 
-                // Save manga
+            } catch (error) {
+                console.error('Ошибка сохранения:', error);
+                showNotification(error.message, 'error');
+            }
+        }
+
+        function saveToAPI(mangaData) {
+            try {
                 let result;
                 if (editingManga) {
-                    result = mangaAPI.updateManga(editingManga.id, mangaData);
+                    result = window.MangaAPI.updateManga(editingManga.id, mangaData);
                     showNotification('Тайтл успешно обновлен!', 'success');
-                    editingManga = null;
-                    document.getElementById('formTitle').textContent = 'Добавить новый тайтл';
                 } else {
-                    result = mangaAPI.addManga(mangaData);
+                    result = window.MangaAPI.addManga(mangaData);
                     showNotification('Тайтл успешно добавлен!', 'success');
                 }
 
                 if (result) {
+                    // Сохраняем главы отдельно
+                    saveChaptersToStorage(result.id);
+                    
                     console.log('💾 Тайтл сохранен:', result);
+                    console.log('📚 Главы сохранены:', chapters.length);
+                    
+                    // Очищаем форму после успешного сохранения
                     resetForm();
-                    loadMangaList();
-                    loadDashboardStats();
-                } else {
-                    throw new Error('Ошибка сохранения тайтла');
                 }
 
             } catch (error) {
-                console.error('❌ Ошибка сохранения тайтла:', error);
-                showNotification(error.message, 'error');
-            } finally {
-                showLoading(false);
+                console.error('Ошибка API:', error);
+                showNotification('Ошибка сохранения в базу данных', 'error');
             }
         }
 
-        function resetForm() {
-            const form = document.getElementById('mangaForm');
-            if (form) {
-                form.reset();
+        function saveChaptersToStorage(mangaId) {
+            // Создаем структуру групп глав для плеера
+            if (chapters.length > 0) {
+                const chapterGroups = [{
+                    id: 1,
+                    name: "Все главы",
+                    fromChapter: Math.min(...chapters.map(ch => ch.number)),
+                    toChapter: Math.max(...chapters.map(ch => ch.number)),
+                    chapters: chapters.reduce((acc, chapter) => {
+                        if (chapter.url && chapter.url.trim()) {
+                            acc[chapter.number] = chapter.url;
+                        }
+                        return acc;
+                    }, {}),
+                    created: true
+                }];
+
+                localStorage.setItem(`manga_chapters_${mangaId}`, JSON.stringify(chapterGroups));
+                console.log('💾 Группы глав сохранены для плеера');
             }
+        }
+
+        function loadDataSystem() {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = 'js/data.js';
+                script.onload = () => {
+                    const checkAPI = () => {
+                        if (window.MangaAPI) {
+                            resolve();
+                        } else {
+                            setTimeout(checkAPI, 100);
+                        }
+                    };
+                    checkAPI();
+                };
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
+
+        // === ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ ===
+
+        function resetForm() {
+            document.getElementById('mangaForm').reset();
+            document.getElementById('genreTags').innerHTML = '';
+            document.getElementById('categoryTags').innerHTML = '';
             
-            const genreTags = document.getElementById('genreTags');
-            if (genreTags) genreTags.innerHTML = '';
-            
-            const categoryTags = document.getElementById('categoryTags');
-            if (categoryTags) categoryTags.innerHTML = '';
-            
-            const episodeGrid = document.getElementById('episodeGrid');
-            if (episodeGrid) episodeGrid.innerHTML = '';
+            // Очищаем главы
+            chapters = [];
+            chapterIdCounter = 1;
+            renderChaptersList();
+            updateChaptersSummary();
             
             editingManga = null;
             document.getElementById('formTitle').textContent = 'Добавить новый тайтл';
-        }
-
-        // CRUD operations
-        function viewManga(id) {
-            window.open(`player.html?id=${id}`, '_blank');
-        }
-
-        function editManga(id) {
-            if (!mangaAPI) {
-                showNotification('Система данных не готова', 'error');
-                return;
-            }
-
-            const manga = mangaAPI.getMangaById(id);
-            if (!manga) {
-                showNotification('Тайтл не найден', 'error');
-                return;
-            }
-
-            editingManga = manga;
-            showSection('add-manga');
-            document.getElementById('formTitle').textContent = 'Редактировать тайтл';
-
-            // Fill form
-            document.getElementById('mangaTitle').value = manga.title || '';
-            document.getElementById('mangaType').value = manga.type || '';
-            document.getElementById('mangaStatus').value = manga.status || '';
-            document.getElementById('mangaYear').value = manga.year || '';
-            document.getElementById('mangaRating').value = manga.rating || '';
-            document.getElementById('totalEpisodes').value = manga.totalEpisodes || '';
-            document.getElementById('availableEpisodes').value = manga.availableEpisodes || '';
-            document.getElementById('donationGoal').value = manga.donationGoal || 10000;
-            document.getElementById('mangaImage').value = manga.image || '';
-            document.getElementById('mangaDescription').value = manga.description || '';
-
-            // Fill genres
-            if (manga.genres) {
-                manga.genres.forEach(genre => addTag('genre', genre));
-            }
-
-            // Fill categories
-            if (manga.categories) {
-                manga.categories.forEach(category => addTag('category', category));
-            }
-
-            // Generate episode inputs and fill URLs
-            generateEpisodeInputs();
-            setTimeout(() => {
-                if (manga.episodes) {
-                    Object.entries(manga.episodes).forEach(([episode, url]) => {
-                        const input = document.querySelector(`[data-episode="${episode}"]`);
-                        if (input) {
-                            input.value = url;
-                        }
-                    });
-                }
-            }, 100);
-
-            console.log('✏️ Редактирование тайтла:', manga.title);
-        }
-
-        function deleteManga(id) {
-            if (!mangaAPI) {
-                showNotification('Система данных не готова', 'error');
-                return;
-            }
-
-            const manga = mangaAPI.getMangaById(id);
-            if (!manga) {
-                showNotification('Тайтл не найден', 'error');
-                return;
-            }
-
-            if (confirm(`Вы уверены, что хотите удалить "${manga.title}"?\n\nЭто действие нельзя отменить!`)) {
-                const result = mangaAPI.deleteManga(id);
-                if (result) {
-                    showNotification('Тайтл успешно удален', 'success');
-                    loadMangaList();
-                    loadDashboardStats();
-                    console.log('🗑️ Тайтл удален:', manga.title);
-                } else {
-                    showNotification('Ошибка удаления тайтла', 'error');
-                }
-            }
-        }
-
-        // Data management
-        function exportData() {
-            if (!mangaAPI) {
-                showNotification('Система данных не готова', 'error');
-                return;
-            }
-
-            try {
-                const data = mangaAPI.exportData();
-                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `manga-database-${new Date().toISOString().split('T')[0]}.json`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                
-                URL.revokeObjectURL(url);
-                showNotification('Данные экспортированы', 'success');
-                console.log('📤 Данные экспортированы');
-            } catch (error) {
-                console.error('❌ Ошибка экспорта:', error);
-                showNotification('Ошибка экспорта данных', 'error');
-            }
-        }
-
-        function refreshData() {
-            showLoading(true);
-            setTimeout(() => {
-                loadDashboardStats();
-                loadMangaList();
-                showLoading(false);
-                showNotification('Данные обновлены', 'success');
-            }, 1000);
-        }
-
-        // Debug functions
-        function runDiagnostics() {
-            const output = document.getElementById('debugOutput');
-            const results = [];
-
-            results.push('<div class="debug-info">');
-            results.push('<div class="debug-title">🔍 ДИАГНОСТИКА СИСТЕМЫ</div>');
-
-            // Check MangaAPI
-            results.push(`<strong>1. Проверка MangaAPI:</strong> ${mangaAPI ? '✅ Загружен' : '❌ Не загружен'}`);
             
-            if (mangaAPI) {
-                try {
-                    const allManga = mangaAPI.getAllManga();
-                    results.push(`<strong>2. Тайтлы в базе:</strong> ${allManga.length} шт.`);
-                    
-                    const stats = mangaAPI.getStats();
-                    results.push(`<strong>3. Статистика:</strong>`);
-                    results.push(`   - Общее количество: ${stats.totalManga}`);
-                    results.push(`   - Всего серий: ${stats.totalEpisodes}`);
-                    results.push(`   - Средний рейтинг: ${stats.averageRating.toFixed(1)}`);
-                    results.push(`   - Общие донаты: ${stats.totalDonations}₽`);
-
-                    // Test CRUD operations
-                    results.push(`<strong>4. Тест CRUD операций:</strong>`);
-                    
-                    // Test add
-                    const testManga = {
-                        title: `Тест ${Date.now()}`,
-                        type: 'Манга',
-                        status: 'Тестовый',
-                        totalEpisodes: 1,
-                        availableEpisodes: 1
-                    };
-                    
-                    const addResult = mangaAPI.addManga(testManga);
-                    results.push(`   - Добавление: ${addResult ? '✅ OK' : '❌ FAIL'}`);
-                    
-                    if (addResult) {
-                        // Test update
-                        const updateResult = mangaAPI.updateManga(addResult.id, { title: 'Обновленный тест' });
-                        results.push(`   - Обновление: ${updateResult ? '✅ OK' : '❌ FAIL'}`);
-                        
-                        // Test delete
-                        const deleteResult = mangaAPI.deleteManga(addResult.id);
-                        results.push(`   - Удаление: ${deleteResult ? '✅ OK' : '❌ FAIL'}`);
-                    }
-
-                    results.push(`<strong>5. Фильтры и поиск:</strong>`);
-                    const genres = mangaAPI.getGenres();
-                    const categories = mangaAPI.getCategories();
-                    const statuses = mangaAPI.getStatuses();
-                    
-                    results.push(`   - Жанры: ${genres.length} (${genres.slice(0, 3).join(', ')}...)`);
-                    results.push(`   - Категории: ${categories.length} (${categories.join(', ')})`);
-                    results.push(`   - Статусы: ${statuses.length} (${statuses.join(', ')})`);
-
-                } catch (error) {
-                    results.push(`<strong>❌ ОШИБКА ТЕСТИРОВАНИЯ:</strong> ${error.message}`);
-                }
-            }
-
-            // Check localStorage
-            results.push(`<strong>6. LocalStorage:</strong>`);
-            try {
-                const stored = localStorage.getItem('lightfox_manga_data');
-                results.push(`   - Данные сохранены: ${stored ? '✅ YES' : '❌ NO'}`);
-                if (stored) {
-                    const parsed = JSON.parse(stored);
-                    results.push(`   - Размер данных: ${(stored.length / 1024).toFixed(1)} KB`);
-                    results.push(`   - Количество тайтлов: ${Array.isArray(parsed) ? parsed.length : 'N/A'}`);
-                }
-            } catch (error) {
-                results.push(`   - Ошибка localStorage: ${error.message}`);
-            }
-
-            results.push(`<strong>7. Время диагностики:</strong> ${new Date().toLocaleString()}`);
-            results.push('</div>');
-
-            output.innerHTML = results.join('<br>');
-            console.log('🔍 Диагностика завершена');
+            showNotification('Форма очищена', 'success');
         }
 
-        // UI helpers
+        function previewManga() {
+            const title = document.getElementById('mangaTitle').value.trim();
+            if (!title) {
+                showNotification('Введите название тайтла для предпросмотра', 'warning');
+                return;
+            }
+
+            if (chapters.length === 0) {
+                showNotification('Добавьте хотя бы одну главу для предпросмотра', 'warning');
+                return;
+            }
+
+            showNotification('Предпросмотр будет доступен после сохранения тайтла', 'warning');
+        }
+
+        function logout() {
+            if (confirm('Выйти из админ-панели?')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // === УТИЛИТЫ ===
+
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
             notification.textContent = message;
@@ -1508,30 +1188,110 @@
             }, 4000);
         }
 
-        function showLoading(show) {
-            const overlay = document.getElementById('loadingOverlay');
-            overlay.classList.toggle('show', show);
+        // Быстрое добавление тестовых глав
+        function addTestChapters() {
+            for (let i = 1; i <= 5; i++) {
+                const chapter = {
+                    id: chapterIdCounter++,
+                    number: i,
+                    title: `Глава ${i}`,
+                    url: i <= 3 ? 'https://www.youtube.com/embed/dQw4w9WgXcQ' : '', // Первые 3 с ссылками
+                    order: chapters.length
+                };
+                chapters.push(chapter);
+            }
+            renderChaptersList();
+            updateChaptersSummary();
+            showNotification('Добавлены тестовые главы', 'success');
         }
 
-        function logout() {
-            if (confirm('Выйти из админ-панели?')) {
-                window.location.href = 'index.html';
+        // Импорт глав из текста
+        function importChaptersFromText() {
+            const text = prompt('Введите главы в формате:\n1. Глава 1 - ссылка\n2. Глава 2 - ссылка\n...');
+            if (!text) return;
+
+            const lines = text.split('\n').filter(line => line.trim());
+            let imported = 0;
+
+            lines.forEach(line => {
+                const match = line.match(/(\d+)\.?\s*(.+?)\s*-\s*(.+)/);
+                if (match) {
+                    const [, number, title, url] = match;
+                    const chapter = {
+                        id: chapterIdCounter++,
+                        number: parseInt(number),
+                        title: title.trim(),
+                        url: url.trim(),
+                        order: chapters.length
+                    };
+                    chapters.push(chapter);
+                    imported++;
+                }
+            });
+
+            if (imported > 0) {
+                renderChaptersList();
+                updateChaptersSummary();
+                showNotification(`Импортировано ${imported} глав`, 'success');
+            } else {
+                showNotification('Не удалось импортировать главы', 'error');
             }
         }
 
-        // Initialize when page loads
+        // Добавляем кнопки для быстрых действий
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 Инициализация админ-панели...');
-            initializeAdmin();
+            // Добавляем скрытые кнопки для разработки (Ctrl+Click на заголовке)
+            document.querySelector('.chapters-title').addEventListener('click', function(e) {
+                if (e.ctrlKey) {
+                    const menu = confirm('Быстрые действия:\nОК - Добавить тестовые главы\nОтмена - Импорт из текста');
+                    if (menu) {
+                        addTestChapters();
+                    } else {
+                        importChaptersFromText();
+                    }
+                }
+            });
         });
 
-        // Listen for data ready event (backup)
-        window.addEventListener('mangaDataReady', function() {
-            if (!isDataReady) {
-                console.log('📡 Получен сигнал готовности данных');
-                initializeAdmin();
+        // Автосохранение черновика
+        function autoSaveDraft() {
+            const draft = {
+                title: document.getElementById('mangaTitle').value,
+                type: document.getElementById('mangaType').value,
+                chapters: chapters,
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('manga_draft', JSON.stringify(draft));
+        }
+
+        // Автосохранение каждые 30 секунд
+        setInterval(autoSaveDraft, 30000);
+
+        // Восстановление черновика при загрузке
+        window.addEventListener('load', function() {
+            const draft = localStorage.getItem('manga_draft');
+            if (draft) {
+                try {
+                    const data = JSON.parse(draft);
+                    if (data.chapters && data.chapters.length > 0) {
+                        const restore = confirm(`Найден черновик от ${new Date(data.timestamp).toLocaleString()}.\nВосстановить?`);
+                        if (restore) {
+                            document.getElementById('mangaTitle').value = data.title || '';
+                            document.getElementById('mangaType').value = data.type || '';
+                            chapters = data.chapters || [];
+                            chapterIdCounter = Math.max(...chapters.map(ch => ch.id)) + 1;
+                            renderChaptersList();
+                            updateChaptersSummary();
+                            showNotification('Черновик восстановлен', 'success');
+                        }
+                    }
+                } catch (e) {
+                    console.error('Ошибка восстановления черновика:', e);
+                }
             }
         });
+
+        console.log('🔥 Админка с управлением главами полностью загружена!');
     </script>
 </body>
 </html>

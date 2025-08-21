@@ -285,6 +285,37 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
+        /* Status Badge Styles */
+        .status-badge {
+            background: var(--primary-color);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        /* Цвета для разных статусов */
+        .status-badge.completed {
+            background: #10b981; /* Зеленый для завершенных */
+        }
+
+        .status-badge.ongoing {
+            background: #f59e0b; /* Оранжевый для выходящих/продолжающихся */
+        }
+
+        .status-badge.paused {
+            background: #3b82f6; /* Синий для замороженных */
+        }
+
+        .status-badge.announced {
+            background: #8b5cf6; /* Фиолетовый для анонсов */
+        }
+
+        .status-badge.licensed {
+            background: #ef4444; /* Красный для лицензии */
+        }
+
         /* Episodes Manager */
         .episodes-manager {
             margin-top: 30px;
@@ -667,17 +698,6 @@
             border-radius: 8px;
             box-shadow: var(--shadow);
         }
-
-        /* Info Notice */
-        .info-notice {
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 8px;
-            padding: 12px 16px;
-            margin-bottom: 16px;
-            font-size: 0.875rem;
-            color: #1d4ed8;
-        }
     </style>
 </head>
 <body>
@@ -797,20 +817,16 @@
                                 </div>
                             </div>
 
-                            <!-- Информация о главах -->
-                            <div class="info-notice">
-                                ℹ️ Поля ниже используются только для отображения информации в каталоге и на страницах тайтлов. Реальные серии для просмотра добавляются через менеджер серий ниже.
-                            </div>
-
+                            <!-- Количество глав -->
                             <div class="form-grid">
                                 <div class="form-group">
-                                    <label class="form-label">Доступно глав (для отображения)</label>
-                                    <input type="number" class="form-input" id="availableChapters" min="0" placeholder="Для отображения в описании (например: 5)">
+                                    <label class="form-label">Доступно глав</label>
+                                    <input type="number" class="form-input" id="availableChapters" min="0" placeholder="Сколько глав доступно (например: 5)">
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="form-label">Всего глав (для отображения)</label>
-                                    <input type="number" class="form-input" id="totalChapters" min="1" placeholder="Для отображения в описании (например: 99)">
+                                    <label class="form-label">Всего глав</label>
+                                    <input type="number" class="form-input" id="totalChapters" min="1" placeholder="Общее количество глав (например: 99)">
                                 </div>
 
                                 <div class="form-group">
@@ -849,7 +865,7 @@
                                 <div class="episodes-header">
                                     <h3 class="episodes-title">
                                         <span>📺</span>
-                                        Управление сериями (реальный контент для просмотра)
+                                        Управление сериями
                                     </h3>
                                     <button type="button" class="add-episode-btn" onclick="addNewEpisode()">
                                         <span>➕</span>
@@ -862,7 +878,7 @@
                                         📊 Сортировать
                                     </button>
                                     <span style="font-size: 0.875rem; color: var(--secondary-color);">
-                                        Только серии с URL будут доступны для просмотра в плеере
+                                        Используйте диапазоны глав, например: от 1 до 9, от 10 до 20
                                     </span>
                                 </div>
 
@@ -905,6 +921,21 @@
         let episodeIdCounter = 1;
         let editingManga = null;
         let isAuthenticated = false;
+
+        // Status color mapping function
+        function getStatusClass(status) {
+            const statusMap = {
+                'Завершён': 'completed',
+                'Завершен': 'completed',
+                'Выходит': 'ongoing',
+                'Продолжается': 'ongoing',
+                'Заморожен': 'paused',
+                'Анонс': 'announced',
+                'Лицензировано': 'licensed',
+                'Лицензия': 'licensed'
+            };
+            return statusMap[status] || '';
+        }
 
         // Authentication
         document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -1033,7 +1064,7 @@
                     <div class="manga-item-header">
                         <div class="manga-item-title">${manga.title}</div>
                         <div class="manga-item-meta">
-                            ${manga.type} • ${manga.status} • Главы: ${manga.availableEpisodes || 0}/${manga.totalEpisodes || 0}
+                            ${manga.type} • <span class="status-badge ${getStatusClass(manga.status)}">${manga.status}</span> • Главы: ${manga.availableEpisodes || 0}/${manga.totalEpisodes || 0}
                         </div>
                     </div>
                     <div class="manga-item-actions">
@@ -1062,9 +1093,9 @@
             document.getElementById('mangaImage').value = manga.image || '';
             document.getElementById('mangaDescription').value = manga.description || '';
 
-            // Load chapters count (for display only)
-            document.getElementById('availableChapters').value = manga.availableEpisodes || 0;
-            document.getElementById('totalChapters').value = manga.totalEpisodes || 0;
+            // Load chapters count
+            document.getElementById('availableChapters').value = manga.availableChapters || 0;
+            document.getElementById('totalChapters').value = manga.totalChapters || 0;
             updateChaptersPreview();
 
             // Load genres
@@ -1079,7 +1110,7 @@
                 manga.categories.forEach(category => addTag('category', category));
             }
 
-            // Load episodes from episodes manager
+            // Load episodes
             episodes = [];
             episodeIdCounter = 1;
             if (manga.episodes) {
@@ -1366,19 +1397,18 @@
                     throw new Error('Статус тайтла обязателен');
                 }
 
-                // ИЗМЕНЕНИЕ: Поля глав используются только для отображения
+                // ИНФОРМАЦИОННАЯ СИСТЕМА: Поля для отображения текста в каталоге и плеере
                 const availableChapters = parseInt(document.getElementById('availableChapters').value) || 0;
                 const totalChapters = parseInt(document.getElementById('totalChapters').value) || 0;
                 
-                // Сохраняем как информацию для отображения
-                mangaData.availableEpisodes = availableChapters;
-                mangaData.totalEpisodes = totalChapters;
+                mangaData.availableChapters = availableChapters;  // ДЛЯ ТЕКСТА в каталоге/плеере
+                mangaData.totalChapters = totalChapters;          // ДЛЯ ТЕКСТА в каталоге/плеере
 
-                // Преобразуем серии из менеджера в старый формат для совместимости
+                // ФУНКЦИОНАЛЬНАЯ СИСТЕМА: Серии для кнопок в плеере
                 mangaData.episodes = {};
                 const readyEpisodes = episodes.filter(ep => ep.url && ep.url.trim());
                 readyEpisodes.forEach(episode => {
-                    // Создаем ключ серии на основе диапазона глав
+                    // Create episode key based on chapter range
                     let episodeKey;
                     if (episode.chapterFrom === episode.chapterTo) {
                         episodeKey = episode.chapterFrom.toString();
@@ -1388,7 +1418,11 @@
                     mangaData.episodes[episodeKey] = episode.url;
                 });
 
-                // Сохраняем в API
+                // ДЛЯ СОВМЕСТИМОСТИ: Количество серий основано на менеджере серий
+                mangaData.totalEpisodes = Object.keys(mangaData.episodes).length;
+                mangaData.availableEpisodes = Object.keys(mangaData.episodes).length;
+
+                // Save to API
                 saveToAPI(mangaData);
 
             } catch (error) {
@@ -1452,7 +1486,7 @@
             showNotification('Форма очищена', 'success');
         }
 
-        // Update chapters preview (только для отображения)
+        // Update chapters preview
         function updateChaptersPreview() {
             const available = parseInt(document.getElementById('availableChapters').value) || 0;
             const total = parseInt(document.getElementById('totalChapters').value) || 0;
@@ -1479,6 +1513,11 @@
             const title = document.getElementById('mangaTitle').value.trim();
             if (!title) {
                 showNotification('Введите название тайтла для предпросмотра', 'warning');
+                return;
+            }
+
+            if (episodes.length === 0) {
+                showNotification('Добавьте хотя бы одну серию для предпросмотра', 'warning');
                 return;
             }
 
@@ -1546,7 +1585,7 @@
 
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🔥 Админка обновлена - поля глав только для отображения!');
+            console.log('🔥 Админка с диапазонами глав загружена!');
         });
     </script>
 </body>

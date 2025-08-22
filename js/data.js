@@ -1,479 +1,480 @@
-// Система управления данными для Light Fox Manga
-(function() {
-    'use strict';
+// === СИСТЕМА ОБЛАЧНОЙ СИНХРОНИЗАЦИИ ДАННЫХ ===
+// Добавить в js/data.js
 
-    // Ключ для localStorage
-    const STORAGE_KEY = 'lightfox_manga_data';
-    const SETTINGS_KEY = 'lightfox_settings';
+class CloudSyncManager {
+    constructor() {
+        this.syncKey = 'lightfox_sync_data';
+        this.lastSyncKey = 'lightfox_last_sync';
+        this.isOnline = navigator.onLine;
+        this.syncInterval = null;
+        
+        // Настройки для разных провайдеров
+        this.providers = {
+            github: {
+                token: localStorage.getItem('github_token'),
+                gistId: localStorage.getItem('sync_gist_id'),
+                enabled: false
+            },
+            firebase: {
+                apiKey: localStorage.getItem('firebase_api_key'),
+                enabled: false
+            }
+        };
 
-    // Образцы данных манги
-    const sampleData = [
-        {
-            id: '1',
-            title: 'Атака титанов',
-            type: 'Аниме',
-            status: 'Завершён',
-            year: 2013,
-            rating: 9.0,
-            genres: ['Экшен', 'Драма', 'Фэнтези', 'Военное'],
-            categories: ['Сёнен'],
-            availableEpisodes: 87,
-            totalEpisodes: 87,
-            currentDonations: 7500,
-            donationGoal: 10000,
-            image: 'https://via.placeholder.com/300x450/FF6B35/FFFFFF?text=Атака+титанов',
-            description: 'Человечество живёт в городах, окружённых огромными стенами, защищающими от титанов — гигантских гуманоидов, пожирающих людей.',
-            episodes: {
-                1: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-                2: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
-            }
-        },
-        {
-            id: '2',
-            title: 'Наруто',
-            type: 'Аниме',
-            status: 'Завершён',
-            year: 2002,
-            rating: 8.7,
-            genres: ['Экшен', 'Приключения', 'Боевые искусства'],
-            categories: ['Сёнен'],
-            availableEpisodes: 720,
-            totalEpisodes: 720,
-            currentDonations: 12000,
-            donationGoal: 15000,
-            image: 'https://via.placeholder.com/300x450/FF6B35/FFFFFF?text=Наруто',
-            description: 'История молодого ниндзя Наруто Узумаки, мечтающего стать Хокаге.',
-            episodes: {
-                1: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
-            }
-        },
-        {
-            id: '3',
-            title: 'Ван Пис',
-            type: 'Аниме',
-            status: 'Выходит',
-            year: 1999,
-            rating: 9.1,
-            genres: ['Экшен', 'Приключения', 'Комедия'],
-            categories: ['Сёнен'],
-            availableEpisodes: 1000,
-            totalEpisodes: 1200,
-            currentDonations: 8000,
-            donationGoal: 20000,
-            image: 'https://via.placeholder.com/300x450/FF6B35/FFFFFF?text=Ван+Пис',
-            description: 'Приключения Монки Д. Луффи и его команды пиратов в поисках легендарного сокровища.',
-            episodes: {
-                1: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
-            }
-        },
-        {
-            id: '4',
-            title: 'Моя геройская академия',
-            type: 'Аниме',
-            status: 'Выходит',
-            year: 2016,
-            rating: 8.5,
-            genres: ['Экшен', 'Школа', 'Супергерои'],
-            categories: ['Сёнен'],
-            availableEpisodes: 138,
-            totalEpisodes: 150,
-            currentDonations: 5500,
-            donationGoal: 12000,
-            image: 'https://via.placeholder.com/300x450/FF6B35/FFFFFF?text=Моя+геройская+академия',
-            description: 'В мире, где 80% населения обладает суперспособностями, обычный мальчик мечтает стать героем.',
-            episodes: {
-                1: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
-            }
-        },
-        {
-            id: '5',
-            title: 'Магическая битва',
-            type: 'Аниме',
-            status: 'Выходит',
-            year: 2020,
-            rating: 8.8,
-            genres: ['Экшен', 'Сверхъестественное', 'Школа'],
-            categories: ['Сёнен'],
-            availableEpisodes: 24,
-            totalEpisodes: 50,
-            currentDonations: 3000,
-            donationGoal: 8000,
-            image: 'https://via.placeholder.com/300x450/FF6B35/FFFFFF?text=Магическая+битва',
-            description: 'Юки Итадори попадает в мир магов и проклятий после того, как съедает палец древнего демона.',
-            episodes: {
-                1: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
-            }
-        },
-        {
-            id: '6',
-            title: 'Демон разрушения',
-            type: 'Аниме',
-            status: 'Выходит',
-            year: 2019,
-            rating: 8.9,
-            genres: ['Экшен', 'Исторический', 'Сверхъестественное'],
-            categories: ['Сёнен'],
-            availableEpisodes: 32,
-            totalEpisodes: 44,
-            currentDonations: 9200,
-            donationGoal: 11000,
-            image: 'https://via.placeholder.com/300x450/FF6B35/FFFFFF?text=Демон+разрушения',
-            description: 'Танджиро Камадо становится охотником на демонов, чтобы спасти свою сестру.',
-            episodes: {
-                1: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
-            }
-        },
-        {
-            id: '7',
-            title: 'Берсерк',
-            type: 'Манга',
-            status: 'Выходит',
-            year: 1989,
-            rating: 9.2,
-            genres: ['Экшен', 'Драма', 'Ужасы', 'Фэнтези'],
-            categories: ['Сэйнэн'],
-            availableEpisodes: 364,
-            totalEpisodes: 400,
-            currentDonations: 15000,
-            donationGoal: 25000,
-            image: 'https://via.placeholder.com/300x450/FF6B35/FFFFFF?text=Берсерк',
-            description: 'Тёмное фэнтези о наёмнике Гатсе и его борьбе с демонами.',
-            episodes: {}
-        },
-        {
-            id: '8',
-            title: 'Токийский гуль',
-            type: 'Аниме',
-            status: 'Завершён',
-            year: 2014,
-            rating: 8.3,
-            genres: ['Экшен', 'Ужасы', 'Сверхъестественное'],
-            categories: ['Сэйнэн'],
-            availableEpisodes: 48,
-            totalEpisodes: 48,
-            currentDonations: 6800,
-            donationGoal: 9000,
-            image: 'https://via.placeholder.com/300x450/FF6B35/FFFFFF?text=Токийский+гуль',
-            description: 'Кен Канеки становится получеловеком-полугулем после встречи с загадочной девушкой.',
-            episodes: {
-                1: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
-            }
-        }
-    ];
+        this.initializeSync();
+    }
 
-    // Система управления данными
-    class MangaDataSystem {
-        constructor() {
-            this.data = this.loadData();
-            this.settings = this.loadSettings();
+    // === ИНИЦИАЛИЗАЦИЯ ===
+    initializeSync() {
+        console.log('🔄 Инициализация системы синхронизации...');
+        
+        // Проверяем доступные провайдеры
+        this.checkProviders();
+        
+        // Слушаем изменения сети
+        window.addEventListener('online', () => {
+            this.isOnline = true;
+            this.syncToCloud();
+        });
+        
+        window.addEventListener('offline', () => {
+            this.isOnline = false;
+        });
+
+        // Автосинхронизация каждые 5 минут
+        this.startAutoSync();
+
+        // Пытаемся загрузить данные при старте
+        this.loadFromCloud();
+    }
+
+    checkProviders() {
+        // Проверяем GitHub
+        if (this.providers.github.token && this.providers.github.gistId) {
+            this.providers.github.enabled = true;
+            console.log('✅ GitHub Gist синхронизация доступна');
         }
 
-        // Загрузка данных из localStorage
-        loadData() {
-            try {
-                const stored = localStorage.getItem(STORAGE_KEY);
-                if (stored) {
-                    const parsedData = JSON.parse(stored);
-                    // Проверяем, что данные валидны
-                    if (Array.isArray(parsedData) && parsedData.length > 0) {
-                        return parsedData;
-                    }
-                }
-            } catch (error) {
-                console.warn('Ошибка загрузки данных из localStorage:', error);
-            }
-            
-            // Если нет сохранённых данных, используем образцы
-            this.saveData(sampleData);
-            return [...sampleData];
-        }
-
-        // Сохранение данных в localStorage
-        saveData(data = null) {
-            try {
-                const dataToSave = data || this.data;
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
-                
-                // Уведомляем об обновлении данных
-                if (typeof window !== 'undefined') {
-                    window.dispatchEvent(new CustomEvent('mangaDataUpdate', {
-                        detail: { data: dataToSave }
-                    }));
-                }
-            } catch (error) {
-                console.error('Ошибка сохранения данных:', error);
-            }
-        }
-
-        // Загрузка настроек
-        loadSettings() {
-            try {
-                const stored = localStorage.getItem(SETTINGS_KEY);
-                return stored ? JSON.parse(stored) : {};
-            } catch (error) {
-                console.warn('Ошибка загрузки настроек:', error);
-                return {};
-            }
-        }
-
-        // Сохранение настроек
-        saveSettings() {
-            try {
-                localStorage.setItem(SETTINGS_KEY, JSON.stringify(this.settings));
-            } catch (error) {
-                console.error('Ошибка сохранения настроек:', error);
-            }
-        }
-
-        // Получение всех манги
-        getAllManga() {
-            return [...this.data];
-        }
-
-        // Получение манги по ID
-        getMangaById(id) {
-            return this.data.find(manga => manga.id === String(id));
-        }
-
-        // Добавление новой манги
-        addManga(manga) {
-            const newManga = {
-                id: String(Date.now()),
-                currentDonations: 0,
-                donationGoal: 10000,
-                episodes: {},
-                ...manga
-            };
-            
-            this.data.push(newManga);
-            this.saveData();
-            return newManga;
-        }
-
-        // Обновление манги
-        updateManga(id, updates) {
-            const index = this.data.findIndex(manga => manga.id === String(id));
-            if (index !== -1) {
-                this.data[index] = { ...this.data[index], ...updates };
-                this.saveData();
-                return this.data[index];
-            }
-            return null;
-        }
-
-        // Удаление манги
-        deleteManga(id) {
-            const index = this.data.findIndex(manga => manga.id === String(id));
-            if (index !== -1) {
-                const deleted = this.data.splice(index, 1)[0];
-                this.saveData();
-                return deleted;
-            }
-            return null;
-        }
-
-        // Получение уникальных жанров
-        getGenres() {
-            const genres = new Set();
-            this.data.forEach(manga => {
-                if (manga.genres) {
-                    manga.genres.forEach(genre => genres.add(genre));
-                }
-            });
-            return Array.from(genres).sort();
-        }
-
-        // Получение уникальных категорий
-        getCategories() {
-            const categories = new Set();
-            this.data.forEach(manga => {
-                if (manga.categories) {
-                    manga.categories.forEach(category => categories.add(category));
-                }
-            });
-            return Array.from(categories).sort();
-        }
-
-        // Получение уникальных статусов
-        getStatuses() {
-            const statuses = new Set();
-            this.data.forEach(manga => {
-                if (manga.status) {
-                    statuses.add(manga.status);
-                }
-            });
-            return Array.from(statuses).sort();
-        }
-
-        // Фильтрация и поиск
-        filterManga(filters = {}) {
-            let result = [...this.data];
-
-            // Поиск по названию
-            if (filters.search) {
-                const searchTerm = filters.search.toLowerCase();
-                result = result.filter(manga => 
-                    manga.title.toLowerCase().includes(searchTerm)
-                );
-            }
-
-            // Фильтр по жанрам
-            if (filters.genres && filters.genres.length > 0) {
-                result = result.filter(manga => 
-                    manga.genres && filters.genres.some(genre => 
-                        manga.genres.includes(genre)
-                    )
-                );
-            }
-
-            // Фильтр по категориям
-            if (filters.categories && filters.categories.length > 0) {
-                result = result.filter(manga => 
-                    manga.categories && filters.categories.some(category => 
-                        manga.categories.includes(category)
-                    )
-                );
-            }
-
-            // Фильтр по статусам
-            if (filters.statuses && filters.statuses.length > 0) {
-                result = result.filter(manga => 
-                    manga.status && filters.statuses.includes(manga.status)
-                );
-            }
-
-            // Фильтр по количеству серий
-            if (filters.chaptersFrom) {
-                const from = parseInt(filters.chaptersFrom);
-                if (!isNaN(from)) {
-                    result = result.filter(manga => 
-                        manga.availableEpisodes >= from
-                    );
-                }
-            }
-
-            if (filters.chaptersTo) {
-                const to = parseInt(filters.chaptersTo);
-                if (!isNaN(to)) {
-                    result = result.filter(manga => 
-                        manga.availableEpisodes <= to
-                    );
-                }
-            }
-
-            // Сортировка
-            if (filters.sortBy) {
-                switch (filters.sortBy) {
-                    case 'alphabet':
-                        result.sort((a, b) => a.title.localeCompare(b.title));
-                        break;
-                    case 'rating':
-                        result.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-                        break;
-                    case 'updated':
-                        result.sort((a, b) => (b.year || 0) - (a.year || 0));
-                        break;
-                    case 'popularity':
-                    default:
-                        result.sort((a, b) => {
-                            const aPopularity = (a.currentDonations || 0) + (a.rating || 0) * 1000;
-                            const bPopularity = (b.currentDonations || 0) + (b.rating || 0) * 1000;
-                            return bPopularity - aPopularity;
-                        });
-                        break;
-                }
-            }
-
-            return result;
-        }
-
-        // Статистика
-        getStats() {
-            return {
-                totalManga: this.data.length,
-                totalEpisodes: this.data.reduce((sum, manga) => sum + (manga.availableEpisodes || 0), 0),
-                averageRating: this.data.reduce((sum, manga) => sum + (manga.rating || 0), 0) / this.data.length,
-                totalDonations: this.data.reduce((sum, manga) => sum + (manga.currentDonations || 0), 0)
-            };
-        }
-
-        // Сброс данных к образцам
-        resetToSampleData() {
-            this.data = [...sampleData];
-            this.saveData();
-            return this.data;
-        }
-
-        // Экспорт данных
-        exportData() {
-            return {
-                manga: this.data,
-                settings: this.settings,
-                exportDate: new Date().toISOString(),
-                version: '1.0'
-            };
-        }
-
-        // Импорт данных
-        importData(importedData) {
-            try {
-                if (importedData.manga && Array.isArray(importedData.manga)) {
-                    this.data = importedData.manga;
-                    this.saveData();
-                }
-                
-                if (importedData.settings) {
-                    this.settings = { ...this.settings, ...importedData.settings };
-                    this.saveSettings();
-                }
-                
-                return true;
-            } catch (error) {
-                console.error('Ошибка импорта данных:', error);
-                return false;
-            }
+        // Если нет настроенных провайдеров, показываем уведомление
+        if (!this.hasEnabledProvider()) {
+            this.showSyncSetup();
         }
     }
 
-    // Создание глобального экземпляра
-    const mangaSystem = new MangaDataSystem();
+    hasEnabledProvider() {
+        return Object.values(this.providers).some(p => p.enabled);
+    }
 
-    // Экспорт в глобальную область видимости
-    window.MangaAPI = {
-        // Основные методы работы с данными
-        getAllManga: () => mangaSystem.getAllManga(),
-        getMangaById: (id) => mangaSystem.getMangaById(id),
-        addManga: (manga) => mangaSystem.addManga(manga),
-        updateManga: (id, updates) => mangaSystem.updateManga(id, updates),
-        deleteManga: (id) => mangaSystem.deleteManga(id),
-        
-        // Методы для фильтров
-        getGenres: () => mangaSystem.getGenres(),
-        getCategories: () => mangaSystem.getCategories(),
-        getStatuses: () => mangaSystem.getStatuses(),
-        filterManga: (filters) => mangaSystem.filterManga(filters),
-        
-        // Утилиты
-        getStats: () => mangaSystem.getStats(),
-        resetToSampleData: () => mangaSystem.resetToSampleData(),
-        exportData: () => mangaSystem.exportData(),
-        importData: (data) => mangaSystem.importData(data),
-        
-        // Прямой доступ к системе для расширенного использования
-        _system: mangaSystem
-    };
+    // === GITHUB GIST СИНХРОНИЗАЦИЯ ===
+    async syncWithGitHub() {
+        if (!this.providers.github.enabled) return false;
 
-    // Уведомление о готовности данных
-    setTimeout(() => {
-        if (typeof window !== 'undefined') {
-            window.dispatchEvent(new CustomEvent('mangaDataReady', {
-                detail: { api: window.MangaAPI }
+        try {
+            const data = this.gatherAllData();
+            const gistData = {
+                description: "Light Fox Manga - Синхронизация данных",
+                files: {
+                    "lightfox_data.json": {
+                        content: JSON.stringify(data, null, 2)
+                    }
+                }
+            };
+
+            const response = await fetch(`https://api.github.com/gists/${this.providers.github.gistId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `token ${this.providers.github.token}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(gistData)
+            });
+
+            if (response.ok) {
+                localStorage.setItem(this.lastSyncKey, new Date().toISOString());
+                console.log('✅ Данные успешно синхронизированы с GitHub');
+                this.showNotification('Данные синхронизированы с облаком', 'success');
+                return true;
+            } else {
+                throw new Error(`GitHub API error: ${response.status}`);
+            }
+        } catch (error) {
+            console.error('❌ Ошибка синхронизации с GitHub:', error);
+            this.showNotification('Ошибка синхронизации с GitHub', 'error');
+            return false;
+        }
+    }
+
+    async loadFromGitHub() {
+        if (!this.providers.github.enabled) return false;
+
+        try {
+            const response = await fetch(`https://api.github.com/gists/${this.providers.github.gistId}`, {
+                headers: {
+                    'Authorization': `token ${this.providers.github.token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+
+            if (response.ok) {
+                const gist = await response.json();
+                const fileContent = gist.files['lightfox_data.json']?.content;
+                
+                if (fileContent) {
+                    const cloudData = JSON.parse(fileContent);
+                    this.mergeCloudData(cloudData);
+                    console.log('✅ Данные загружены из GitHub');
+                    this.showNotification('Данные загружены из облака', 'success');
+                    return true;
+                }
+            }
+        } catch (error) {
+            console.error('❌ Ошибка загрузки из GitHub:', error);
+        }
+        return false;
+    }
+
+    // === УПРАВЛЕНИЕ ДАННЫМИ ===
+    gatherAllData() {
+        return {
+            timestamp: new Date().toISOString(),
+            version: "1.0",
+            data: {
+                manga: JSON.parse(localStorage.getItem('lightfox_manga_data') || '[]'),
+                donationProjects: JSON.parse(localStorage.getItem('lightfox_donation_projects') || '[]'),
+                favorites: JSON.parse(localStorage.getItem('favorites') || '[]'),
+                watching: JSON.parse(localStorage.getItem('watching') || '[]'),
+                wantToWatch: JSON.parse(localStorage.getItem('wantToWatch') || '[]'),
+                completed: JSON.parse(localStorage.getItem('completed') || '[]'),
+                donationHistory: JSON.parse(localStorage.getItem('donationHistory') || '[]'),
+                userSettings: {
+                    theme: localStorage.getItem('theme'),
+                    language: localStorage.getItem('language'),
+                    isLoggedIn: localStorage.getItem('isLoggedIn'),
+                    currentUser: localStorage.getItem('currentUser')
+                }
+            }
+        };
+    }
+
+    mergeCloudData(cloudData) {
+        if (!cloudData || !cloudData.data) return;
+
+        const localLastSync = localStorage.getItem(this.lastSyncKey);
+        const cloudTimestamp = cloudData.timestamp;
+
+        // Если облачные данные новее, используем их
+        if (!localLastSync || new Date(cloudTimestamp) > new Date(localLastSync)) {
+            console.log('🔄 Применяем облачные данные (более новые)');
+            
+            // Сохраняем все данные
+            Object.entries(cloudData.data).forEach(([key, value]) => {
+                if (key === 'userSettings') {
+                    Object.entries(value).forEach(([settingKey, settingValue]) => {
+                        if (settingValue !== null) {
+                            localStorage.setItem(settingKey, settingValue);
+                        }
+                    });
+                } else {
+                    localStorage.setItem(key === 'manga' ? 'lightfox_manga_data' : key, JSON.stringify(value));
+                }
+            });
+
+            // Обновляем систему данных
+            if (window.MangaAPI) {
+                window.MangaAPI.refreshData();
+            }
+
+            // Уведомляем об обновлении
+            window.dispatchEvent(new CustomEvent('dataSync', {
+                detail: { source: 'cloud', timestamp: cloudTimestamp }
             }));
         }
-    }, 100);
+    }
 
-    console.log('🦊 Light Fox Manga Data System загружена');
-    console.log(`📚 Загружено ${mangaSystem.data.length} тайтлов`);
-    console.log('🔧 API доступен через window.MangaAPI');
+    // === ПУБЛИЧНЫЕ МЕТОДЫ ===
+    async syncToCloud() {
+        if (!this.isOnline || !this.hasEnabledProvider()) {
+            console.log('⚠️ Синхронизация недоступна (нет сети или провайдеров)');
+            return false;
+        }
 
-})();
+        console.log('🔄 Начинаем синхронизацию с облаком...');
+
+        // Пробуем разные провайдеры
+        if (this.providers.github.enabled) {
+            return await this.syncWithGitHub();
+        }
+
+        return false;
+    }
+
+    async loadFromCloud() {
+        if (!this.isOnline || !this.hasEnabledProvider()) {
+            console.log('⚠️ Загрузка из облака недоступна');
+            return false;
+        }
+
+        console.log('📥 Загружаем данные из облака...');
+
+        if (this.providers.github.enabled) {
+            return await this.loadFromGitHub();
+        }
+
+        return false;
+    }
+
+    // === НАСТРОЙКА СИНХРОНИЗАЦИИ ===
+    showSyncSetup() {
+        const setupModal = document.createElement('div');
+        setupModal.innerHTML = `
+            <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 10000; display: flex; align-items: center; justify-content: center;" id="syncSetupModal">
+                <div style="background: var(--card-bg); padding: 32px; border-radius: 16px; max-width: 500px; width: 90%;">
+                    <h3 style="margin-bottom: 16px; color: var(--text-color);">🔄 Настройка синхронизации</h3>
+                    <p style="margin-bottom: 24px; color: var(--secondary-color); line-height: 1.5;">
+                        Настройте синхронизацию, чтобы ваши данные (тайтлы, донаты, избранное) были доступны на всех устройствах.
+                    </p>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: var(--text-color); margin-bottom: 8px;">GitHub Gist (рекомендуется)</h4>
+                        <input type="text" id="githubToken" placeholder="GitHub Personal Access Token" 
+                               style="width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); color: var(--text-color);">
+                        <input type="text" id="gistId" placeholder="Gist ID (оставьте пустым для создания нового)" 
+                               style="width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); color: var(--text-color);">
+                        <small style="color: var(--secondary-color);">
+                            <a href="https://github.com/settings/tokens" target="_blank" style="color: var(--primary-color);">Создать токен</a>
+                            с правами gist
+                        </small>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                        <button onclick="document.getElementById('syncSetupModal').remove()" 
+                                style="padding: 12px 24px; border: 1px solid var(--border-color); background: transparent; color: var(--text-color); border-radius: 8px; cursor: pointer;">
+                            Пропустить
+                        </button>
+                        <button onclick="window.cloudSync.setupGitHubSync()" 
+                                style="padding: 12px 24px; border: none; background: var(--primary-color); color: white; border-radius: 8px; cursor: pointer;">
+                            Настроить
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(setupModal);
+    }
+
+    async setupGitHubSync() {
+        const token = document.getElementById('githubToken').value.trim();
+        const gistId = document.getElementById('gistId').value.trim();
+
+        if (!token) {
+            this.showNotification('Введите GitHub токен', 'error');
+            return;
+        }
+
+        try {
+            let finalGistId = gistId;
+
+            // Если Gist ID не указан, создаем новый
+            if (!finalGistId) {
+                const newGist = await this.createNewGist(token);
+                finalGistId = newGist.id;
+            }
+
+            // Сохраняем настройки
+            localStorage.setItem('github_token', token);
+            localStorage.setItem('sync_gist_id', finalGistId);
+            
+            this.providers.github.token = token;
+            this.providers.github.gistId = finalGistId;
+            this.providers.github.enabled = true;
+
+            // Удаляем модальное окно
+            document.getElementById('syncSetupModal').remove();
+
+            // Выполняем первую синхронизацию
+            await this.syncToCloud();
+
+            this.showNotification('Синхронизация настроена! Данные будут автоматически сохраняться в облаке.', 'success');
+        } catch (error) {
+            console.error('❌ Ошибка настройки GitHub sync:', error);
+            this.showNotification('Ошибка настройки. Проверьте токен и попробуйте снова.', 'error');
+        }
+    }
+
+    async createNewGist(token) {
+        const initialData = this.gatherAllData();
+        const gistData = {
+            description: "Light Fox Manga - Синхронизация данных",
+            public: false,
+            files: {
+                "lightfox_data.json": {
+                    content: JSON.stringify(initialData, null, 2)
+                }
+            }
+        };
+
+        const response = await fetch('https://api.github.com/gists', {
+            method: 'POST',
+            headers: {
+                'Authorization': `token ${token}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(gistData)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to create gist: ${response.status}`);
+        }
+
+        return await response.json();
+    }
+
+    // === АВТОМАТИЧЕСКАЯ СИНХРОНИЗАЦИЯ ===
+    startAutoSync() {
+        // Синхронизация каждые 5 минут
+        this.syncInterval = setInterval(() => {
+            if (this.isOnline && this.hasEnabledProvider()) {
+                this.syncToCloud();
+            }
+        }, 5 * 60 * 1000);
+
+        // Синхронизация при изменении данных
+        window.addEventListener('storage', () => {
+            clearTimeout(this.syncTimeout);
+            this.syncTimeout = setTimeout(() => {
+                this.syncToCloud();
+            }, 2000);
+        });
+    }
+
+    // === УТИЛИТЫ ===
+    showNotification(message, type = 'info') {
+        // Создаем или обновляем уведомление
+        let notification = document.getElementById('syncNotification');
+        if (!notification) {
+            notification = document.createElement('div');
+            notification.id = 'syncNotification';
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 16px 20px;
+                border-radius: 12px;
+                color: white;
+                font-weight: 500;
+                z-index: 9999;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                max-width: 300px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            `;
+            document.body.appendChild(notification);
+        }
+
+        // Устанавливаем цвет в зависимости от типа
+        const colors = {
+            success: '#28a745',
+            error: '#dc3545',
+            warning: '#ffc107',
+            info: '#17a2b8'
+        };
+        notification.style.background = colors[type] || colors.info;
+        notification.textContent = message;
+
+        // Показываем уведомление
+        setTimeout(() => {
+            notification.style.transform = 'translateX(0)';
+        }, 100);
+
+        // Скрываем через 4 секунды
+        setTimeout(() => {
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }, 4000);
+    }
+
+    // === УПРАВЛЕНИЕ ===
+    getLastSyncInfo() {
+        const lastSync = localStorage.getItem(this.lastSyncKey);
+        return lastSync ? new Date(lastSync) : null;
+    }
+
+    getSyncStatus() {
+        return {
+            isOnline: this.isOnline,
+            hasProvider: this.hasEnabledProvider(),
+            lastSync: this.getLastSyncInfo(),
+            providers: this.providers
+        };
+    }
+
+    async forcSync() {
+        return await this.syncToCloud();
+    }
+
+    async forceLoad() {
+        return await this.loadFromCloud();
+    }
+
+    clearSyncSettings() {
+        localStorage.removeItem('github_token');
+        localStorage.removeItem('sync_gist_id');
+        localStorage.removeItem(this.lastSyncKey);
+        
+        this.providers.github.enabled = false;
+        
+        this.showNotification('Настройки синхронизации сброшены', 'info');
+    }
+}
+
+// === ИНТЕГРАЦИЯ С ОСНОВНОЙ СИСТЕМОЙ ===
+
+// Инициализируем синхронизацию при загрузке
+window.addEventListener('DOMContentLoaded', function() {
+    window.cloudSync = new CloudSyncManager();
+});
+
+// Добавляем в MangaAPI методы для триггера синхронизации
+if (window.MangaAPI) {
+    const originalAddManga = window.MangaAPI.addManga;
+    const originalUpdateManga = window.MangaAPI.updateManga;
+    const originalDeleteManga = window.MangaAPI.deleteManga;
+
+    window.MangaAPI.addManga = function(manga) {
+        const result = originalAddManga.call(this, manga);
+        if (window.cloudSync) {
+            setTimeout(() => window.cloudSync.syncToCloud(), 1000);
+        }
+        return result;
+    };
+
+    window.MangaAPI.updateManga = function(id, updates) {
+        const result = originalUpdateManga.call(this, id, updates);
+        if (window.cloudSync) {
+            setTimeout(() => window.cloudSync.syncToCloud(), 1000);
+        }
+        return result;
+    };
+
+    window.MangaAPI.deleteManga = function(id) {
+        const result = originalDeleteManga.call(this, id);
+        if (window.cloudSync) {
+            setTimeout(() => window.cloudSync.syncToCloud(), 1000);
+        }
+        return result;
+    };
+
+    // Добавляем метод обновления данных
+    window.MangaAPI.refreshData = function() {
+        this.loadMangaData();
+        window.dispatchEvent(new CustomEvent('mangaDataUpdate'));
+    };
+}
+
+console.log('🔄 Система облачной синхронизации готова!');

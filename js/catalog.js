@@ -20,7 +20,7 @@ let state = {
 function getStatusBadge(status) {
     const statusMap = {
         'Заморожен': { class: 'status-frozen', text: 'Заморожен' },
-        'Завершен': { class: 'status-completed', text: 'Завершен' },
+        'Завершён': { class: 'status-completed', text: 'Завершён' },
         'Анонс': { class: 'status-announcement', text: 'Анонс' },
         'Выходит': { class: 'status-ongoing', text: 'Выходит' }
     };

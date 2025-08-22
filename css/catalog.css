@@ -583,6 +583,7 @@ body {
     align-items: flex-start;
     pointer-events: none;
     z-index: 10;
+    flex-direction: column;
 }
 
 /* Status Badge (left side) */

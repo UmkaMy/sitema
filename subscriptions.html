@@ -1,1 +1,1294 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Light Fox Manga - Подписки</title>
+    <style>
+        /* Цвета навигации для светлой темы */
+        .desktop-nav a,
+        .bottom-nav .nav-item {
+            color: #000;
+        }
 
+        /* Цвета навигации для темной темы */
+        [data-theme="dark"] .desktop-nav a,
+        [data-theme="dark"] .bottom-nav .nav-item {
+            color: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-color: #f5f5f5;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --border-color: #e0e0e0;
+            --primary-color: #ff8a50;
+            --primary-hover: #ff7043;
+            --secondary-color: #666;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --header-height: 60px;
+            --mobile-bottom-nav: 60px;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --gradient-premium: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-color: #ffffff;
+            --border-color: #444;
+            --secondary-color: #aaa;
+            --shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: var(--mobile-bottom-nav);
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: none;
+            align-items: center;
+            padding: 0 32px;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-right: auto;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .logo:hover {
+            color: var(--primary-hover);
+        }
+
+        .desktop-nav {
+            display: flex;
+            gap: 24px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .desktop-nav a {
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .desktop-nav a:hover {
+            background: var(--primary-hover);
+            color: white;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .lang-switch, .theme-toggle {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle {
+            font-size: 16px;
+            width: 40px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .profile-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .profile-btn:hover {
+            background: var(--primary-hover);
+            transform: scale(1.05);
+        }
+
+        .profile-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+        }
+
+        /* Mobile Header */
+        .mobile-header {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-color);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-right: auto;
+        }
+
+        .back-button:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(255, 138, 80, 0.05);
+        }
+
+        .mobile-header-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-color);
+            flex: 1;
+            text-align: center;
+            margin: 0 16px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 0;
+            padding: 20px;
+            min-height: calc(100vh - var(--mobile-bottom-nav));
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+            background: linear-gradient(135deg, rgba(255, 138, 80, 0.1), rgba(255, 112, 67, 0.1));
+            border-radius: 20px;
+            margin-bottom: 3rem;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Duration Selector */
+        .duration-selector {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .duration-btn {
+            padding: 12px 24px;
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .duration-btn.active {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 138, 80, 0.3);
+        }
+
+        .duration-btn:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .duration-discount {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #28a745;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+
+        /* Subscriptions Grid */
+        .subscriptions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Subscription Cards */
+        .subscription-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        .subscription-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-1);
+            transition: all 0.3s ease;
+        }
+
+        .subscription-card.basic::before { background: var(--gradient-1); }
+        .subscription-card.advanced::before { background: var(--gradient-2); }
+        .subscription-card.premium::before { background: var(--gradient-3); }
+        .subscription-card.ultimate::before { background: var(--gradient-4); }
+
+        .subscription-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .subscription-card.selected {
+            border-color: var(--primary-color);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(255, 138, 80, 0.2);
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-price-period {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            margin-bottom: 2rem;
+        }
+
+        .card-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .card-features li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .feature-icon {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .card-button {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-button.basic {
+            background: var(--gradient-1);
+            color: white;
+        }
+
+        .card-button.advanced {
+            background: var(--gradient-2);
+            color: white;
+        }
+
+        .card-button.premium {
+            background: var(--gradient-3);
+            color: white;
+        }
+
+        .card-button.ultimate {
+            background: var(--gradient-4);
+            color: white;
+        }
+
+        .card-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .card-button:active {
+            transform: translateY(0);
+        }
+
+        /* Popular Badge */
+        .popular-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: var(--gradient-premium);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--mobile-bottom-nav);
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            z-index: 1000;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-size: 11px;
+            gap: 4px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        /* Compare Section */
+        .compare-section {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow);
+        }
+
+        .compare-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--text-color);
+        }
+
+        .compare-table {
+            overflow-x: auto;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .comparison-table th {
+            background: var(--bg-color);
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .feature-check {
+            color: #28a745;
+            font-size: 1.2rem;
+        }
+
+        .feature-cross {
+            color: #dc3545;
+            font-size: 1.2rem;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow);
+        }
+
+        .faq-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--text-color);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            color: var(--secondary-color);
+            display: none;
+            padding-top: 0.5rem;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            body {
+                padding-bottom: 0;
+            }
+            
+            .header {
+                display: flex;
+            }
+            
+            .main-content {
+                margin-top: var(--header-height);
+            }
+            
+            .bottom-nav {
+                display: none;
+            }
+            
+            .mobile-header {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 3.5rem;
+            }
+
+            .subscriptions-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .duration-selector {
+                gap: 0.5rem;
+            }
+
+            .duration-btn {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+
+            .subscriptions-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .card-price {
+                font-size: 2rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            color: var(--secondary-color);
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            background: #ef4444;
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <!-- Header (Desktop) -->
+    <header class="header">
+        <a href="index.html" class="logo">Light Fox Manga</a>
+        
+        <nav class="desktop-nav">
+            <a href="index.html" class="nav-link">Главная</a>
+            <a href="catalog.html" class="nav-link">Каталог</a>
+            <a href="cabinet.html" class="nav-link">Личный кабинет</a>
+            <a href="#" class="nav-link" onclick="openRandomManga()">Случайное</a>
+        </nav>
+        
+        <div class="header-controls">
+            <select class="lang-switch" id="langSwitch">
+                <option value="ru">Рус</option>
+                <option value="ua">Укр</option>
+                <option value="en">Eng</option>
+            </select>
+            <button class="theme-toggle" id="themeToggle">
+                <svg class="moon-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79C20.8427 14.4922 20.2039 16.1144 19.1583 17.4668C18.1127 18.8192 16.7035 19.8458 15.0957 20.4265C13.4879 21.0073 11.7431 21.1181 10.0644 20.7461C8.38579 20.374 6.8398 19.5345 5.61677 18.3271C4.39374 17.1198 3.54362 15.5916 3.17133 13.9299C2.79905 12.2682 2.91262 10.5378 3.49644 8.94267C4.08026 7.34753 5.10962 5.94939 6.46482 4.90969C7.82002 3.86999 9.44343 3.23112 11.16 3.08C10.1598 4.98048 9.94059 7.18295 10.5446 9.23931C11.1486 11.2957 12.5154 13.0464 14.3735 14.1467C16.2317 15.247 18.4549 15.6021 20.55 15.13L21 12.79Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <svg class="sun-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                    <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <button class="profile-btn" id="profileBtn">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+        <a href="index.html" class="back-button">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Главная
+        </a>
+        
+        <h1 class="mobile-header-title">Подписки</h1>
+        
+        <button class="theme-toggle" id="mobileThemeToggle">
+            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 12.79C20.8427 14.4922 20.2039 16.1144 19.1583 17.4668C18.1127 18.8192 16.7035 19.8458 15.0957 20.4265C13.4879 21.0073 11.7431 21.1181 10.0644 20.7461C8.38579 20.374 6.8398 19.5345 5.61677 18.3271C4.39374 17.1198 3.54362 15.5916 3.17133 13.9299C2.79905 12.2682 2.91262 10.5378 3.49644 8.94267C4.08026 7.34753 5.10962 5.94939 6.46482 4.90969C7.82002 3.86999 9.44343 3.23112 11.16 3.08C10.1598 4.98048 9.94059 7.18295 10.5446 9.23931C11.1486 11.2957 12.5154 13.0464 14.3735 14.1467C16.2317 15.247 18.4549 15.6021 20.55 15.13L21 12.79Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <svg class="sun-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Hero Section -->
+            <div class="hero-section">
+                <h1 class="hero-title">Премиум Подписки</h1>
+                <p class="hero-subtitle">Выберите идеальный план и получите эксклюзивный доступ к контенту Light Fox Manga</p>
+            </div>
+
+            <!-- Duration Selector -->
+            <div class="duration-selector">
+                <button class="duration-btn active" data-duration="1" onclick="selectDuration(1)">
+                    1 месяц
+                </button>
+                <button class="duration-btn" data-duration="3" onclick="selectDuration(3)">
+                    3 месяца
+                    <span class="duration-discount">-5%</span>
+                </button>
+                <button class="duration-btn" data-duration="6" onclick="selectDuration(6)">
+                    6 месяцев
+                    <span class="duration-discount">-10%</span>
+                </button>
+                <button class="duration-btn" data-duration="12" onclick="selectDuration(12)">
+                    12 месяцев
+                    <span class="duration-discount">-20%</span>
+                </button>
+            </div>
+
+            <!-- Subscriptions Grid -->
+            <div class="subscriptions-grid">
+                <!-- Любители Манги -->
+                <div class="subscription-card basic" data-plan="basic">
+                    <div class="card-header">
+                        <span class="card-icon">📚</span>
+                        <h3 class="card-title">Любители Манги</h3>
+                        <p class="card-subtitle">Доступ к вашим любимым тайтлам</p>
+                        <div class="card-price" data-base-price="3">$3</div>
+                        <div class="card-price-period">в месяц</div>
+                    </div>
+                    
+                    <ul class="card-features">
+                        <li><span class="feature-icon">✓</span> Доступ к популярным тайтлам</li>
+                        <li><span class="feature-icon">✓</span> HD качество</li>
+                        <li><span class="feature-icon">✓</span> Без рекламы</li>
+                        <li><span class="feature-icon">✓</span> Синхронизация между устройствами</li>
+                        <li><span class="feature-icon">✓</span> Базовая поддержка</li>
+                    </ul>
+                    
+                    <button class="card-button basic" onclick="selectPlan('basic')">
+                        Выбрать план
+                    </button>
+                </div>
+
+                <!-- Любители Пика -->
+                <div class="subscription-card advanced" data-plan="advanced">
+                    <div class="popular-badge">🔥 Популярный</div>
+                    <div class="card-header">
+                        <span class="card-icon">🏆</span>
+                        <h3 class="card-title">Любители Пика</h3>
+                        <p class="card-subtitle">Доступ к желанным тайтлам раньше YouTube</p>
+                        <div class="card-price" data-base-price="6">$6</div>
+                        <div class="card-price-period">в месяц</div>
+                    </div>
+                    
+                    <ul class="card-features">
+                        <li><span class="feature-icon">✓</span> Всё из плана "Любители Манги"</li>
+                        <li><span class="feature-icon">✓</span> Ранний доступ к новым главам</li>
+                        <li><span class="feature-icon">✓</span> Эксклюзивные тайтлы</li>
+                        <li><span class="feature-icon">✓</span> 4K качество</li>
+                        <li><span class="feature-icon">✓</span> Приоритетная поддержка</li>
+                    </ul>
+                    
+                    <button class="card-button advanced" onclick="selectPlan('advanced')">
+                        Выбрать план
+                    </button>
+                </div>
+
+                <!-- Орден Шейхов -->
+                <div class="subscription-card premium" data-plan="premium">
+                    <div class="card-header">
+                        <span class="card-icon">👑</span>
+                        <h3 class="card-title">Орден Шейхов</h3>
+                        <p class="card-subtitle">Ранний доступ к роликам выбранных вами тайтлов</p>
+                        <div class="card-price" data-base-price="14">$14</div>
+                        <div class="card-price-period">в месяц</div>
+                    </div>
+                    
+                    <ul class="card-features">
+                        <li><span class="feature-icon">✓</span> Всё из плана "Любители Пика"</li>
+                        <li><span class="feature-icon">✓</span> Персональный выбор тайтлов</li>
+                        <li><span class="feature-icon">✓</span> Доступ к закрытым роликам</li>
+                        <li><span class="feature-icon">✓</span> Участие в голосованиях</li>
+                        <li><span class="feature-icon">✓</span> Эксклюзивные обои и контент</li>
+                    </ul>
+                    
+                    <button class="card-button premium" onclick="selectPlan('premium')">
+                        Выбрать план
+                    </button>
+                </div>
+
+                <!-- Лисямбы -->
+                <div class="subscription-card ultimate" data-plan="ultimate">
+                    <div class="card-header">
+                        <span class="card-icon">🦊</span>
+                        <h3 class="card-title">Лисямбы</h3>
+                        <p class="card-subtitle">Доступ ко всевозможному контенту</p>
+                        <div class="card-price" data-base-price="25">$25</div>
+                        <div class="card-price-period">в месяц</div>
+                    </div>
+                    
+                    <ul class="card-features">
+                        <li><span class="feature-icon">✓</span> Все предыдущие возможности</li>
+                        <li><span class="feature-icon">✓</span> Неограниченный доступ ко всему</li>
+                        <li><span class="feature-icon">✓</span> Прямое общение с командой</li>
+                        <li><span class="feature-icon">✓</span> Влияние на контент</li>
+                        <li><span class="feature-icon">✓</span> Эксклюзивные мероприятия</li>
+                    </ul>
+                    
+                    <button class="card-button ultimate" onclick="selectPlan('ultimate')">
+                        Выбрать план
+                    </button>
+                </div>
+            </div>
+
+            <!-- Comparison Table -->
+            <div class="compare-section">
+                <h2 class="compare-title">Сравнение планов</h2>
+                <div class="compare-table">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Возможности</th>
+                                <th>Любители Манги</th>
+                                <th>Любители Пика</th>
+                                <th>Орден Шейхов</th>
+                                <th>Лисямбы</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Доступ к популярным тайтлам</td>
+                                <td><span class="feature-check">✓</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                            </tr>
+                            <tr>
+                                <td>HD качество</td>
+                                <td><span class="feature-check">✓</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                            </tr>
+                            <tr>
+                                <td>Без рекламы</td>
+                                <td><span class="feature-check">✓</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                            </tr>
+                            <tr>
+                                <td>Ранний доступ к главам</td>
+                                <td><span class="feature-cross">✗</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                            </tr>
+                            <tr>
+                                <td>4K качество</td>
+                                <td><span class="feature-cross">✗</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                            </tr>
+                            <tr>
+                                <td>Эксклюзивные тайтлы</td>
+                                <td><span class="feature-cross">✗</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                            </tr>
+                            <tr>
+                                <td>Персональный выбор контента</td>
+                                <td><span class="feature-cross">✗</span></td>
+                                <td><span class="feature-cross">✗</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                            </tr>
+                            <tr>
+                                <td>Участие в голосованиях</td>
+                                <td><span class="feature-cross">✗</span></td>
+                                <td><span class="feature-cross">✗</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                            </tr>
+                            <tr>
+                                <td>Прямое общение с командой</td>
+                                <td><span class="feature-cross">✗</span></td>
+                                <td><span class="feature-cross">✗</span></td>
+                                <td><span class="feature-cross">✗</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                            </tr>
+                            <tr>
+                                <td>Влияние на контент</td>
+                                <td><span class="feature-cross">✗</span></td>
+                                <td><span class="feature-cross">✗</span></td>
+                                <td><span class="feature-cross">✗</span></td>
+                                <td><span class="feature-check">✓</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="faq-section">
+                <h2 class="faq-title">Часто задаваемые вопросы</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        Можно ли изменить план подписки?
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Да, вы можете повысить или понизить свой план в любое время. При повышении плана разница будет пропорционально списана, при понижении - средства будут зачислены на следующий период.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        Как работают скидки на длительные подписки?
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        При выборе 3-месячной подписки вы получаете скидку 5%, 6-месячной - 10%, годовой - 20%. Скидка применяется автоматически при оплате.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        Можно ли отменить подписку?
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Конечно! Вы можете отменить подписку в любое время в настройках аккаунта. Доступ к премиум-функциям сохранится до конца оплаченного периода.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        Работает ли подписка на всех устройствах?
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Да, ваша подписка работает на всех устройствах, где вы войдете в свой аккаунт - компьютер, планшет, смартфон.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        Что включает в себя ранний доступ?
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Ранний доступ означает, что вы получите новые главы на 1-3 дня раньше, чем они появятся в открытом доступе или на YouTube.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 12L5 10M5 10L12 3L19 10M5 10V20C5 20.5523 5.44772 21 6 21H9M19 10L21 12M19 10V20C19 20.5523 18.5523 21 18 21H15M9 21C9.55228 21 10 20.5523 10 20V16C10 15.4477 10.4477 15 11 15H13C13.5523 15 14 15.4477 14 16V20C14 20.5523 14.4477 21 15 21M9 21H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <span>Главная</span>
+        </a>
+        <a href="catalog.html" class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 19.5C4 18.1193 5.11929 17 6.5 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M6.5 2H20V22H6.5C5.11929 22 4 20.8807 4 19.5V4.5C4 3.11929 5.11929 2 6.5 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <span>Каталог</span>
+        </a>
+        <a href="#" class="nav-item" onclick="openRandomManga()">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <span>Случайное</span>
+        </a>
+        <a href="subscriptions.html" class="nav-item active">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 17h5l-5 5v-5zM4 3h16a1 1 0 011 1v8.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 01-.707.293H4a1 1 0 01-1-1V4a1 1 0 011-1z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M8 7h8M8 11h8M8 15h3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <span>Подписки</span>
+        </a>
+        <div class="nav-item" id="mobileProfileBtn">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <span>Профиль</span>
+        </div>
+    </nav>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <!-- Scripts -->
+    <script>
+        // Global state
+        let isDark = localStorage.getItem('theme') === 'dark';
+        let selectedDuration = 1;
+        let selectedPlan = null;
+
+        // Subscription plans data
+        const plans = {
+            basic: {
+                name: 'Любители Манги',
+                basePrice: 3,
+                features: ['Доступ к популярным тайтлам', 'HD качество', 'Без рекламы', 'Синхронизация между устройствами', 'Базовая поддержка']
+            },
+            advanced: {
+                name: 'Любители Пика',
+                basePrice: 6,
+                features: ['Всё из плана "Любители Манги"', 'Ранний доступ к новым главам', 'Эксклюзивные тайтлы', '4K качество', 'Приоритетная поддержка']
+            },
+            premium: {
+                name: 'Орден Шейхов',
+                basePrice: 14,
+                features: ['Всё из плана "Любители Пика"', 'Персональный выбор тайтлов', 'Доступ к закрытым роликам', 'Участие в голосованиях', 'Эксклюзивные обои и контент']
+            },
+            ultimate: {
+                name: 'Лисямбы',
+                basePrice: 25,
+                features: ['Все предыдущие возможности', 'Неограниченный доступ ко всему', 'Прямое общение с командой', 'Влияние на контент', 'Эксклюзивные мероприятия']
+            }
+        };
+
+        // Theme functionality
+        function updateTheme() {
+            document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            
+            const updateIcons = (moonClass, sunClass) => {
+                const moonIcons = document.querySelectorAll(moonClass);
+                const sunIcons = document.querySelectorAll(sunClass);
+                
+                moonIcons.forEach(icon => {
+                    icon.style.display = isDark ? 'none' : 'block';
+                });
+                
+                sunIcons.forEach(icon => {
+                    icon.style.display = isDark ? 'block' : 'none';
+                });
+            };
+            
+            updateIcons('.moon-icon', '.sun-icon');
+            
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        function toggleTheme() {
+            isDark = !isDark;
+            updateTheme();
+        }
+
+        // Duration selection
+        function selectDuration(duration) {
+            selectedDuration = duration;
+            
+            // Update button states
+            document.querySelectorAll('.duration-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-duration="${duration}"]`).classList.add('active');
+            
+            // Update prices
+            updatePrices();
+        }
+
+        // Update prices based on duration
+        function updatePrices() {
+            const discounts = {
+                1: 0,
+                3: 0.05,
+                6: 0.10,
+                12: 0.20
+            };
+            
+            const discount = discounts[selectedDuration];
+            
+            document.querySelectorAll('.card-price').forEach(priceElement => {
+                const basePrice = parseInt(priceElement.dataset.basePrice);
+                const discountedPrice = basePrice * (1 - discount);
+                const totalPrice = discountedPrice * selectedDuration;
+                
+                if (selectedDuration === 1) {
+                    priceElement.textContent = `${basePrice}`;
+                } else {
+                    priceElement.innerHTML = `
+                        <span style="text-decoration: line-through; opacity: 0.6; font-size: 0.8em;">${basePrice * selectedDuration}</span>
+                        <br>${Math.round(totalPrice)}
+                    `;
+                }
+            });
+        }
+
+        // Plan selection
+        function selectPlan(planType) {
+            selectedPlan = planType;
+            
+            // Update card states
+            document.querySelectorAll('.subscription-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelector(`[data-plan="${planType}"]`).classList.add('selected');
+            
+            // Process subscription
+            processSubscription(planType);
+        }
+
+        // Process subscription
+        function processSubscription(planType) {
+            const plan = plans[planType];
+            const discounts = {
+                1: 0,
+                3: 0.05,
+                6: 0.10,
+                12: 0.20
+            };
+            
+            const discount = discounts[selectedDuration];
+            const discountedPrice = plan.basePrice * (1 - discount);
+            const totalPrice = discountedPrice * selectedDuration;
+            
+            const durationText = {
+                1: '1 месяц',
+                3: '3 месяца',
+                6: '6 месяцев',
+                12: '12 месяцев'
+            };
+            
+            showNotification(
+                `Выбран план "${plan.name}" на ${durationText[selectedDuration]}. ` +
+                `Общая стоимость: ${Math.round(totalPrice)}. ` +
+                `Функция оплаты в разработке!`,
+                'success'
+            );
+        }
+
+        // FAQ functionality
+        function toggleFaq(questionElement) {
+            const faqItem = questionElement.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+                item.querySelector('.faq-question span').textContent = '+';
+            });
+            
+            // Toggle current item
+            if (!isActive) {
+                faqItem.classList.add('active');
+                questionElement.querySelector('span').textContent = '-';
+            }
+        }
+
+        // Random manga functionality
+        function openRandomManga() {
+            showNotification('Функция "Случайное" пока не работает на этой странице', 'error');
+        }
+
+        // Utility functions
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification show ${type}`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 4000);
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme toggles
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+            document.getElementById('mobileThemeToggle').addEventListener('click', toggleTheme);
+
+            // Initialize
+            updateTheme();
+            updatePrices();
+            
+            // Add hover effects to cards
+            document.querySelectorAll('.subscription-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('selected')) {
+                        this.style.transform = 'translateY(0) scale(1)';
+                    }
+                });
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // Close any modals if needed
+            }
+        });
+    </script>
+</body>
+</html>

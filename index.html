@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Light Fox Manga - Главная</title>
     <style>
+        /* Цвета навигации для светлой темы */
+        .desktop-nav a,
+        .bottom-nav .nav-item {
+            color: #000;
+        }
+
+        /* Цвета навигации для темной темы */
+        [data-theme="dark"] .desktop-nav a,
+        [data-theme="dark"] .bottom-nav .nav-item {
+            color: #ffffff;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,32 +24,46 @@
         }
 
         :root {
+            --bg-color: #f5f5f5;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --border-color: #e0e0e0;
+            --primary-color: #ff8a50;
+            --primary-hover: #ff7043;
+            --secondary-color: #666;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --header-height: 60px;
+            --mobile-bottom-nav: 60px;
+            
+            /* Для совместимости со старыми стилями */
+            --bg-primary: var(--card-bg);
+            --bg-secondary: var(--card-bg);
+            --bg-tertiary: #e9ecef;
+            --text-primary: var(--text-color);
+            --text-secondary: var(--secondary-color);
+            --text-muted: #868e96;
+            --accent-primary: var(--primary-color);
+            --accent-hover: var(--primary-hover);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-color: #ffffff;
+            --border-color: #444;
+            --secondary-color: #aaa;
+            --shadow: 0 2px 8px rgba(0,0,0,0.3);
+            
+            /* Для совместимости */
             --bg-primary: #121212;
             --bg-secondary: #1e1e1e;
             --bg-tertiary: #2a2a2a;
             --text-primary: #ffffff;
             --text-secondary: #b3b3b3;
             --text-muted: #666666;
-            --accent-primary: #ff6b35;
-            --accent-hover: #ff5722;
-            --border-color: #333333;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --header-height: 64px;
-            --mobile-bottom-nav: 60px;
-        }
-
-        [data-theme="light"] {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --bg-tertiary: #e9ecef;
-            --text-primary: #212529;
-            --text-secondary: #495057;
-            --text-muted: #868e96;
-            --border-color: #dee2e6;
-            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         body {
@@ -49,106 +75,117 @@
             padding-bottom: var(--mobile-bottom-nav);
         }
 
-        /* Header */
+        /* Header - унифицированный с catalog.html */
         .header {
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
+            position: fixed;
             top: 0;
-            z-index: 100;
-            backdrop-filter: blur(8px);
-            display: none;
-        }
-
-        .header-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            align-items: center;
+            left: 0;
+            right: 0;
             height: var(--header-height);
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: none;
+            align-items: center;
+            padding: 0 32px;
+            z-index: 1000;
+            box-shadow: var(--shadow);
         }
 
         .logo {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--accent-primary);
-            text-decoration: none;
-            margin-right: 40px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 32px;
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary-color);
             margin-right: auto;
+            cursor: pointer;
+            text-decoration: none;
         }
 
-        .nav-link {
-            color: var(--text-secondary);
+        .logo:hover {
+            color: var(--primary-hover);
+        }
+
+        .desktop-nav {
+            display: flex;
+            gap: 24px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .desktop-nav a {
             text-decoration: none;
             font-weight: 500;
-            padding: 8px 0;
-            border-bottom: 2px solid transparent;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
         }
 
-        .nav-link:hover,
-        .nav-link.active {
-            color: var(--accent-primary);
-            border-bottom-color: var(--accent-primary);
+        .desktop-nav a.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .desktop-nav a:hover {
+            background: var(--primary-hover);
+            color: white;
         }
 
         .header-controls {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
+        }
+
+        .lang-switch, .theme-toggle {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
         }
 
         .theme-toggle {
-            background: var(--bg-tertiary);
-            border: none;
-            border-radius: var(--radius-sm);
-            padding: 10px;
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: all 0.2s;
+            font-size: 16px;
+            width: 40px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .theme-toggle:hover {
-            background: var(--accent-primary);
-        }
-
         .theme-toggle svg {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             fill: currentColor;
         }
 
         .profile-btn {
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            background: var(--accent-primary);
+            background: var(--primary-color);
             color: white;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            border: none;
         }
 
         .profile-btn:hover {
-            background: var(--accent-hover);
+            background: var(--primary-hover);
             transform: scale(1.05);
         }
 
         .profile-btn svg {
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
             stroke: currentColor;
         }
 
@@ -159,7 +196,7 @@
             left: 0;
             right: 0;
             height: var(--mobile-bottom-nav);
-            background: var(--bg-secondary);
+            background: var(--card-bg);
             border-top: 1px solid var(--border-color);
             display: flex;
             z-index: 1000;
@@ -182,7 +219,7 @@
         }
 
         .nav-item.active {
-            color: var(--accent-primary);
+            color: var(--primary-color);
         }
 
         .nav-icon {
@@ -651,6 +688,78 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* Side Menu */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100vh;
+            background: var(--card-bg);
+            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            transition: right 0.3s ease;
+            padding: var(--header-height) 0 0 0;
+            overflow-y: auto;
+        }
+
+        .side-menu.open {
+            right: 0;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1500;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .menu-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .auth-buttons {
+            padding: 20px;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 1px solid var(--accent-primary);
+            border-radius: var(--radius-sm);
+            background: var(--accent-primary);
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .auth-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .menu-item {
+            display: block;
+            padding: 16px 20px;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            background: var(--bg-color);
+        }
+
         /* Responsive */
         @media (min-width: 768px) {
             body {
@@ -658,7 +767,7 @@
             }
             
             .header {
-                display: block;
+                display: flex;
             }
             
             .main-content {
@@ -721,110 +830,41 @@
                 padding: 0 16px;
             }
         }
-
-        /* Side Menu */
-        .side-menu {
-            position: fixed;
-            top: 0;
-            right: -300px;
-            width: 300px;
-            height: 100vh;
-            background: var(--bg-secondary);
-            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.3);
-            z-index: 2000;
-            transition: right 0.3s ease;
-            padding: var(--header-height) 0 0 0;
-            overflow-y: auto;
-        }
-
-        .side-menu.open {
-            right: 0;
-        }
-
-        .menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1500;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .menu-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .auth-buttons {
-            padding: 20px;
-        }
-
-        .auth-btn {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 12px;
-            border: 1px solid var(--accent-primary);
-            border-radius: var(--radius-sm);
-            background: var(--accent-primary);
-            color: white;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.2s ease;
-        }
-
-        .auth-btn:hover {
-            background: var(--accent-hover);
-        }
-
-        .menu-item {
-            display: block;
-            padding: 16px 20px;
-            color: var(--text-primary);
-            text-decoration: none;
-            border-bottom: 1px solid var(--border-color);
-            transition: background 0.2s;
-            cursor: pointer;
-        }
-
-        .menu-item:hover {
-            background: var(--bg-tertiary);
-        }
     </style>
 </head>
 <body data-theme="dark">
-    <!-- Header (Desktop) -->
+    <!-- Header (Desktop) - унифицированный с catalog.html -->
     <header class="header">
-        <div class="header-container">
-            <a href="index.html" class="logo">Light Fox Manga</a>
-            
-            <nav class="nav-links">
-                <a href="index.html" class="nav-link active">Главная</a>
-                <a href="catalog.html" class="nav-link">Каталог</a>
-                <a href="cabinet.html" class="nav-link">Личный кабинет</a>
-                <a href="#" class="nav-link" onclick="openRandomManga()">Случайное</a>
-            </nav>
-            
-            <div class="header-controls">
-                <button class="theme-toggle" id="themeToggle">
-                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M21 12.79C20.8427 14.4922 20.2039 16.1144 19.1583 17.4668C18.1127 18.8192 16.7035 19.8458 15.0957 20.4265C13.4879 21.0073 11.7431 21.1181 10.0644 20.7461C8.38579 20.374 6.8398 19.5345 5.61677 18.3271C4.39374 17.1198 3.54362 15.5916 3.17133 13.9299C2.79905 12.2682 2.91262 10.5378 3.49644 8.94267C4.08026 7.34753 5.10962 5.94939 6.46482 4.90969C7.82002 3.86999 9.44343 3.23112 11.16 3.08C10.1598 4.98048 9.94059 7.18295 10.5446 9.23931C11.1486 11.2957 12.5154 13.0464 14.3735 14.1467C16.2317 15.247 18.4549 15.6021 20.55 15.13L21 12.79Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                        <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
-                <button class="profile-btn" id="profileBtn">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
-            </div>
+        <a href="index.html" class="logo">Light Fox Manga</a>
+        
+        <nav class="desktop-nav">
+            <a href="index.html" class="nav-link active">Главная</a>
+            <a href="catalog.html" class="nav-link">Каталог</a>
+            <a href="cabinet.html" class="nav-link">Личный кабинет</a>
+            <a href="#" class="nav-link" onclick="openSubscriptionPage()">Подписка</a>
+        </nav>
+        
+        <div class="header-controls">
+            <select class="lang-switch" id="langSwitch">
+                <option value="ru">Рус</option>
+                <option value="ua">Укр</option>
+                <option value="en">Eng</option>
+            </select>
+            <button class="theme-toggle" id="themeToggle">
+                <svg class="moon-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79C20.8427 14.4922 20.2039 16.1144 19.1583 17.4668C18.1127 18.8192 16.7035 19.8458 15.0957 20.4265C13.4879 21.0073 11.7431 21.1181 10.0644 20.7461C8.38579 20.374 6.8398 19.5345 5.61677 18.3271C4.39374 17.1198 3.54362 15.5916 3.17133 13.9299C2.79905 12.2682 2.91262 10.5378 3.49644 8.94267C4.08026 7.34753 5.10962 5.94939 6.46482 4.90969C7.82002 3.86999 9.44343 3.23112 11.16 3.08C10.1598 4.98048 9.94059 7.18295 10.5446 9.23931C11.1486 11.2957 12.5154 13.0464 14.3735 14.1467C16.2317 15.247 18.4549 15.6021 20.55 15.13L21 12.79Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <svg class="sun-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                    <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <button class="profile-btn" id="profileBtn">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
         </div>
     </header>
 
@@ -956,14 +996,13 @@
             </div>
             <span>Кабинет</span>
         </a>
-        <a href="#" class="nav-item" onclick="openRandomManga()">
+        <a href="#" class="nav-item" onclick="openSubscriptionPage()">
             <div class="nav-icon">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
-            <span>Случайное</span>
+            <span>Подписка</span>
         </a>
         <div class="nav-item" id="mobileProfileBtn">
             <div class="nav-icon">
@@ -990,7 +1029,7 @@
         <a href="index.html" class="menu-item">Главная</a>
         <a href="catalog.html" class="menu-item">Каталог</a>
         <a href="cabinet.html" class="menu-item">Личный кабинет</a>
-        <a href="#" class="menu-item" onclick="openRandomManga()">Случайная манга</a>
+        <a href="#" class="menu-item" onclick="openSubscriptionPage()">Подписка</a>
         <a href="cabinet.html#favorites" class="menu-item">Избранное</a>
         <a href="cabinet.html#history" class="menu-item">История</a>
         <a href="cabinet.html#settings" class="menu-item">Настройки</a>
@@ -1054,6 +1093,13 @@
             updateTheme();
         }
 
+        // Language functionality
+        function updateLanguage(lang) {
+            localStorage.setItem('language', lang);
+            const langSwitch = document.getElementById('langSwitch');
+            if (langSwitch) langSwitch.value = lang;
+        }
+
         // Menu functionality
         function toggleMenu() {
             const sideMenu = document.getElementById('sideMenu');
@@ -1073,6 +1119,11 @@
 
         function login() {
             alert('Функция входа будет реализована позже');
+        }
+
+        // Subscription page functionality
+        function openSubscriptionPage() {
+            alert('Страница подписок будет доступна в следующем обновлении!');
         }
 
         // Random manga functionality
@@ -1290,6 +1341,12 @@
             // Theme toggle
             document.getElementById('themeToggle').addEventListener('click', toggleTheme);
 
+            // Language switch
+            const langSwitch = document.getElementById('langSwitch');
+            if (langSwitch) {
+                langSwitch.addEventListener('change', (e) => updateLanguage(e.target.value));
+            }
+
             // Profile buttons
             document.getElementById('profileBtn').addEventListener('click', toggleMenu);
             document.getElementById('mobileProfileBtn').addEventListener('click', (e) => {
@@ -1302,6 +1359,10 @@
 
             // Initialize
             updateTheme();
+            
+            // Load saved language
+            const savedLang = localStorage.getItem('language') || 'ru';
+            updateLanguage(savedLang);
 
             // Wait for data to be ready
             if (window.MangaAPI) {

@@ -19,10 +19,10 @@ let state = {
 // Function to get status badge class and text
 function getStatusBadge(status) {
     const statusMap = {
-        'Заморожен': { class: 'status-frozen', text: '❄️ Заморожен' },
-        'Завершен': { class: 'status-completed', text: '✅ Завершен' },
-        'Анонс': { class: 'status-announcement', text: '📢 Анонс' },
-        'Выходит': { class: 'status-ongoing', text: '📖 Выходит' }
+        'Заморожен': { class: 'status-frozen', text: 'Заморожен' },
+        'Завершен': { class: 'status-completed', text: 'Завершен' },
+        'Анонс': { class: 'status-announcement', text: 'Анонс' },
+        'Выходит': { class: 'status-ongoing', text: 'Выходит' }
     };
     
     return statusMap[status] || { class: 'status-ongoing', text: status };

@@ -195,7 +195,6 @@ function renderMangaCard(manga) {
             <div class="card-info">
                 <div class="card-meta">
                     <span>${manga.type} ${manga.year}</span>
-                    <span class="status-badge">${manga.status}</span>
                 </div>
                 <h3 class="card-title">${manga.title}</h3>
                 <div class="card-meta">
